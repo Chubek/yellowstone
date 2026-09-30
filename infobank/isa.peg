@@ -1,0 +1,61 @@
+Document <- WS Top* WS EOF
+Top <- Arch / Profile / Compiler / Regclass / Encoding / Op / Legacy
+
+Arch <- KW("arch") WS Ident WS "{" WS Field* WS "}"
+Profile <- KW("profile") WS "{" WS Field* WS "}"
+Compiler <- KW("compiler") WS "{" WS CompilerSection* WS "}"
+CompilerSection <- Ident WS "{" WS Field* WS "}"
+Legacy <- KW("legacy") WS "{" WS Field* WS "}"
+
+Regclass <- KW("regclass") WS Ident WS "{" WS RegisterEntry* WS "}"
+RegisterEntry <- Ident WS "(" Number ")" WS "=" WS Number WS ","
+
+Encoding <- KW("encoding") WS Ident WS "{" WS Field* WS "}"
+Op <- KW("op") WS Ident WS "{" WS OpField* WS "}"
+OpField <- SemanticsField / Field
+SemanticsField <- KW("semantics") WS "=" WS Semantic WS ";"
+
+Field <- Ident WS "=" WS Value WS ";"
+
+Value <- String
+       / Number
+       / Boolean
+       / Array
+       / Object
+       / CallList
+       / BareList
+
+Array <- "[" WS (Value (WS "," WS Value)*)? WS "]"
+Object <- "{" WS Field* WS "}"
+CallList <- Call (WS "," WS Call)*
+Call <- Ident WS "(" WS BareArgs? WS ")"
+BareArgs <- Value (WS "," WS Value)*
+
+Semantic <- String / SExpr
+SExpr <- "(" WS SExprItem* WS ")"
+SExprItem <- String / Number / Ident / SExpr
+
+Boolean <- "true" / "false"
+Number <- Hex / Decimal
+Hex <- "0x" HexDigit+
+Decimal <- "-"? Digit+
+
+BareList <- (BareAtom (WS "," WS BareAtom)*)?
+BareAtom <- BareChar (BareChar / WSChar)*
+BareChar <- !";" !"}" !"]" !")" !"," !WSChar .
+String <- '"' StringChar* '"'
+StringChar <- Escape / !'"' .
+Escape <- "\\" .
+
+KW(x) <- x !IdentCont
+Ident <- IdentStart IdentCont*
+IdentStart <- [A-Za-z_]
+IdentCont <- [A-Za-z0-9_.-]
+Digit <- [0-9]
+HexDigit <- [0-9A-Fa-f]
+
+WS <- (WSChar / LineBreak / Comment)*
+WSChar <- [ \t\r\n]
+LineBreak <- "\n"
+Comment <- "#" (!"\n" .)* ("\n" / EOF)
+EOF <- !.

@@ -80,7 +80,7 @@ install(TARGETS qld
         LIBRARY DESTINATION lib)
 install(DIRECTORY qbfd/ DESTINATION include/qbfd
         FILES_MATCHING PATTERN "*.hpp")
-install(FILES common/qdsl.hpp
+install(FILES common/qdsl.hpp common/isa.hpp
         DESTINATION include/qobjfile)
 install(FILES ld/ld.h ld/ld.hpp
         DESTINATION include/qobjld)

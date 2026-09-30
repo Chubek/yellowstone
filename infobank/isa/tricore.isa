@@ -1,0 +1,255 @@
+arch tricore { word_size = 32; addr_size = 32; endian = little; align = 2; }
+
+
+profile {
+  family = "TriCore";
+  model = "TriCore_TC1_6_2";
+  version = "TC1.6.2";
+  word_size = 32;
+  address_size = 32;
+  endianness = "little";
+  instruction_encoding = "textual_assembly";
+  execution_model = "superscalar_target_dependent";
+  register_model = "data_and_address_registers";
+  extensions = ["TC1.6.2"];
+  register_classes = ["GPR"];
+  fixed_registers = ["a10"];
+  zero_register = "none";
+  operation_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+  instruction_count = 31;
+  encoding_widths = ["text"];
+  coverage = "source_inventory";
+  encoding_layout = { representation = "assembler_text"; physical_encoding = "not_modeled"; };
+}
+compiler {
+  instruction_selection {
+    strategy = "target_pattern_matching";
+    opcode_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+    register_classes = ["GPR"];
+    immediate_folding = true;
+    addressing_mode_folding = true;
+    branch_form_selection = true;
+    pseudo_expansion = "target_dependent";
+    cost_model = "target_microarchitecture";
+  }
+  instruction_scheduling {
+    strategy = "dependency_aware_target_scheduler";
+    dependency_ordering = true;
+    memory_dependence_analysis = true;
+    control_dependence_analysis = true;
+    latency_model = "target_microarchitecture";
+    resource_model = "target_microarchitecture";
+    packetization = false;
+  }
+  register_allocation {
+    strategy = "target_register_allocation";
+    register_classes = ["GPR"];
+    fixed_registers = ["a10"];
+    zero_register = "none";
+    caller_saved = "abi_dependent";
+    callee_saved = "abi_dependent";
+    spill_policy = "target_dependent";
+  }
+  optimization {
+    legality_model = "isa_and_memory_model";
+    transforms = ["constant_folding", "copy_propagation", "dead_code_elimination", "common_subexpression_elimination", "peephole_rewrite", "branch_simplification", "load_store_motion_target_dependent", "strength_reduction_target_dependent", "addressing_mode_folding", "branch_relaxation_target_dependent"];
+    instruction_combining = true;
+    peephole_optimization = true;
+    constant_folding = true;
+    dead_code_elimination = true;
+    common_subexpression_elimination = true;
+    loop_optimization = "target_dependent";
+    vectorization = "target_dependent";
+    if_conversion = "target_dependent";
+    interprocedural_optimization = "abi_and_linkage_dependent";
+  }
+}
+regclass GPR {
+    d0(32)=0,
+    d1(32)=1,
+    d2(32)=2,
+    d3(32)=3,
+    d4(32)=4,
+    d5(32)=5,
+    d6(32)=6,
+    d7(32)=7,
+    d8(32)=8,
+    d9(32)=9,
+    d10(32)=10,
+    d11(32)=11,
+    d12(32)=12,
+    d13(32)=13,
+    d14(32)=14,
+    d15(32)=15,
+    a0(32)=16,
+    a1(32)=17,
+    a2(32)=18,
+    a3(32)=19,
+    a4(32)=20,
+    a5(32)=21,
+    a6(32)=22,
+    a7(32)=23,
+    a8(32)=24,
+    a9(32)=25,
+    a10(32)=26,
+    a11(32)=27,
+    a12(32)=28,
+    a13(32)=29,
+    a14(32)=30,
+    a15(32)=31,
+}
+
+encoding ADD { width = text; }
+op add { class = arithmetic; encoding = ADD; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "add {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUB { width = text; }
+op sub { class = arithmetic; encoding = SUB; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "sub {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding MUL { width = text; }
+op mul { class = arithmetic; encoding = MUL; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "mul {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding DIV { width = text; }
+op div { class = arithmetic; encoding = DIV; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "div {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (div rs1 rs2))";
+}
+
+encoding AND { width = text; }
+op and { class = arithmetic; encoding = AND; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "and {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding OR { width = text; }
+op or { class = arithmetic; encoding = OR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "or {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding XOR { width = text; }
+op xor { class = arithmetic; encoding = XOR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "xor {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (xor rs1 rs2))";
+}
+
+encoding NOT { width = text; }
+op not { class = arithmetic; encoding = NOT; operands = rd: GPR, rs1: GPR; syntax = "not {rd}, {rs1}";
+  semantics = "(set rd (not rd))";
+}
+
+encoding SHL { width = text; }
+op shl { class = arithmetic; encoding = SHL; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "shl {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (shl rs1 rs2))";
+}
+
+encoding SHR { width = text; }
+op shr { class = arithmetic; encoding = SHR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "shr {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (shr rs1 rs2))";
+}
+
+encoding SHA { width = text; }
+op sha { class = arithmetic; encoding = SHA; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "sha {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"sha\" rs1 rs2))";
+}
+
+encoding ADDS { width = text; }
+op adds { class = arithmetic; encoding = ADDS; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "adds {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUBS { width = text; }
+op subs { class = arithmetic; encoding = SUBS; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "subs {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding ADDS_U { width = text; }
+op adds_u { class = arithmetic; encoding = ADDS_U; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "adds.u {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding MAX { width = text; }
+op max { class = arithmetic; encoding = MAX; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "max {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (max rs1 rs2))";
+}
+
+encoding MIN { width = text; }
+op min { class = arithmetic; encoding = MIN; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "min {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (min rs1 rs2))";
+}
+
+encoding ADDI { width = text; }
+op addi { class = arithmetic; encoding = ADDI; operands = rd: GPR, rs1: GPR, imm: imm; syntax = "addi {rd}, {rs1}, {imm}";
+  semantics = "(set rd (add rs1 imm))";
+}
+
+encoding SUBI { width = text; }
+op subi { class = arithmetic; encoding = SUBI; operands = rd: GPR, rs1: GPR, imm: imm; syntax = "subi {rd}, {rs1}, {imm}";
+  semantics = "(set rd (sub rs1 imm))";
+}
+
+encoding MOV { width = text; }
+op mov { class = arithmetic; encoding = MOV; operands = rd: GPR, rs1: GPR; syntax = "mov {rd}, {rs1}";
+  semantics = "(set rd rs1)";
+}
+
+encoding MOVH { width = text; }
+op movh { class = arithmetic; encoding = MOVH; operands = rd: GPR, imm: imm; syntax = "movh {rd}, {imm}";
+  semantics = "(set rd imm)";
+}
+
+encoding CMP { width = text; }
+op cmp { class = compare; encoding = CMP; operands = rs1: GPR, rs2: GPR; syntax = "cmp {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding LT { width = text; }
+op lt { class = compare; encoding = LT; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "lt {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (compare rs1 rs2))";
+}
+
+encoding ADDA { width = text; }
+op adda { class = arithmetic; encoding = ADDA; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "add.a {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding LD_W { width = text; }
+op ld_w { class = load; encoding = LD_W; operands = rd: GPR, rs1: GPR, offset: imm; syntax = "ld.w {rd}, [{rs1}]{offset}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding ST_W { width = text; }
+op st_w { class = store; encoding = ST_W; operands = rs1: GPR, rs2: GPR, offset: imm; syntax = "st.w [{rs1}]{offset}, {rs2}";
+  semantics = "(store (addr rs1 imm) rs2)";
+}
+
+encoding J { width = text; }
+op j { class = branch; encoding = J; operands = target: rel; syntax = "j {target}";
+  semantics = "(branch target)";
+}
+
+encoding CALL { width = text; }
+op call { class = branch; encoding = CALL; operands = target: rel; syntax = "call {target}";
+  semantics = "(call target)";
+}
+
+encoding JZ { width = text; }
+op jz { class = branch; encoding = JZ; operands = rs1: GPR, target: rel; syntax = "jz {rs1}, {target}";
+  semantics = "(if (eq rs1 0) (branch target))";
+}
+
+encoding JNZ { width = text; }
+op jnz { class = branch; encoding = JNZ; operands = rs1: GPR, target: rel; syntax = "jnz {rs1}, {target}";
+  semantics = "(if (ne rs1 0) (branch target))";
+}
+
+encoding RET { width = text; }
+op ret { class = branch; encoding = RET; operands = ; syntax = "ret";
+  semantics = "(return)";
+}
+
+encoding NOP { width = text; }
+op nop { class = misc; encoding = NOP; operands = ; syntax = "nop";
+  semantics = "(effect (intrinsic \"nop\" ))";
+}

@@ -7,6 +7,7 @@
 //   -m architecture      -V version           -b <target>  force a target
 //   -j <section>         -? help
 #include "../common/cli.hpp"
+#include "../common/isa.hpp"
 #include "../common/options.hpp"
 
 using namespace qbfd;
@@ -26,12 +27,107 @@ struct Flags {
   bool contents = false, allHeaders = false, archiveIndex = false;
   bool architecture = false, version = false, privateHeaders = false;
   bool fullRelocations = false, needed = false;
+  bool disassemble = false, hexDump = false, octDump = false;
+  bool text = true, tui = false;
+  bool raw = false;
+  std::string search, isaDir = "infobank/isa";
   std::string section, target;
   std::optional<uint64_t> startAddress, stopAddress;
 };
 
+std::string isaKey(Arch a) {
+  switch (a) {
+    case Arch::X86: return "x86";
+    case Arch::X86_64: return "amd64";
+    case Arch::ARM: return "arm32";
+    case Arch::AArch64: return "aarch64";
+    case Arch::RISCV32: return "riscv32";
+    case Arch::RISCV64: return "riscv64";
+    case Arch::PowerPC: return "ppc32";
+    case Arch::PowerPC64: return "ppc64";
+    case Arch::MIPS: return "mips32";
+    case Arch::MIPS64: return "mips64";
+    case Arch::SPARC64: return "sparc64";
+    case Arch::S390X: return "s390x";
+    case Arch::LoongArch64: return "loongarch64";
+    default: return {};
+  }
+}
+
+uint64_t fieldNumber(const qisa::Encoding& e, const char* key) {
+  auto it = e.fields.find(key); if (it == e.fields.end()) return UINT64_MAX;
+  try { return std::stoull(it->second, nullptr, 0); } catch (...) { return UINT64_MAX; }
+}
+
+std::string unquote(std::string value) {
+  if (value.size() >= 2 && value.front() == '"' && value.back() == '"')
+    return value.substr(1, value.size() - 2);
+  return value;
+}
+
+void showDisassembly(std::ostream& out, const ObjectFile& file,
+                     const Flags& flags) {
+  qisa::Database db; std::vector<std::string> errors;
+  db.loadDirectory(flags.isaDir, errors);
+  std::string key = isaKey(file.arch());
+  const qisa::Document* doc = db.find(key);
+  if (!doc) {
+    out << "\nDisassembly: ISA description unavailable for " << key << "\n";
+    for (const auto& e : errors) out << "  ISA: " << e << '\n';
+    return;
+  }
+  std::map<uint64_t, const qisa::Operation*> ops;
+  for (const auto& op : doc->operations) {
+    auto it = op.fields.find("encoding"); if (it == op.fields.end()) continue;
+    for (const auto& e : doc->encodings) if (e.name == it->second) {
+      uint64_t opcode = fieldNumber(e, "opcode"); if (opcode == UINT64_MAX) opcode = fieldNumber(e, "base");
+      if (opcode != UINT64_MAX) ops[opcode] = &op;
+    }
+  }
+  out << "\nDisassembly for " << key << " using " << doc->source << ":\n";
+  for (const auto& s : file.sections()) {
+    if (!(s.flags & sec::Code) || (s.flags & sec::Bss)) continue;
+    auto bytes = file.sectionContents(s); if (!bytes || bytes->empty()) continue;
+    std::size_t begin = 0, end = bytes->size();
+    if (flags.startAddress || flags.stopAddress) { uint64_t lo = flags.startAddress.value_or(s.vma), hi = flags.stopAddress.value_or(UINT64_MAX); if (hi <= s.vma || lo >= s.vma + bytes->size()) continue; begin = std::size_t(std::max(lo, s.vma) - s.vma); end = std::size_t(std::min<uint64_t>(hi, s.vma + bytes->size()) - s.vma); }
+    out << "\n" << s.name << ":\n";
+    std::size_t width = key.starts_with("riscv") || key == "aarch64" || key == "arm32" ? 4 : 1;
+    for (std::size_t i = begin; i < end; ) {
+      std::size_t n = std::min(width, end - i); uint64_t raw = 0; for (std::size_t j = 0; j < n; ++j) raw |= uint64_t((*bytes)[i+j]) << (8*j);
+      const qisa::Operation* op = nullptr; for (const auto& [code, candidate] : ops) if ((raw & 0xffu) == code || (raw & 0x7fu) == code) { op = candidate; break; }
+      std::string text = op ? unquote(op->syntax) : (n == 1 ? ".byte " + hex((*bytes)[i], 2) : ".word " + hex(raw));
+      if (!flags.search.empty() && text.find(flags.search) == std::string::npos) { i += n; continue; }
+      out << "  " << std::setw(16) << std::setfill('0') << std::hex << (s.vma + i) << std::dec << std::setfill(' ') << "  ";
+      for (std::size_t j = 0; j < n; ++j) out << hex((*bytes)[i+j], 2) << ' ';
+      if (flags.tui) out << "  \033[36m" << text << "\033[0m";
+      else out << "  " << text;
+      if (op && !op->semantics.empty()) out << "  ; " << unquote(op->semantics);
+      out << '\n'; i += n;
+    }
+  }
+}
+
+void dumpRaw(std::ostream& out, const std::string& label,
+             const std::vector<uint8_t>& bytes, int radix, bool showText) {
+  out << "Contents of " << label << ":\n";
+  for (std::size_t i = 0; i < bytes.size(); i += 16) {
+    std::size_t n = std::min<std::size_t>(16, bytes.size() - i);
+    out << ' ' << std::setw(8) << std::setfill('0') << std::hex << i
+        << std::dec << std::setfill(' ') << ' ';
+    for (std::size_t j = 0; j < 16; ++j) {
+      if (j >= n) out << "  ";
+      else if (radix == 8) out << std::oct << std::setw(3) << std::setfill('0') << unsigned(bytes[i+j]) << std::dec << std::setfill(' ');
+      else out << hex(bytes[i+j], 2);
+      out << ' ';
+    }
+    if (showText) out << " |" << qobj::printableText(std::span<const uint8_t>(bytes.data()+i, n)) << '|';
+    out << '\n';
+  }
+}
+
 void dumpContents(std::ostream& out, const ObjectFile& file, const Section& s,
-                  std::optional<uint64_t> start, std::optional<uint64_t> stop) {
+                  std::optional<uint64_t> start, std::optional<uint64_t> stop,
+                  bool showText = true, int radix = 16) {
   auto bytes = file.sectionContents(s);
   if (!bytes) {
     out << "qobjdump: " << s.name << ": " << bytes.error().message << '\n';
@@ -55,9 +151,14 @@ void dumpContents(std::ostream& out, const ObjectFile& file, const Section& s,
     size_t n = std::min<size_t>(16, end - i);
     out << ' ' << std::setw(8) << std::setfill('0') << std::hex
         << (s.fileOffset + i) << std::dec << std::setfill(' ') << ' ';
-    for (size_t k = 0; k < 16; ++k)
-      out << (k < n ? hex((*bytes)[i + k], 2) : "  ") << ' ';
-    out << " |" << qobj::printableText(bytes->subspan(i, n)) << "|\n";
+    for (size_t k = 0; k < 16; ++k) {
+      if (k >= n) { out << "  "; }
+      else if (radix == 8) { out << std::oct << std::setw(3) << std::setfill('0') << unsigned((*bytes)[i+k]) << std::dec << std::setfill(' '); }
+      else { out << hex((*bytes)[i + k], 2); }
+      out << ' ';
+    }
+    if (showText) out << " |" << qobj::printableText(bytes->subspan(i, n)) << "|";
+    out << '\n';
   }
 }
 
@@ -240,6 +341,12 @@ int dump(const qobj::Source& source, const Flags& flags) {
   }
   if (flags.architecture) {
     out << source.label << ": " << std::string(toString(file.arch())) << '\n';
+    qisa::Database db; std::vector<std::string> errors; db.loadDirectory(flags.isaDir, errors);
+    if (const auto* isa = db.find(isaKey(file.arch()))) {
+      auto show = [&](const char* key) { auto it = isa->profile.find(key); if (it != isa->profile.end()) out << "  " << key << " = " << unquote(it->second) << '\n'; };
+      show("family"); show("model"); show("version"); show("word_size");
+      show("instruction_encoding"); show("instruction_count");
+    }
     return 0;
   }
   if (flags.needed) {
@@ -254,7 +361,7 @@ int dump(const qobj::Source& source, const Flags& flags) {
       return 1;
     }
     showSections(out, file, false);
-    dumpContents(out, file, *s, flags.startAddress, flags.stopAddress);
+    dumpContents(out, file, *s, flags.startAddress, flags.stopAddress, flags.text, flags.octDump ? 8 : 16);
     return 0;
   }
 
@@ -273,8 +380,9 @@ int dump(const qobj::Source& source, const Flags& flags) {
     showRelocations(out, file, flags.fullRelocations);
   if (flags.allHeaders || flags.contents) {
     for (const auto& s : file.sections())
-      dumpContents(out, file, s, flags.startAddress, flags.stopAddress);
+      dumpContents(out, file, s, flags.startAddress, flags.stopAddress, flags.text, flags.octDump ? 8 : 16);
   }
+  if (flags.disassemble) showDisassembly(out, file, flags);
   return 0;
 }
 
@@ -320,6 +428,14 @@ int main(int argc, char** argv) {
       {'r', "reloc", false, "", "show relocations"},
       {0, "full-reloc", false, "", "show every relocation field"},
       {'s', "section-contents", false, "", "hex dump section contents"},
+      {'d', "disassemble", false, "", "disassemble code sections using ISA descriptions"},
+      {0, "hex-dump", false, "", "dump bytes in hexadecimal"},
+      {0, "oct-dump", false, "", "dump bytes in octal"},
+      {0, "no-text", false, "", "suppress printable text beside dumps"},
+      {0, "isa-dir", true, "dir", "ISA description directory"},
+      {0, "search", true, "pattern", "show disassembly lines containing a pattern"},
+      {0, "tui", false, "", "highlight disassembly for terminal viewing"},
+      {0, "raw", false, "", "treat input as raw bytes when object parsing fails"},
       {'x', "all-headers", false, "", "show every header and section"},
       {'a', "archive-index", false, "", "show the archive symbol index"},
       {0, "private-headers", false, "", "dump the raw header tables"},
@@ -350,6 +466,15 @@ int main(int argc, char** argv) {
   flags.relocations = options.has('r');
   flags.fullRelocations = options.has("full-reloc");
   flags.contents = options.has('s');
+  flags.disassemble = options.has('d');
+  flags.hexDump = options.has("hex-dump");
+  flags.octDump = options.has("oct-dump");
+  flags.text = !options.has("no-text");
+  flags.isaDir = options.value("isa-dir").empty() ? "infobank/isa" : options.value("isa-dir");
+  flags.search = options.value("search");
+  flags.tui = options.has("tui");
+  flags.raw = options.has("raw");
+  if (flags.hexDump || flags.octDump) flags.contents = true;
   flags.allHeaders = options.has('x');
   flags.archiveIndex = options.has('a');
   flags.privateHeaders = options.has("private-headers");
@@ -389,6 +514,14 @@ int main(int argc, char** argv) {
   if (flags.archiveIndex) {
     int status = 0;
     for (const auto& path : options.positional()) status |= showArchiveIndex(path);
+    return status;
+  }
+  if (flags.raw) {
+    int status = 0;
+    for (const auto& path : options.positional()) {
+      try { dumpRaw(std::cout, path, qobj::readFile(path), flags.octDump ? 8 : 16, flags.text); }
+      catch (const std::exception& e) { status |= qobj::reportError(path, e); }
+    }
     return status;
   }
   if (flags.target.empty())

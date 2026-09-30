@@ -1,0 +1,2179 @@
+arch amdgpu { word_size = 32; addr_size = 64; endian = little; align = 4; }
+
+
+profile {
+  family = "AMD_GCN";
+  model = "gfx900";
+  version = "GCN_GFX9";
+  word_size = 32;
+  address_size = 64;
+  endianness = "little";
+  instruction_encoding = "fixed32_and_multiword";
+  execution_model = "SIMT";
+  register_model = "scalar_vector_register_files";
+  extensions = ["GCN", "GFX9", "wave64"];
+  register_classes = ["GPR", "FPR"];
+  fixed_registers = ["exec", "vcc"];
+  zero_register = "none";
+  operation_classes = ["arithmetic", "branch", "compare", "misc"];
+  instruction_count = 139;
+  encoding_widths = ["32"];
+  coverage = "source_inventory";
+  encoding_layout = { base_word = "32"; instruction_forms = "SOP,VOP"; wavefront = "64"; };
+}
+compiler {
+  instruction_selection {
+    strategy = "dag_pattern_matching_with_lane_and_address_space_constraints";
+    opcode_classes = ["arithmetic", "branch", "compare", "misc"];
+    register_classes = ["GPR", "FPR"];
+    immediate_folding = true;
+    addressing_mode_folding = false;
+    branch_form_selection = true;
+    pseudo_expansion = "target_dependent";
+    cost_model = "target_microarchitecture";
+  }
+  instruction_scheduling {
+    strategy = "SIMT_wavefront_scheduler";
+    dependency_ordering = true;
+    memory_dependence_analysis = false;
+    control_dependence_analysis = true;
+    latency_model = "target_microarchitecture";
+    resource_model = "target_microarchitecture";
+    packetization = false;
+  }
+  register_allocation {
+    strategy = "scalar_vector_register_allocation";
+    register_classes = ["GPR", "FPR"];
+    fixed_registers = ["exec", "vcc"];
+    zero_register = "none";
+    caller_saved = "abi_dependent";
+    callee_saved = "abi_dependent";
+    spill_policy = "target_dependent";
+  }
+  optimization {
+    legality_model = "isa_and_memory_model";
+    transforms = ["constant_folding", "copy_propagation", "dead_code_elimination", "common_subexpression_elimination", "peephole_rewrite", "branch_simplification", "load_store_motion_target_dependent", "strength_reduction_target_dependent", "branch_relaxation_target_dependent"];
+    instruction_combining = true;
+    peephole_optimization = true;
+    constant_folding = true;
+    dead_code_elimination = true;
+    common_subexpression_elimination = true;
+    loop_optimization = "target_dependent";
+    vectorization = "target_dependent";
+    if_conversion = "target_dependent";
+    interprocedural_optimization = "abi_and_linkage_dependent";
+  }
+}
+regclass GPR {
+    s0(32)=0,
+    s1(32)=1,
+    s2(32)=2,
+    s3(32)=3,
+    s4(32)=4,
+    s5(32)=5,
+    s6(32)=6,
+    s7(32)=7,
+    s8(32)=8,
+    s9(32)=9,
+    s10(32)=10,
+    s11(32)=11,
+    s12(32)=12,
+    s13(32)=13,
+    s14(32)=14,
+    s15(32)=15,
+    s16(32)=16,
+    s17(32)=17,
+    s18(32)=18,
+    s19(32)=19,
+    s20(32)=20,
+    s21(32)=21,
+    s22(32)=22,
+    s23(32)=23,
+    s24(32)=24,
+    s25(32)=25,
+    s26(32)=26,
+    s27(32)=27,
+    s28(32)=28,
+    s29(32)=29,
+    s30(32)=30,
+    s31(32)=31,
+    s32(32)=32,
+    s33(32)=33,
+    s34(32)=34,
+    s35(32)=35,
+    s36(32)=36,
+    s37(32)=37,
+    s38(32)=38,
+    s39(32)=39,
+    s40(32)=40,
+    s41(32)=41,
+    s42(32)=42,
+    s43(32)=43,
+    s44(32)=44,
+    s45(32)=45,
+    s46(32)=46,
+    s47(32)=47,
+    s48(32)=48,
+    s49(32)=49,
+    s50(32)=50,
+    s51(32)=51,
+    s52(32)=52,
+    s53(32)=53,
+    s54(32)=54,
+    s55(32)=55,
+    s56(32)=56,
+    s57(32)=57,
+    s58(32)=58,
+    s59(32)=59,
+    s60(32)=60,
+    s61(32)=61,
+    s62(32)=62,
+    s63(32)=63,
+    s64(32)=64,
+    s65(32)=65,
+    s66(32)=66,
+    s67(32)=67,
+    s68(32)=68,
+    s69(32)=69,
+    s70(32)=70,
+    s71(32)=71,
+    s72(32)=72,
+    s73(32)=73,
+    s74(32)=74,
+    s75(32)=75,
+    s76(32)=76,
+    s77(32)=77,
+    s78(32)=78,
+    s79(32)=79,
+    s80(32)=80,
+    s81(32)=81,
+    s82(32)=82,
+    s83(32)=83,
+    s84(32)=84,
+    s85(32)=85,
+    s86(32)=86,
+    s87(32)=87,
+    s88(32)=88,
+    s89(32)=89,
+    s90(32)=90,
+    s91(32)=91,
+    s92(32)=92,
+    s93(32)=93,
+    s94(32)=94,
+    s95(32)=95,
+    s96(32)=96,
+    s97(32)=97,
+    s98(32)=98,
+    s99(32)=99,
+    s100(32)=100,
+    s101(32)=101,
+    s102(32)=102,
+    s103(32)=103,
+}
+
+regclass FPR {
+    v0(32)=0,
+    v1(32)=1,
+    v2(32)=2,
+    v3(32)=3,
+    v4(32)=4,
+    v5(32)=5,
+    v6(32)=6,
+    v7(32)=7,
+    v8(32)=8,
+    v9(32)=9,
+    v10(32)=10,
+    v11(32)=11,
+    v12(32)=12,
+    v13(32)=13,
+    v14(32)=14,
+    v15(32)=15,
+    v16(32)=16,
+    v17(32)=17,
+    v18(32)=18,
+    v19(32)=19,
+    v20(32)=20,
+    v21(32)=21,
+    v22(32)=22,
+    v23(32)=23,
+    v24(32)=24,
+    v25(32)=25,
+    v26(32)=26,
+    v27(32)=27,
+    v28(32)=28,
+    v29(32)=29,
+    v30(32)=30,
+    v31(32)=31,
+    v32(32)=32,
+    v33(32)=33,
+    v34(32)=34,
+    v35(32)=35,
+    v36(32)=36,
+    v37(32)=37,
+    v38(32)=38,
+    v39(32)=39,
+    v40(32)=40,
+    v41(32)=41,
+    v42(32)=42,
+    v43(32)=43,
+    v44(32)=44,
+    v45(32)=45,
+    v46(32)=46,
+    v47(32)=47,
+    v48(32)=48,
+    v49(32)=49,
+    v50(32)=50,
+    v51(32)=51,
+    v52(32)=52,
+    v53(32)=53,
+    v54(32)=54,
+    v55(32)=55,
+    v56(32)=56,
+    v57(32)=57,
+    v58(32)=58,
+    v59(32)=59,
+    v60(32)=60,
+    v61(32)=61,
+    v62(32)=62,
+    v63(32)=63,
+    v64(32)=64,
+    v65(32)=65,
+    v66(32)=66,
+    v67(32)=67,
+    v68(32)=68,
+    v69(32)=69,
+    v70(32)=70,
+    v71(32)=71,
+    v72(32)=72,
+    v73(32)=73,
+    v74(32)=74,
+    v75(32)=75,
+    v76(32)=76,
+    v77(32)=77,
+    v78(32)=78,
+    v79(32)=79,
+    v80(32)=80,
+    v81(32)=81,
+    v82(32)=82,
+    v83(32)=83,
+    v84(32)=84,
+    v85(32)=85,
+    v86(32)=86,
+    v87(32)=87,
+    v88(32)=88,
+    v89(32)=89,
+    v90(32)=90,
+    v91(32)=91,
+    v92(32)=92,
+    v93(32)=93,
+    v94(32)=94,
+    v95(32)=95,
+    v96(32)=96,
+    v97(32)=97,
+    v98(32)=98,
+    v99(32)=99,
+    v100(32)=100,
+    v101(32)=101,
+    v102(32)=102,
+    v103(32)=103,
+    v104(32)=104,
+    v105(32)=105,
+    v106(32)=106,
+    v107(32)=107,
+    v108(32)=108,
+    v109(32)=109,
+    v110(32)=110,
+    v111(32)=111,
+    v112(32)=112,
+    v113(32)=113,
+    v114(32)=114,
+    v115(32)=115,
+    v116(32)=116,
+    v117(32)=117,
+    v118(32)=118,
+    v119(32)=119,
+    v120(32)=120,
+    v121(32)=121,
+    v122(32)=122,
+    v123(32)=123,
+    v124(32)=124,
+    v125(32)=125,
+    v126(32)=126,
+    v127(32)=127,
+    v128(32)=128,
+    v129(32)=129,
+    v130(32)=130,
+    v131(32)=131,
+    v132(32)=132,
+    v133(32)=133,
+    v134(32)=134,
+    v135(32)=135,
+    v136(32)=136,
+    v137(32)=137,
+    v138(32)=138,
+    v139(32)=139,
+    v140(32)=140,
+    v141(32)=141,
+    v142(32)=142,
+    v143(32)=143,
+    v144(32)=144,
+    v145(32)=145,
+    v146(32)=146,
+    v147(32)=147,
+    v148(32)=148,
+    v149(32)=149,
+    v150(32)=150,
+    v151(32)=151,
+    v152(32)=152,
+    v153(32)=153,
+    v154(32)=154,
+    v155(32)=155,
+    v156(32)=156,
+    v157(32)=157,
+    v158(32)=158,
+    v159(32)=159,
+    v160(32)=160,
+    v161(32)=161,
+    v162(32)=162,
+    v163(32)=163,
+    v164(32)=164,
+    v165(32)=165,
+    v166(32)=166,
+    v167(32)=167,
+    v168(32)=168,
+    v169(32)=169,
+    v170(32)=170,
+    v171(32)=171,
+    v172(32)=172,
+    v173(32)=173,
+    v174(32)=174,
+    v175(32)=175,
+    v176(32)=176,
+    v177(32)=177,
+    v178(32)=178,
+    v179(32)=179,
+    v180(32)=180,
+    v181(32)=181,
+    v182(32)=182,
+    v183(32)=183,
+    v184(32)=184,
+    v185(32)=185,
+    v186(32)=186,
+    v187(32)=187,
+    v188(32)=188,
+    v189(32)=189,
+    v190(32)=190,
+    v191(32)=191,
+    v192(32)=192,
+    v193(32)=193,
+    v194(32)=194,
+    v195(32)=195,
+    v196(32)=196,
+    v197(32)=197,
+    v198(32)=198,
+    v199(32)=199,
+    v200(32)=200,
+    v201(32)=201,
+    v202(32)=202,
+    v203(32)=203,
+    v204(32)=204,
+    v205(32)=205,
+    v206(32)=206,
+    v207(32)=207,
+    v208(32)=208,
+    v209(32)=209,
+    v210(32)=210,
+    v211(32)=211,
+    v212(32)=212,
+    v213(32)=213,
+    v214(32)=214,
+    v215(32)=215,
+    v216(32)=216,
+    v217(32)=217,
+    v218(32)=218,
+    v219(32)=219,
+    v220(32)=220,
+    v221(32)=221,
+    v222(32)=222,
+    v223(32)=223,
+    v224(32)=224,
+    v225(32)=225,
+    v226(32)=226,
+    v227(32)=227,
+    v228(32)=228,
+    v229(32)=229,
+    v230(32)=230,
+    v231(32)=231,
+    v232(32)=232,
+    v233(32)=233,
+    v234(32)=234,
+    v235(32)=235,
+    v236(32)=236,
+    v237(32)=237,
+    v238(32)=238,
+    v239(32)=239,
+    v240(32)=240,
+    v241(32)=241,
+    v242(32)=242,
+    v243(32)=243,
+    v244(32)=244,
+    v245(32)=245,
+    v246(32)=246,
+    v247(32)=247,
+    v248(32)=248,
+    v249(32)=249,
+    v250(32)=250,
+    v251(32)=251,
+    v252(32)=252,
+    v253(32)=253,
+    v254(32)=254,
+    v255(32)=255,
+}
+
+alias vcc = s1;
+alias vcc_lo = s1;
+alias vcc_hi = s2;
+alias exec = s3;
+alias scc = s4;
+
+encoding S_ADD_U32 { width = 32;
+  base = 0x80000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_add_u32 { class = arithmetic; encoding = S_ADD_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_SUB_U32 { width = 32;
+  base = 0x80800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_sub_u32 { class = arithmetic; encoding = S_SUB_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_sub_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding S_ADD_I32 { width = 32;
+  base = 0x81000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_add_i32 { class = arithmetic; encoding = S_ADD_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_add_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_SUB_I32 { width = 32;
+  base = 0x81800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_sub_i32 { class = arithmetic; encoding = S_SUB_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_sub_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding S_ADDC_U32 { width = 32;
+  base = 0x82000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_addc_u32 { class = arithmetic; encoding = S_ADDC_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_addc_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_SUBB_U32 { width = 32;
+  base = 0x82800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_subb_u32 { class = arithmetic; encoding = S_SUBB_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_subb_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding S_MIN_I32 { width = 32;
+  base = 0x83000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_min_i32 { class = arithmetic; encoding = S_MIN_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_min_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (min rs1 rs2))";
+}
+
+encoding S_MIN_U32 { width = 32;
+  base = 0x83800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_min_u32 { class = arithmetic; encoding = S_MIN_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_min_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (min rs1 rs2))";
+}
+
+encoding S_MAX_I32 { width = 32;
+  base = 0x84000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_max_i32 { class = arithmetic; encoding = S_MAX_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_max_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (max rs1 rs2))";
+}
+
+encoding S_MAX_U32 { width = 32;
+  base = 0x84800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_max_u32 { class = arithmetic; encoding = S_MAX_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_max_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (max rs1 rs2))";
+}
+
+encoding S_CSELECT_B32 { width = 32;
+  base = 0x85000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_cselect_b32 { class = arithmetic; encoding = S_CSELECT_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_cselect_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_cselect_b32\" rs1 rs2))";
+}
+
+encoding S_AND_B32 { width = 32;
+  base = 0x86000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_and_b32 { class = arithmetic; encoding = S_AND_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_and_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding S_OR_B32 { width = 32;
+  base = 0x87000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_or_b32 { class = arithmetic; encoding = S_OR_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_or_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding S_XOR_B32 { width = 32;
+  base = 0x88000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_xor_b32 { class = arithmetic; encoding = S_XOR_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_xor_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (xor rs1 rs2))";
+}
+
+encoding S_ANDN2_B32 { width = 32;
+  base = 0x89000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_andn2_b32 { class = arithmetic; encoding = S_ANDN2_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_andn2_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding S_ORN2_B32 { width = 32;
+  base = 0x8a000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_orn2_b32 { class = arithmetic; encoding = S_ORN2_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_orn2_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding S_NAND_B32 { width = 32;
+  base = 0x8b000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_nand_b32 { class = arithmetic; encoding = S_NAND_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_nand_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_nand_b32\" rs1 rs2))";
+}
+
+encoding S_NOR_B32 { width = 32;
+  base = 0x8c000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_nor_b32 { class = arithmetic; encoding = S_NOR_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_nor_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (nor rs1 rs2))";
+}
+
+encoding S_XNOR_B32 { width = 32;
+  base = 0x8d000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_xnor_b32 { class = arithmetic; encoding = S_XNOR_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_xnor_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (xnor rs1 rs2))";
+}
+
+encoding S_LSHL_B32 { width = 32;
+  base = 0x8e000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshl_b32 { class = arithmetic; encoding = S_LSHL_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshl_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_lshl_b32\" rs1 rs2))";
+}
+
+encoding S_LSHR_B32 { width = 32;
+  base = 0x8f000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshr_b32 { class = arithmetic; encoding = S_LSHR_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshr_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_lshr_b32\" rs1 rs2))";
+}
+
+encoding S_ASHR_I32 { width = 32;
+  base = 0x90000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_ashr_i32 { class = arithmetic; encoding = S_ASHR_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_ashr_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_ashr_i32\" rs1 rs2))";
+}
+
+encoding S_BFM_B32 { width = 32;
+  base = 0x91000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_bfm_b32 { class = arithmetic; encoding = S_BFM_B32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_bfm_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_bfm_b32\" rs1 rs2))";
+}
+
+encoding S_MUL_I32 { width = 32;
+  base = 0x92000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_mul_i32 { class = arithmetic; encoding = S_MUL_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_mul_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding S_BFE_U32 { width = 32;
+  base = 0x92800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_bfe_u32 { class = arithmetic; encoding = S_BFE_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_bfe_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_bfe_u32\" rs1 rs2))";
+}
+
+encoding S_BFE_I32 { width = 32;
+  base = 0x93000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_bfe_i32 { class = arithmetic; encoding = S_BFE_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_bfe_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_bfe_i32\" rs1 rs2))";
+}
+
+encoding S_ABSDIFF_I32 { width = 32;
+  base = 0x95000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_absdiff_i32 { class = arithmetic; encoding = S_ABSDIFF_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_absdiff_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (abs rs1 rs2))";
+}
+
+encoding S_MUL_HI_U32 { width = 32;
+  base = 0x96000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_mul_hi_u32 { class = arithmetic; encoding = S_MUL_HI_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_mul_hi_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding S_MUL_HI_I32 { width = 32;
+  base = 0x96800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_mul_hi_i32 { class = arithmetic; encoding = S_MUL_HI_I32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_mul_hi_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding S_PACK_LL_B32_B16 { width = 32;
+  base = 0x99000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_pack_ll_b32_b16 { class = arithmetic; encoding = S_PACK_LL_B32_B16;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_pack_ll_b32_b16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_pack_ll_b32_b16\" rs1 rs2))";
+}
+
+encoding S_PACK_LH_B32_B16 { width = 32;
+  base = 0x99800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_pack_lh_b32_b16 { class = arithmetic; encoding = S_PACK_LH_B32_B16;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_pack_lh_b32_b16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_pack_lh_b32_b16\" rs1 rs2))";
+}
+
+encoding S_PACK_HH_B32_B16 { width = 32;
+  base = 0x9a000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_pack_hh_b32_b16 { class = arithmetic; encoding = S_PACK_HH_B32_B16;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_pack_hh_b32_b16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"s_pack_hh_b32_b16\" rs1 rs2))";
+}
+
+encoding S_LSHL1_ADD_U32 { width = 32;
+  base = 0x97000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshl1_add_u32 { class = arithmetic; encoding = S_LSHL1_ADD_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshl1_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_LSHL2_ADD_U32 { width = 32;
+  base = 0x97800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshl2_add_u32 { class = arithmetic; encoding = S_LSHL2_ADD_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshl2_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_LSHL3_ADD_U32 { width = 32;
+  base = 0x98000000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshl3_add_u32 { class = arithmetic; encoding = S_LSHL3_ADD_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshl3_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_LSHL4_ADD_U32 { width = 32;
+  base = 0x98800000;
+  rd = 16:7;
+  rs2 = 8:8;
+  rs1 = 0:8;
+}
+
+op s_lshl4_add_u32 { class = arithmetic; encoding = S_LSHL4_ADD_U32;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "s_lshl4_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding S_MOV_B32 { width = 32;
+  base = 0xbe800000;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_mov_b32 { class = misc; encoding = S_MOV_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_mov_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_mov_b32\" rd rs1))";
+}
+
+encoding S_NOT_B32 { width = 32;
+  base = 0xbe800400;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_not_b32 { class = arithmetic; encoding = S_NOT_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_not_b32 {rd}, {rs1}";
+  semantics = "(set rd (not rs1))";
+}
+
+encoding S_WQM_B32 { width = 32;
+  base = 0xbe800600;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_wqm_b32 { class = misc; encoding = S_WQM_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_wqm_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_wqm_b32\" rd rs1))";
+}
+
+encoding S_BREV_B32 { width = 32;
+  base = 0xbe800800;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_brev_b32 { class = misc; encoding = S_BREV_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_brev_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_brev_b32\" rd rs1))";
+}
+
+encoding S_BCNT0_I32_B32 { width = 32;
+  base = 0xbe800a00;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_bcnt0_i32_b32 { class = misc; encoding = S_BCNT0_I32_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_bcnt0_i32_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_bcnt0_i32_b32\" rd rs1))";
+}
+
+encoding S_BCNT1_I32_B32 { width = 32;
+  base = 0xbe800c00;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_bcnt1_i32_b32 { class = misc; encoding = S_BCNT1_I32_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_bcnt1_i32_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_bcnt1_i32_b32\" rd rs1))";
+}
+
+encoding S_FF0_I32_B32 { width = 32;
+  base = 0xbe800e00;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_ff0_i32_b32 { class = misc; encoding = S_FF0_I32_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_ff0_i32_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_ff0_i32_b32\" rd rs1))";
+}
+
+encoding S_FF1_I32_B32 { width = 32;
+  base = 0xbe801000;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_ff1_i32_b32 { class = misc; encoding = S_FF1_I32_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_ff1_i32_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_ff1_i32_b32\" rd rs1))";
+}
+
+encoding S_FLBIT_I32_B32 { width = 32;
+  base = 0xbe801200;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_flbit_i32_b32 { class = misc; encoding = S_FLBIT_I32_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_flbit_i32_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_flbit_i32_b32\" rd rs1))";
+}
+
+encoding S_FLBIT_I32 { width = 32;
+  base = 0xbe801400;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_flbit_i32 { class = misc; encoding = S_FLBIT_I32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_flbit_i32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_flbit_i32\" rd rs1))";
+}
+
+encoding S_ABS_I32 { width = 32;
+  base = 0xbe803000;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_abs_i32 { class = arithmetic; encoding = S_ABS_I32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_abs_i32 {rd}, {rs1}";
+  semantics = "(set rd (abs rs1))";
+}
+
+encoding S_BITSET0_B32 { width = 32;
+  base = 0xbe801800;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_bitset0_b32 { class = misc; encoding = S_BITSET0_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_bitset0_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_bitset0_b32\" rd rs1))";
+}
+
+encoding S_BITSET1_B32 { width = 32;
+  base = 0xbe801a00;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_bitset1_b32 { class = misc; encoding = S_BITSET1_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_bitset1_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_bitset1_b32\" rd rs1))";
+}
+
+encoding S_QUADMASK_B32 { width = 32;
+  base = 0xbe802800;
+  rd = 16:7;
+  rs1 = 0:8;
+}
+
+op s_quadmask_b32 { class = misc; encoding = S_QUADMASK_B32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "s_quadmask_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"s_quadmask_b32\" rd rs1))";
+}
+
+encoding S_MOV_B32_IMM { width = 32;
+  base = 0xbe800080;
+  rd = 16:7;
+  imm = 0:7;
+  signed = 1;
+}
+
+op s_mov_b32_imm { class = arithmetic; encoding = S_MOV_B32_IMM;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_mov_b32 {rd}, {imm}";
+  semantics = "(set rd imm)";
+}
+
+encoding S_NOT_B32_IMM { width = 32;
+  base = 0xbe800480;
+  rd = 16:7;
+  imm = 0:7;
+  signed = 1;
+}
+
+op s_not_b32_imm { class = arithmetic; encoding = S_NOT_B32_IMM;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_not_b32 {rd}, {imm}";
+  semantics = "(set rd (not imm))";
+}
+
+encoding S_ABS_I32_IMM { width = 32;
+  base = 0xbe803080;
+  rd = 16:7;
+  imm = 0:7;
+  signed = 1;
+}
+
+op s_abs_i32_imm { class = arithmetic; encoding = S_ABS_I32_IMM;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_abs_i32 {rd}, {imm}";
+  semantics = "(set rd (abs imm))";
+}
+
+encoding S_BREV_B32_IMM { width = 32;
+  base = 0xbe800880;
+  rd = 16:7;
+  imm = 0:7;
+  signed = 1;
+}
+
+op s_brev_b32_imm { class = arithmetic; encoding = S_BREV_B32_IMM;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_brev_b32 {rd}, {imm}";
+  semantics = "(set rd (intrinsic \"s_brev_b32_imm\" imm))";
+}
+
+encoding S_CMP_EQ_U32 { width = 32;
+  base = 0xbf060000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_eq_u32 { class = compare; encoding = S_CMP_EQ_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_eq_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LG_U32 { width = 32;
+  base = 0xbf070000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_lg_u32 { class = compare; encoding = S_CMP_LG_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_lg_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_GT_U32 { width = 32;
+  base = 0xbf080000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_gt_u32 { class = compare; encoding = S_CMP_GT_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_gt_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_GE_U32 { width = 32;
+  base = 0xbf090000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_ge_u32 { class = compare; encoding = S_CMP_GE_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_ge_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LT_U32 { width = 32;
+  base = 0xbf0a0000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_lt_u32 { class = compare; encoding = S_CMP_LT_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_lt_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LE_U32 { width = 32;
+  base = 0xbf0b0000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_le_u32 { class = compare; encoding = S_CMP_LE_U32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_le_u32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_EQ_I32 { width = 32;
+  base = 0xbf000000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_eq_i32 { class = compare; encoding = S_CMP_EQ_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_eq_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LG_I32 { width = 32;
+  base = 0xbf010000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_lg_i32 { class = compare; encoding = S_CMP_LG_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_lg_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_GT_I32 { width = 32;
+  base = 0xbf020000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_gt_i32 { class = compare; encoding = S_CMP_GT_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_gt_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_GE_I32 { width = 32;
+  base = 0xbf030000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_ge_i32 { class = compare; encoding = S_CMP_GE_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_ge_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LT_I32 { width = 32;
+  base = 0xbf040000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_lt_i32 { class = compare; encoding = S_CMP_LT_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_lt_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_CMP_LE_I32 { width = 32;
+  base = 0xbf050000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_cmp_le_i32 { class = compare; encoding = S_CMP_LE_I32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_cmp_le_i32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_BITCMP0_B32 { width = 32;
+  base = 0xbf0c0000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_bitcmp0_b32 { class = compare; encoding = S_BITCMP0_B32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_bitcmp0_b32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_BITCMP1_B32 { width = 32;
+  base = 0xbf0d0000;
+  rs1 = 0:8;
+  rs2 = 8:8;
+}
+
+op s_bitcmp1_b32 { class = compare; encoding = S_BITCMP1_B32;
+  operands = rs1: GPR, rs2: GPR;
+  syntax = "s_bitcmp1_b32 {rs1}, {rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding S_MOVK_I32 { width = 32;
+  base = 0xb0000000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_movk_i32 { class = misc; encoding = S_MOVK_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_movk_i32 {rd}, {imm}";
+  semantics = "(effect (intrinsic \"s_movk_i32\" rd imm))";
+}
+
+encoding S_CMOVK_I32 { width = 32;
+  base = 0xb0800000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmovk_i32 { class = misc; encoding = S_CMOVK_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmovk_i32 {rd}, {imm}";
+  semantics = "(effect (intrinsic \"s_cmovk_i32\" rd imm))";
+}
+
+encoding S_CMPK_EQ_I32 { width = 32;
+  base = 0xb1000000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_eq_i32 { class = compare; encoding = S_CMPK_EQ_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_eq_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_CMPK_LG_I32 { width = 32;
+  base = 0xb1800000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_lg_i32 { class = compare; encoding = S_CMPK_LG_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_lg_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_CMPK_GT_I32 { width = 32;
+  base = 0xb2000000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_gt_i32 { class = compare; encoding = S_CMPK_GT_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_gt_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_CMPK_GE_I32 { width = 32;
+  base = 0xb2800000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_ge_i32 { class = compare; encoding = S_CMPK_GE_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_ge_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_CMPK_LT_I32 { width = 32;
+  base = 0xb3000000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_lt_i32 { class = compare; encoding = S_CMPK_LT_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_lt_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_CMPK_LE_I32 { width = 32;
+  base = 0xb3800000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cmpk_le_i32 { class = compare; encoding = S_CMPK_LE_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_cmpk_le_i32 {rd}, {imm}";
+  semantics = "(set rd (compare imm))";
+}
+
+encoding S_ADDK_I32 { width = 32;
+  base = 0xb7000000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_addk_i32 { class = arithmetic; encoding = S_ADDK_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_addk_i32 {rd}, {imm}";
+  semantics = "(set rd (add imm))";
+}
+
+encoding S_MULK_I32 { width = 32;
+  base = 0xb7800000;
+  rd = 16:7;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_mulk_i32 { class = arithmetic; encoding = S_MULK_I32;
+  operands = rd: GPR, imm: imm;
+  syntax = "s_mulk_i32 {rd}, {imm}";
+  semantics = "(set rd (mul imm))";
+}
+
+encoding S_BRANCH { width = 32;
+  base = 0xbf820000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_branch { class = branch; encoding = S_BRANCH;
+  operands = imm: imm;
+  syntax = "s_branch {imm}";
+  semantics = "(effect (branch \"s_branch\" imm))";
+}
+
+encoding S_CBRANCH_SCC0 { width = 32;
+  base = 0xbf840000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_scc0 { class = branch; encoding = S_CBRANCH_SCC0;
+  operands = imm: imm;
+  syntax = "s_cbranch_scc0 {imm}";
+  semantics = "(effect (branch \"s_cbranch_scc0\" imm))";
+}
+
+encoding S_CBRANCH_SCC1 { width = 32;
+  base = 0xbf850000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_scc1 { class = branch; encoding = S_CBRANCH_SCC1;
+  operands = imm: imm;
+  syntax = "s_cbranch_scc1 {imm}";
+  semantics = "(effect (branch \"s_cbranch_scc1\" imm))";
+}
+
+encoding S_CBRANCH_VCCZ { width = 32;
+  base = 0xbf860000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_vccz { class = branch; encoding = S_CBRANCH_VCCZ;
+  operands = imm: imm;
+  syntax = "s_cbranch_vccz {imm}";
+  semantics = "(effect (branch \"s_cbranch_vccz\" imm))";
+}
+
+encoding S_CBRANCH_VCCNZ { width = 32;
+  base = 0xbf870000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_vccnz { class = branch; encoding = S_CBRANCH_VCCNZ;
+  operands = imm: imm;
+  syntax = "s_cbranch_vccnz {imm}";
+  semantics = "(effect (branch \"s_cbranch_vccnz\" imm))";
+}
+
+encoding S_CBRANCH_EXECZ { width = 32;
+  base = 0xbf880000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_execz { class = branch; encoding = S_CBRANCH_EXECZ;
+  operands = imm: imm;
+  syntax = "s_cbranch_execz {imm}";
+  semantics = "(effect (branch \"s_cbranch_execz\" imm))";
+}
+
+encoding S_CBRANCH_EXECNZ { width = 32;
+  base = 0xbf890000;
+  imm = 0:16;
+  signed = 1;
+}
+
+op s_cbranch_execnz { class = branch; encoding = S_CBRANCH_EXECNZ;
+  operands = imm: imm;
+  syntax = "s_cbranch_execnz {imm}";
+  semantics = "(effect (branch \"s_cbranch_execnz\" imm))";
+}
+
+encoding S_ENDPGM { width = 32;
+  base = 0xbf810000;
+}
+
+op s_endpgm { class = misc; encoding = S_ENDPGM;
+  operands = ;
+  syntax = "s_endpgm";
+  semantics = "(effect (intrinsic \"s_endpgm\" ))";
+}
+
+encoding S_BARRIER { width = 32;
+  base = 0xbf8a0000;
+}
+
+op s_barrier { class = misc; encoding = S_BARRIER;
+  operands = ;
+  syntax = "s_barrier";
+  semantics = "(effect (intrinsic \"s_barrier\" ))";
+}
+
+encoding S_WAKEUP { width = 32;
+  base = 0xbf830000;
+}
+
+op s_wakeup { class = misc; encoding = S_WAKEUP;
+  operands = ;
+  syntax = "s_wakeup";
+  semantics = "(effect (intrinsic \"s_wakeup\" ))";
+}
+
+encoding V_MOV_B32 { width = 32;
+  base = 0x7e000300;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_mov_b32 { class = misc; encoding = V_MOV_B32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_mov_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"v_mov_b32\" rd rs1))";
+}
+
+encoding V_NOT_B32 { width = 32;
+  base = 0x7e005700;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_not_b32 { class = arithmetic; encoding = V_NOT_B32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_not_b32 {rd}, {rs1}";
+  semantics = "(set rd (not rs1))";
+}
+
+encoding V_BFREV_B32 { width = 32;
+  base = 0x7e005900;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_bfrev_b32 { class = misc; encoding = V_BFREV_B32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_bfrev_b32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"v_bfrev_b32\" rd rs1))";
+}
+
+encoding V_RCP_F32 { width = 32;
+  base = 0x7e004500;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_rcp_f32 { class = arithmetic; encoding = V_RCP_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_rcp_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_rcp_f32\" rs1))";
+}
+
+encoding V_RSQ_F32 { width = 32;
+  base = 0x7e004900;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_rsq_f32 { class = arithmetic; encoding = V_RSQ_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_rsq_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_rsq_f32\" rs1))";
+}
+
+encoding V_SQRT_F32 { width = 32;
+  base = 0x7e004f00;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_sqrt_f32 { class = arithmetic; encoding = V_SQRT_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_sqrt_f32 {rd}, {rs1}";
+  semantics = "(set rd (sqrt rs1))";
+}
+
+encoding V_LOG_F32 { width = 32;
+  base = 0x7e004300;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_log_f32 { class = arithmetic; encoding = V_LOG_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_log_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_log_f32\" rs1))";
+}
+
+encoding V_EXP_F32 { width = 32;
+  base = 0x7e004100;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_exp_f32 { class = arithmetic; encoding = V_EXP_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_exp_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_exp_f32\" rs1))";
+}
+
+encoding V_FRACT_F32 { width = 32;
+  base = 0x7e003700;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_fract_f32 { class = arithmetic; encoding = V_FRACT_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_fract_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_fract_f32\" rs1))";
+}
+
+encoding V_CEIL_F32 { width = 32;
+  base = 0x7e003b00;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_ceil_f32 { class = arithmetic; encoding = V_CEIL_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_ceil_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_ceil_f32\" rs1))";
+}
+
+encoding V_FLOOR_F32 { width = 32;
+  base = 0x7e003f00;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_floor_f32 { class = arithmetic; encoding = V_FLOOR_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_floor_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_floor_f32\" rs1))";
+}
+
+encoding V_TRUNC_F32 { width = 32;
+  base = 0x7e003900;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_trunc_f32 { class = arithmetic; encoding = V_TRUNC_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_trunc_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_trunc_f32\" rs1))";
+}
+
+encoding V_RNDNE_F32 { width = 32;
+  base = 0x7e003d00;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_rndne_f32 { class = arithmetic; encoding = V_RNDNE_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_rndne_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_rndne_f32\" rs1))";
+}
+
+encoding V_SIN_F32 { width = 32;
+  base = 0x7e005300;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_sin_f32 { class = arithmetic; encoding = V_SIN_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_sin_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_sin_f32\" rs1))";
+}
+
+encoding V_COS_F32 { width = 32;
+  base = 0x7e005500;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_cos_f32 { class = arithmetic; encoding = V_COS_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_cos_f32 {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"v_cos_f32\" rs1))";
+}
+
+encoding V_CVT_F32_I32 { width = 32;
+  base = 0x7e000b00;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_cvt_f32_i32 { class = arithmetic; encoding = V_CVT_F32_I32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_cvt_f32_i32 {rd}, {rs1}";
+  semantics = "(set rd (convert rs1))";
+}
+
+encoding V_CVT_I32_F32 { width = 32;
+  base = 0x7e001100;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_cvt_i32_f32 { class = arithmetic; encoding = V_CVT_I32_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_cvt_i32_f32 {rd}, {rs1}";
+  semantics = "(set rd (convert rs1))";
+}
+
+encoding V_CVT_F16_F32 { width = 32;
+  base = 0x7e001500;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_cvt_f16_f32 { class = arithmetic; encoding = V_CVT_F16_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_cvt_f16_f32 {rd}, {rs1}";
+  semantics = "(set rd (convert rs1))";
+}
+
+encoding V_CVT_F32_F16 { width = 32;
+  base = 0x7e001700;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_cvt_f32_f16 { class = arithmetic; encoding = V_CVT_F32_F16;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_cvt_f32_f16 {rd}, {rs1}";
+  semantics = "(set rd (convert rs1))";
+}
+
+encoding V_FREXP_EXP_I32_F32 { width = 32;
+  base = 0x7e006700;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_frexp_exp_i32_f32 { class = misc; encoding = V_FREXP_EXP_I32_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_frexp_exp_i32_f32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"v_frexp_exp_i32_f32\" rd rs1))";
+}
+
+encoding V_FREXP_MANT_F32 { width = 32;
+  base = 0x7e006900;
+  rd = 17:8;
+  rs1 = 0:8;
+}
+
+op v_frexp_mant_f32 { class = misc; encoding = V_FREXP_MANT_F32;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "v_frexp_mant_f32 {rd}, {rs1}";
+  semantics = "(effect (intrinsic \"v_frexp_mant_f32\" rd rs1))";
+}
+
+encoding V_MOV_B32_IMM { width = 32;
+  base = 0x7e000280;
+  rd = 17:8;
+  imm = 0:7;
+  signed = 1;
+}
+
+op v_mov_b32_imm { class = misc; encoding = V_MOV_B32_IMM;
+  operands = rd: FPR, imm: imm;
+  syntax = "v_mov_b32 {rd}, {imm}";
+  semantics = "(effect (intrinsic \"v_mov_b32_imm\" rd imm))";
+}
+
+encoding V_NOT_B32_IMM { width = 32;
+  base = 0x7e005680;
+  rd = 17:8;
+  imm = 0:7;
+  signed = 1;
+}
+
+op v_not_b32_imm { class = misc; encoding = V_NOT_B32_IMM;
+  operands = rd: FPR, imm: imm;
+  syntax = "v_not_b32 {rd}, {imm}";
+  semantics = "(effect (intrinsic \"v_not_b32_imm\" rd imm))";
+}
+
+encoding V_BFREV_B32_IMM { width = 32;
+  base = 0x7e005880;
+  rd = 17:8;
+  imm = 0:7;
+  signed = 1;
+}
+
+op v_bfrev_b32_imm { class = misc; encoding = V_BFREV_B32_IMM;
+  operands = rd: FPR, imm: imm;
+  syntax = "v_bfrev_b32 {rd}, {imm}";
+  semantics = "(effect (intrinsic \"v_bfrev_b32_imm\" rd imm))";
+}
+
+encoding V_ADD_F32 { width = 32;
+  base = 0x2000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_add_f32 { class = arithmetic; encoding = V_ADD_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_add_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding V_SUB_F32 { width = 32;
+  base = 0x4000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_sub_f32 { class = arithmetic; encoding = V_SUB_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_sub_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_SUBREV_F32 { width = 32;
+  base = 0x6000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_subrev_f32 { class = arithmetic; encoding = V_SUBREV_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_subrev_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_MUL_F32 { width = 32;
+  base = 0xa000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_mul_f32 { class = arithmetic; encoding = V_MUL_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_mul_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding V_MUL_LEGACY_F32 { width = 32;
+  base = 0x8000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_mul_legacy_f32 { class = arithmetic; encoding = V_MUL_LEGACY_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_mul_legacy_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding V_MAX_F32 { width = 32;
+  base = 0x16000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_max_f32 { class = arithmetic; encoding = V_MAX_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_max_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (max rs1 rs2))";
+}
+
+encoding V_MIN_F32 { width = 32;
+  base = 0x14000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_min_f32 { class = arithmetic; encoding = V_MIN_F32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_min_f32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (min rs1 rs2))";
+}
+
+encoding V_ADD_U32 { width = 32;
+  base = 0x68000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_add_u32 { class = arithmetic; encoding = V_ADD_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_add_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding V_SUB_U32 { width = 32;
+  base = 0x6a000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_sub_u32 { class = arithmetic; encoding = V_SUB_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_sub_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_SUBREV_U32 { width = 32;
+  base = 0x6c000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_subrev_u32 { class = arithmetic; encoding = V_SUBREV_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_subrev_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_MIN_U32 { width = 32;
+  base = 0x1c000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_min_u32 { class = arithmetic; encoding = V_MIN_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_min_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (min rs1 rs2))";
+}
+
+encoding V_MAX_U32 { width = 32;
+  base = 0x1e000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_max_u32 { class = arithmetic; encoding = V_MAX_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_max_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (max rs1 rs2))";
+}
+
+encoding V_AND_B32 { width = 32;
+  base = 0x26000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_and_b32 { class = arithmetic; encoding = V_AND_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_and_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding V_OR_B32 { width = 32;
+  base = 0x28000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_or_b32 { class = arithmetic; encoding = V_OR_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_or_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding V_XOR_B32 { width = 32;
+  base = 0x2a000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_xor_b32 { class = arithmetic; encoding = V_XOR_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_xor_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (xor rs1 rs2))";
+}
+
+encoding V_LSHLREV_B32 { width = 32;
+  base = 0x24000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_lshlrev_b32 { class = arithmetic; encoding = V_LSHLREV_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_lshlrev_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_lshlrev_b32\" rs1 rs2))";
+}
+
+encoding V_LSHRREV_B32 { width = 32;
+  base = 0x20000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_lshrrev_b32 { class = arithmetic; encoding = V_LSHRREV_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_lshrrev_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_lshrrev_b32\" rs1 rs2))";
+}
+
+encoding V_ASHRREV_I32 { width = 32;
+  base = 0x22000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_ashrrev_i32 { class = arithmetic; encoding = V_ASHRREV_I32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_ashrrev_i32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_ashrrev_i32\" rs1 rs2))";
+}
+
+encoding V_CNDMASK_B32 { width = 32;
+  base = 0x100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_cndmask_b32 { class = arithmetic; encoding = V_CNDMASK_B32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_cndmask_b32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_cndmask_b32\" rs1 rs2))";
+}
+
+encoding V_MUL_I32_I24 { width = 32;
+  base = 0xc000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_mul_i32_i24 { class = arithmetic; encoding = V_MUL_I32_I24;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_mul_i32_i24 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding V_MUL_U32_U24 { width = 32;
+  base = 0x10000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_mul_u32_u24 { class = arithmetic; encoding = V_MUL_U32_U24;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_mul_u32_u24 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding V_ADD_CO_U32 { width = 32;
+  base = 0x32000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_add_co_u32 { class = arithmetic; encoding = V_ADD_CO_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_add_co_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding V_SUB_CO_U32 { width = 32;
+  base = 0x34000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_sub_co_u32 { class = arithmetic; encoding = V_SUB_CO_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_sub_co_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_SUBREV_CO_U32 { width = 32;
+  base = 0x36000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_subrev_co_u32 { class = arithmetic; encoding = V_SUBREV_CO_U32;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_subrev_co_u32 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding V_LSHLREV_B16 { width = 32;
+  base = 0x54000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_lshlrev_b16 { class = arithmetic; encoding = V_LSHLREV_B16;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_lshlrev_b16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_lshlrev_b16\" rs1 rs2))";
+}
+
+encoding V_LSHRREV_B16 { width = 32;
+  base = 0x56000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_lshrrev_b16 { class = arithmetic; encoding = V_LSHRREV_B16;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_lshrrev_b16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_lshrrev_b16\" rs1 rs2))";
+}
+
+encoding V_ASHRREV_I16 { width = 32;
+  base = 0x58000100;
+  rd = 17:8;
+  rs2 = 9:8;
+  rs1 = 0:8;
+}
+
+op v_ashrrev_i16 { class = arithmetic; encoding = V_ASHRREV_I16;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "v_ashrrev_i16 {rd}, {rs1}, {rs2}";
+  semantics = "(set rd (intrinsic \"v_ashrrev_i16\" rs1 rs2))";
+}

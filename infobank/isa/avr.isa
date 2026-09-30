@@ -1,0 +1,950 @@
+arch avr { word_size = 8; addr_size = 16; endian = little; align = 2; }
+
+
+profile {
+  family = "AVR";
+  model = "AVR_Classic";
+  version = "AVR8";
+  word_size = 8;
+  address_size = 16;
+  endianness = "little";
+  instruction_encoding = "fixed16_and_32";
+  execution_model = "scalar";
+  register_model = "register";
+  extensions = ["AVR8"];
+  register_classes = ["GPR"];
+  fixed_registers = [];
+  zero_register = "none";
+  operation_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+  instruction_count = 68;
+  encoding_widths = ["16"];
+  coverage = "source_inventory";
+  encoding_layout = { base_word = "16"; extended_instructions = "32"; endian = "little"; };
+}
+compiler {
+  instruction_selection {
+    strategy = "target_pattern_matching";
+    opcode_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+    register_classes = ["GPR"];
+    immediate_folding = true;
+    addressing_mode_folding = true;
+    branch_form_selection = true;
+    pseudo_expansion = "target_dependent";
+    cost_model = "target_microarchitecture";
+  }
+  instruction_scheduling {
+    strategy = "dependency_aware_target_scheduler";
+    dependency_ordering = true;
+    memory_dependence_analysis = true;
+    control_dependence_analysis = true;
+    latency_model = "target_microarchitecture";
+    resource_model = "target_microarchitecture";
+    packetization = false;
+  }
+  register_allocation {
+    strategy = "target_register_allocation";
+    register_classes = ["GPR"];
+    fixed_registers = [];
+    zero_register = "none";
+    caller_saved = "abi_dependent";
+    callee_saved = "abi_dependent";
+    spill_policy = "target_dependent";
+  }
+  optimization {
+    legality_model = "isa_and_memory_model";
+    transforms = ["constant_folding", "copy_propagation", "dead_code_elimination", "common_subexpression_elimination", "peephole_rewrite", "branch_simplification", "load_store_motion_target_dependent", "strength_reduction_target_dependent", "addressing_mode_folding", "branch_relaxation_target_dependent"];
+    instruction_combining = true;
+    peephole_optimization = true;
+    constant_folding = true;
+    dead_code_elimination = true;
+    common_subexpression_elimination = true;
+    loop_optimization = "target_dependent";
+    vectorization = "target_dependent";
+    if_conversion = "target_dependent";
+    interprocedural_optimization = "abi_and_linkage_dependent";
+  }
+}
+regclass GPR {
+    r0(8)=0,
+    r1(8)=1,
+    r2(8)=2,
+    r3(8)=3,
+    r4(8)=4,
+    r5(8)=5,
+    r6(8)=6,
+    r7(8)=7,
+    r8(8)=8,
+    r9(8)=9,
+    r10(8)=10,
+    r11(8)=11,
+    r12(8)=12,
+    r13(8)=13,
+    r14(8)=14,
+    r15(8)=15,
+    r16(8)=16,
+    r17(8)=17,
+    r18(8)=18,
+    r19(8)=19,
+    r20(8)=20,
+    r21(8)=21,
+    r22(8)=22,
+    r23(8)=23,
+    r24(8)=24,
+    r25(8)=25,
+    r26(8)=26,
+    r27(8)=27,
+    r28(8)=28,
+    r29(8)=29,
+    r30(8)=30,
+    r31(8)=31,
+}
+
+alias xl = r26;
+alias xh = r27;
+alias yl = r28;
+alias yh = r29;
+alias zl = r30;
+alias zh = r31;
+alias sp = r5;
+
+encoding ADD { width = 16;
+  base = 0xc00;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op add { class = arithmetic; encoding = ADD;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "add {rd}, {rs1}";
+  semantics = "(set rd (add rd rs1))";
+}
+
+encoding ADC { width = 16;
+  base = 0x1c00;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op adc { class = arithmetic; encoding = ADC;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "adc {rd}, {rs1}";
+  semantics = "(set rd (adc rd rs1))";
+}
+
+encoding SUB { width = 16;
+  base = 0x1800;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op sub { class = arithmetic; encoding = SUB;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sub {rd}, {rs1}";
+  semantics = "(set rd (sub rd rs1))";
+}
+
+encoding SBC { width = 16;
+  base = 0x800;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op sbc { class = arithmetic; encoding = SBC;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sbc {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"sbc\" rs1))";
+}
+
+encoding AND { width = 16;
+  base = 0x2000;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op and { class = arithmetic; encoding = AND;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "and {rd}, {rs1}";
+  semantics = "(set rd (and rd rs1))";
+}
+
+encoding OR { width = 16;
+  base = 0x2800;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op or { class = arithmetic; encoding = OR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "or {rd}, {rs1}";
+  semantics = "(set rd (or rd rs1))";
+}
+
+encoding EOR { width = 16;
+  base = 0x2400;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op eor { class = arithmetic; encoding = EOR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "eor {rd}, {rs1}";
+  semantics = "(set rd (intrinsic \"eor\" rs1))";
+}
+
+encoding CP { width = 16;
+  base = 0x1400;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op cp { class = compare; encoding = CP;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cp {rd}, {rs1}";
+  semantics = "(set rd (compare rs1))";
+}
+
+encoding CPC { width = 16;
+  base = 0x400;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op cpc { class = compare; encoding = CPC;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cpc {rd}, {rs1}";
+  semantics = "(set rd (compare rs1))";
+}
+
+encoding CPSE { width = 16;
+  base = 0x1000;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op cpse { class = compare; encoding = CPSE;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cpse {rd}, {rs1}";
+  semantics = "(set rd (compare rs1))";
+}
+
+encoding MUL { width = 16;
+  base = 0x9c00;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op mul { class = arithmetic; encoding = MUL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mul {rd}, {rs1}";
+  semantics = "(set rd (mul rd rs1))";
+}
+
+encoding MOV { width = 16;
+  base = 0x2c00;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+  rs1[3:0] = 0:4;
+  rs1[4:4] = 9:1;
+}
+
+op mov { class = misc; encoding = MOV;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mov {rd}, {rs1}";
+  semantics = "(set rd (move rs1))";
+}
+
+encoding LSL { width = 16;
+  base = 0xc01;
+  rd = 4:5;
+}
+
+op lsl { class = arithmetic; encoding = LSL;
+  operands = rd: GPR;
+  syntax = "lsl {rd}";
+  semantics = "(set rd (intrinsic \"lsl\" ))";
+}
+
+encoding LSR { width = 16;
+  base = 0x9406;
+  rd = 4:5;
+}
+
+op lsr { class = arithmetic; encoding = LSR;
+  operands = rd: GPR;
+  syntax = "lsr {rd}";
+  semantics = "(set rd (intrinsic \"lsr\" ))";
+}
+
+encoding ASR { width = 16;
+  base = 0x9405;
+  rd = 4:5;
+}
+
+op asr { class = arithmetic; encoding = ASR;
+  operands = rd: GPR;
+  syntax = "asr {rd}";
+  semantics = "(set rd (ashr ))";
+}
+
+encoding ROL { width = 16;
+  base = 0x1c01;
+  rd = 4:5;
+}
+
+op rol { class = arithmetic; encoding = ROL;
+  operands = rd: GPR;
+  syntax = "rol {rd}";
+  semantics = "(set rd (intrinsic \"rol\" ))";
+}
+
+encoding ROR { width = 16;
+  base = 0x9407;
+  rd = 4:5;
+}
+
+op ror { class = arithmetic; encoding = ROR;
+  operands = rd: GPR;
+  syntax = "ror {rd}";
+  semantics = "(set rd (intrinsic \"ror\" ))";
+}
+
+encoding COM { width = 16;
+  base = 0x9400;
+  rd = 4:5;
+}
+
+op com { class = arithmetic; encoding = COM;
+  operands = rd: GPR;
+  syntax = "com {rd}";
+  semantics = "(set rd (intrinsic \"com\" ))";
+}
+
+encoding NEG { width = 16;
+  base = 0x9401;
+  rd = 4:5;
+}
+
+op neg { class = arithmetic; encoding = NEG;
+  operands = rd: GPR;
+  syntax = "neg {rd}";
+  semantics = "(set rd (neg ))";
+}
+
+encoding INC { width = 16;
+  base = 0x9403;
+  rd = 4:5;
+}
+
+op inc { class = arithmetic; encoding = INC;
+  operands = rd: GPR;
+  syntax = "inc {rd}";
+  semantics = "(set rd (intrinsic \"inc\" ))";
+}
+
+encoding DEC { width = 16;
+  base = 0x940a;
+  rd = 4:5;
+}
+
+op dec { class = arithmetic; encoding = DEC;
+  operands = rd: GPR;
+  syntax = "dec {rd}";
+  semantics = "(set rd (intrinsic \"dec\" ))";
+}
+
+encoding TST { width = 16;
+  base = 0x2001;
+  rd = 4:5;
+}
+
+op tst { class = compare; encoding = TST;
+  operands = rd: GPR;
+  syntax = "tst {rd}";
+  semantics = "(set rd (compare ))";
+}
+
+encoding SWAP { width = 16;
+  base = 0x9402;
+  rd = 4:5;
+}
+
+op swap { class = misc; encoding = SWAP;
+  operands = rd: GPR;
+  syntax = "swap {rd}";
+  semantics = "(effect (intrinsic \"swap\" rd))";
+}
+
+encoding PUSH { width = 16;
+  base = 0x920f;
+  rd = 4:5;
+}
+
+op push { class = misc; encoding = PUSH;
+  operands = rd: GPR;
+  syntax = "push {rd}";
+  semantics = "(effect (intrinsic \"push\" rd))";
+}
+
+encoding POP { width = 16;
+  base = 0x900f;
+  rd = 4:5;
+}
+
+op pop { class = misc; encoding = POP;
+  operands = rd: GPR;
+  syntax = "pop {rd}";
+  semantics = "(effect (intrinsic \"pop\" rd))";
+}
+
+encoding SER { width = 16;
+  base = 0xee0f;
+  rd = 4:5;
+}
+
+op ser { class = misc; encoding = SER;
+  operands = rd: GPR;
+  syntax = "ser {rd}";
+  semantics = "(effect (intrinsic \"ser\" rd))";
+}
+
+encoding CBR { width = 16;
+  base = 0x7e0f;
+  rd = 4:5;
+}
+
+op cbr { class = misc; encoding = CBR;
+  operands = rd: GPR;
+  syntax = "cbr {rd}, 0";
+  semantics = "(effect (intrinsic \"cbr\" rd))";
+}
+
+encoding LDI { width = 16;
+  base = 0xe000;
+  rd[3:0] = 4:4;
+  k[7:4] = 8:4;
+  k[3:0] = 0:4;
+}
+
+op ldi { class = arithmetic; encoding = LDI;
+  operands = rd: GPR, k: imm;
+  syntax = "ldi {rd}, {k}";
+  semantics = "(set rd (intrinsic \"ldi\" k))";
+}
+
+encoding SUBI { width = 16;
+  base = 0x5000;
+  rd[3:0] = 4:4;
+  k[7:4] = 8:4;
+  k[3:0] = 0:4;
+}
+
+op subi { class = arithmetic; encoding = SUBI;
+  operands = rd: GPR, k: imm;
+  syntax = "subi {rd}, {k}";
+  semantics = "(set rd (sub rd k))";
+}
+
+encoding SBCI { width = 16;
+  base = 0x4000;
+  rd[3:0] = 4:4;
+  k[7:4] = 8:4;
+  k[3:0] = 0:4;
+}
+
+op sbci { class = arithmetic; encoding = SBCI;
+  operands = rd: GPR, k: imm;
+  syntax = "sbci {rd}, {k}";
+  semantics = "(set rd (intrinsic \"sbci\" k))";
+}
+
+encoding ANDI { width = 16;
+  base = 0x7000;
+  rd[3:0] = 4:4;
+  k[7:4] = 8:4;
+  k[3:0] = 0:4;
+}
+
+op andi { class = arithmetic; encoding = ANDI;
+  operands = rd: GPR, k: imm;
+  syntax = "andi {rd}, {k}";
+  semantics = "(set rd (and rd k))";
+}
+
+encoding ORI { width = 16;
+  base = 0x6000;
+  rd[3:0] = 4:4;
+  k[7:4] = 8:4;
+  k[3:0] = 0:4;
+}
+
+op ori { class = arithmetic; encoding = ORI;
+  operands = rd: GPR, k: imm;
+  syntax = "ori {rd}, {k}";
+  semantics = "(set rd (or rd k))";
+}
+
+encoding SBRC { width = 16;
+  base = 0xfc00;
+  rd = 4:5;
+  b = 0:3;
+}
+
+op sbrc { class = compare; encoding = SBRC;
+  operands = rd: GPR, b: imm;
+  syntax = "sbrc {rd}, {b}";
+  semantics = "(set rd (compare b))";
+}
+
+encoding SBRS { width = 16;
+  base = 0xfe00;
+  rd = 4:5;
+  b = 0:3;
+}
+
+op sbrs { class = compare; encoding = SBRS;
+  operands = rd: GPR, b: imm;
+  syntax = "sbrs {rd}, {b}";
+  semantics = "(set rd (compare b))";
+}
+
+encoding BST { width = 16;
+  base = 0xfa00;
+  rd = 4:5;
+  b = 0:3;
+}
+
+op bst { class = misc; encoding = BST;
+  operands = rd: GPR, b: imm;
+  syntax = "bst {rd}, {b}";
+  semantics = "(effect (intrinsic \"bst\" rd b))";
+}
+
+encoding BLD { width = 16;
+  base = 0xf800;
+  rd = 4:5;
+  b = 0:3;
+}
+
+op bld { class = misc; encoding = BLD;
+  operands = rd: GPR, b: imm;
+  syntax = "bld {rd}, {b}";
+  semantics = "(effect (intrinsic \"bld\" rd b))";
+}
+
+encoding BSET { width = 16;
+  base = 0x9408;
+  b = 4:3;
+}
+
+op bset { class = misc; encoding = BSET;
+  operands = b: imm;
+  syntax = "bset {b}";
+  semantics = "(effect (intrinsic \"bset\" b))";
+}
+
+encoding BCLR { width = 16;
+  base = 0x9488;
+  b = 4:3;
+}
+
+op bclr { class = misc; encoding = BCLR;
+  operands = b: imm;
+  syntax = "bclr {b}";
+  semantics = "(effect (intrinsic \"bclr\" b))";
+}
+
+encoding MULS { width = 16;
+  base = 0x200;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op muls { class = arithmetic; encoding = MULS;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "muls {rd}, {rs1}";
+  semantics = "(set rd (mul rd rs1))";
+}
+
+encoding MULSU { width = 16;
+  base = 0x300;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op mulsu { class = arithmetic; encoding = MULSU;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mulsu {rd}, {rs1}";
+  semantics = "(set rd (mul rd rs1))";
+}
+
+encoding LD { width = 16;
+  base = 0x900c;
+  rd = 4:5;
+}
+
+op ld { class = load; encoding = LD;
+  operands = rd: GPR;
+  syntax = "ld {rd}, X";
+  semantics = "(set rd (load target mem))";
+}
+
+encoding LD_POST { width = 16;
+  base = 0x900d;
+  rd = 4:5;
+}
+
+op ld_post { class = load; encoding = LD_POST;
+  operands = rd: GPR;
+  syntax = "ld {rd}, X+";
+  semantics = "(set rd (load target mem))";
+}
+
+encoding LD_PRE { width = 16;
+  base = 0x900e;
+  rd = 4:5;
+}
+
+op ld_pre { class = load; encoding = LD_PRE;
+  operands = rd: GPR;
+  syntax = "ld {rd}, -X";
+  semantics = "(set rd (load target mem))";
+}
+
+encoding ST { width = 16;
+  base = 0x920c;
+  rd = 4:5;
+}
+
+op st { class = store; encoding = ST;
+  operands = rd: GPR;
+  syntax = "st X, {rd}";
+  semantics = "(store (memory-address ) rd)";
+}
+
+encoding ST_POST { width = 16;
+  base = 0x920d;
+  rd = 4:5;
+}
+
+op st_post { class = store; encoding = ST_POST;
+  operands = rd: GPR;
+  syntax = "st X+, {rd}";
+  semantics = "(store (memory-address ) rd)";
+}
+
+encoding ST_PRE { width = 16;
+  base = 0x920e;
+  rd = 4:5;
+}
+
+op st_pre { class = store; encoding = ST_PRE;
+  operands = rd: GPR;
+  syntax = "st -X, {rd}";
+  semantics = "(store (memory-address ) rd)";
+}
+
+encoding LDD { width = 16;
+  base = 0x8008;
+  rd = 4:5;
+  q[2:0] = 0:3;
+  q[5:3] = 10:3;
+}
+
+op ldd { class = load; encoding = LDD;
+  operands = rd: GPR, q: imm;
+  syntax = "ldd {rd}, Y+{q}";
+  semantics = "(set rd (load target (addr q)))";
+}
+
+encoding STD { width = 16;
+  base = 0x8208;
+  rd = 4:5;
+  q[2:0] = 0:3;
+  q[5:3] = 10:3;
+}
+
+op std { class = store; encoding = STD;
+  operands = rd: GPR, q: imm;
+  syntax = "std Y+{q}, {rd}";
+  semantics = "(store (memory-address q) rd)";
+}
+
+encoding LPM { width = 16;
+  base = 0x9004;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+}
+
+op lpm { class = load; encoding = LPM;
+  operands = rd: GPR;
+  syntax = "lpm {rd}, Z";
+  semantics = "(set rd (load target mem))";
+}
+
+encoding LPM_POST { width = 16;
+  base = 0x9005;
+  rd[3:0] = 4:4;
+  rd[4:4] = 8:1;
+}
+
+op lpm_post { class = load; encoding = LPM_POST;
+  operands = rd: GPR;
+  syntax = "lpm {rd}, Z+";
+  semantics = "(set rd (load target mem))";
+}
+
+encoding RJMP { width = 16;
+  base = 0xc000;
+  offset[12:1] = 0:12;
+  signed = 1;
+  alignment = 2;
+}
+
+op rjmp { class = branch; encoding = RJMP;
+  operands = offset: rel;
+  syntax = "rjmp {offset}";
+  semantics = "(effect (branch \"rjmp\" offset))";
+}
+
+encoding RCALL { width = 16;
+  base = 0xd000;
+  offset[12:1] = 0:12;
+  signed = 1;
+  alignment = 2;
+}
+
+op rcall { class = branch; encoding = RCALL;
+  operands = offset: rel;
+  syntax = "rcall {offset}";
+  semantics = "(effect (branch \"rcall\" offset))";
+}
+
+encoding BREQ { width = 16;
+  base = 0xf001;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op breq { class = branch; encoding = BREQ;
+  operands = offset: rel;
+  syntax = "breq {offset}";
+  semantics = "(effect (branch \"breq\" offset))";
+}
+
+encoding BRNE { width = 16;
+  base = 0xf401;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brne { class = branch; encoding = BRNE;
+  operands = offset: rel;
+  syntax = "brne {offset}";
+  semantics = "(effect (branch \"brne\" offset))";
+}
+
+encoding BRCS { width = 16;
+  base = 0xf000;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brcs { class = branch; encoding = BRCS;
+  operands = offset: rel;
+  syntax = "brcs {offset}";
+  semantics = "(effect (branch \"brcs\" offset))";
+}
+
+encoding BRCC { width = 16;
+  base = 0xf400;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brcc { class = branch; encoding = BRCC;
+  operands = offset: rel;
+  syntax = "brcc {offset}";
+  semantics = "(effect (branch \"brcc\" offset))";
+}
+
+encoding BRSH { width = 16;
+  base = 0xf400;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brsh { class = branch; encoding = BRSH;
+  operands = offset: rel;
+  syntax = "brsh {offset}";
+  semantics = "(effect (branch \"brsh\" offset))";
+}
+
+encoding BRLO { width = 16;
+  base = 0xf000;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brlo { class = branch; encoding = BRLO;
+  operands = offset: rel;
+  syntax = "brlo {offset}";
+  semantics = "(effect (branch \"brlo\" offset))";
+}
+
+encoding BRMI { width = 16;
+  base = 0xf002;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brmi { class = branch; encoding = BRMI;
+  operands = offset: rel;
+  syntax = "brmi {offset}";
+  semantics = "(effect (branch \"brmi\" offset))";
+}
+
+encoding BRPL { width = 16;
+  base = 0xf402;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brpl { class = branch; encoding = BRPL;
+  operands = offset: rel;
+  syntax = "brpl {offset}";
+  semantics = "(effect (branch \"brpl\" offset))";
+}
+
+encoding BRGE { width = 16;
+  base = 0xf404;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brge { class = branch; encoding = BRGE;
+  operands = offset: rel;
+  syntax = "brge {offset}";
+  semantics = "(effect (branch \"brge\" offset))";
+}
+
+encoding BRLT { width = 16;
+  base = 0xf004;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brlt { class = branch; encoding = BRLT;
+  operands = offset: rel;
+  syntax = "brlt {offset}";
+  semantics = "(effect (branch \"brlt\" offset))";
+}
+
+encoding BRHS { width = 16;
+  base = 0xf005;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brhs { class = branch; encoding = BRHS;
+  operands = offset: rel;
+  syntax = "brhs {offset}";
+  semantics = "(effect (branch \"brhs\" offset))";
+}
+
+encoding BRHC { width = 16;
+  base = 0xf405;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brhc { class = branch; encoding = BRHC;
+  operands = offset: rel;
+  syntax = "brhc {offset}";
+  semantics = "(effect (branch \"brhc\" offset))";
+}
+
+encoding BRTS { width = 16;
+  base = 0xf006;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brts { class = branch; encoding = BRTS;
+  operands = offset: rel;
+  syntax = "brts {offset}";
+  semantics = "(effect (branch \"brts\" offset))";
+}
+
+encoding BRTC { width = 16;
+  base = 0xf406;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brtc { class = branch; encoding = BRTC;
+  operands = offset: rel;
+  syntax = "brtc {offset}";
+  semantics = "(effect (branch \"brtc\" offset))";
+}
+
+encoding BRIE { width = 16;
+  base = 0xf007;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brie { class = branch; encoding = BRIE;
+  operands = offset: rel;
+  syntax = "brie {offset}";
+  semantics = "(effect (branch \"brie\" offset))";
+}
+
+encoding BRID { width = 16;
+  base = 0xf407;
+  offset[7:1] = 3:7;
+  signed = 1;
+  alignment = 2;
+}
+
+op brid { class = branch; encoding = BRID;
+  operands = offset: rel;
+  syntax = "brid {offset}";
+  semantics = "(effect (branch \"brid\" offset))";
+}

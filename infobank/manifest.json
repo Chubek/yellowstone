@@ -1,0 +1,604 @@
+{
+  "format": "isa-description-bundle",
+  "version": 1,
+  "grammar": "isa/isa.peg",
+  "semantic_format": "s-expression",
+  "architectures": [
+    {
+      "file": "isa/nvptx.isa",
+      "arch": "nvptx",
+      "family": "NVIDIA_PTX",
+      "model": "PTX",
+      "version": "virtual_ISA",
+      "instruction_count": 42,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 42
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/x86.isa",
+      "arch": "amd64",
+      "family": "x86",
+      "model": "AMD64",
+      "version": "x86-64",
+      "instruction_count": 144,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 144
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/mips32.isa",
+      "arch": "mips32",
+      "family": "MIPS",
+      "model": "MIPS32",
+      "version": "Release_2_plus",
+      "instruction_count": 62,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 62
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/s390x.isa",
+      "arch": "s390x",
+      "family": "IBM_Z",
+      "model": "z_Architecture",
+      "version": "zArch",
+      "instruction_count": 70,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 70
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/ppc32.isa",
+      "arch": "ppc32",
+      "family": "Power",
+      "model": "PowerPC32",
+      "version": "ISA_2_0_plus",
+      "instruction_count": 64,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 64
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/m68k.isa",
+      "arch": "m68k",
+      "family": "Motorola_68000",
+      "model": "68000_family",
+      "version": "base",
+      "instruction_count": 104,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 104
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/aarch64.isa",
+      "arch": "aarch64",
+      "family": "ARM",
+      "model": "AArch64",
+      "version": "A64",
+      "instruction_count": 315,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 315
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/sparc64.isa",
+      "arch": "sparc64",
+      "family": "SPARC",
+      "model": "SPARC_V9",
+      "version": "V9",
+      "instruction_count": 107,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 107
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/amdgpu.isa",
+      "arch": "amdgpu",
+      "family": "AMD_GCN",
+      "model": "gfx900",
+      "version": "GCN_GFX9",
+      "instruction_count": 139,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 139
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/riscv64.isa",
+      "arch": "riscv64",
+      "family": "RISC_V",
+      "model": "RV64",
+      "version": "RV64GC_plus",
+      "instruction_count": 252,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 252
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/spirv.isa",
+      "arch": "spirv",
+      "family": "Khronos_SPIR_V",
+      "model": "SPIR_V",
+      "version": "core",
+      "instruction_count": 873,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 873
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/loongarch64.isa",
+      "arch": "loongarch64",
+      "family": "LoongArch",
+      "model": "LoongArch64",
+      "version": "LA64",
+      "instruction_count": 148,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 148
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/loongarch32.isa",
+      "arch": "loongarch32",
+      "family": "LoongArch",
+      "model": "LoongArch32",
+      "version": "LA32",
+      "instruction_count": 91,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 91
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/mips64.isa",
+      "arch": "mips64",
+      "family": "MIPS",
+      "model": "MIPS64",
+      "version": "Release_2_plus",
+      "instruction_count": 84,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 84
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/tricore.isa",
+      "arch": "tricore",
+      "family": "TriCore",
+      "model": "TriCore_TC1_6_2",
+      "version": "TC1.6.2",
+      "instruction_count": 31,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 31
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/arm32.isa",
+      "arch": "arm32",
+      "family": "ARM",
+      "model": "ARMv7_A32",
+      "version": "A32",
+      "instruction_count": 114,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 114
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/directx.isa",
+      "arch": "directx",
+      "family": "DirectX",
+      "model": "DXIL",
+      "version": "DXIL_LLVM_based",
+      "instruction_count": 34,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 34
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/avr.isa",
+      "arch": "avr",
+      "family": "AVR",
+      "model": "AVR_Classic",
+      "version": "AVR8",
+      "instruction_count": 68,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 68
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/ppc64.isa",
+      "arch": "ppc64",
+      "family": "Power",
+      "model": "PowerPC64",
+      "version": "ISA_2_0_plus",
+      "instruction_count": 90,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 90
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/wasm.isa",
+      "arch": "wasm",
+      "family": "WebAssembly",
+      "model": "Core",
+      "version": "2_0",
+      "instruction_count": 200,
+      "register_classes": [],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 200
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/riscv32.isa",
+      "arch": "riscv32",
+      "family": "RISC_V",
+      "model": "RV32",
+      "version": "RV32G_plus",
+      "instruction_count": 199,
+      "register_classes": [
+        "GPR",
+        "FPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 199
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/bpf.isa",
+      "arch": "bpf",
+      "family": "eBPF",
+      "model": "Linux_eBPF",
+      "version": "ISA_v1_plus",
+      "instruction_count": 138,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 138
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    },
+    {
+      "file": "isa/hexagon.isa",
+      "arch": "hexagon",
+      "family": "Qualcomm_Hexagon",
+      "model": "Hexagon",
+      "version": "V5_plus_target_dependent",
+      "instruction_count": 26,
+      "register_classes": [
+        "GPR"
+      ],
+      "semantics": {
+        "format": "s-expression",
+        "field": "semantics",
+        "count": 26
+      },
+      "compiler": [
+        "instruction_selection",
+        "instruction_scheduling",
+        "register_allocation",
+        "optimization"
+      ],
+      "grammar": "isa/isa.peg"
+    }
+  ],
+  "legacy_markers": [
+    {
+      "file": "isa/.dsymspec.isa",
+      "kind": "dsymspec"
+    },
+    {
+      "file": "isa/.qarch.isa",
+      "kind": "qarch"
+    },
+    {
+      "file": "isa/dsl.lua.isa",
+      "kind": "dsl"
+    }
+  ],
+  "normalization": {
+    "comments": "removed",
+    "profiles": "added",
+    "compiler_metadata": "added",
+    "instruction_semantics": "added",
+    "legacy_markers": "machine_readable",
+    "source_inventory_preserved": true
+  },
+  "corrections": [
+    {
+      "architecture": "spirv",
+      "field": "binary_word_layout",
+      "from": "word_count_bits_16_0_opcode_bits_30_16",
+      "to": "word_count_bits_31_16_opcode_bits_15_0"
+    },
+    {
+      "architecture": "riscv32",
+      "field": "fixed_registers",
+      "from": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "to": [
+        "x0"
+      ]
+    },
+    {
+      "architecture": "riscv64",
+      "field": "fixed_registers",
+      "from": [
+        "x0",
+        "x1",
+        "x2"
+      ],
+      "to": [
+        "x0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1501 @@
+arch sparc64 { word_size = 64; addr_size = 64; endian = big; align = 4; }
+
+
+profile {
+  family = "SPARC";
+  model = "SPARC_V9";
+  version = "V9";
+  word_size = 64;
+  address_size = 64;
+  endianness = "big";
+  instruction_encoding = "fixed32";
+  execution_model = "superscalar_target_dependent";
+  register_model = "register_windows";
+  extensions = ["V9", "VIS_target_dependent"];
+  register_classes = ["GPR", "FPR"];
+  fixed_registers = ["g0"];
+  zero_register = "g0";
+  operation_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+  instruction_count = 107;
+  encoding_widths = ["32"];
+  coverage = "source_inventory";
+  encoding_layout = { fixed_bits = "32"; endian = "big"; };
+}
+compiler {
+  instruction_selection {
+    strategy = "target_pattern_matching";
+    opcode_classes = ["arithmetic", "branch", "compare", "load", "misc", "store"];
+    register_classes = ["GPR", "FPR"];
+    immediate_folding = true;
+    addressing_mode_folding = true;
+    branch_form_selection = true;
+    pseudo_expansion = "target_dependent";
+    cost_model = "target_microarchitecture";
+  }
+  instruction_scheduling {
+    strategy = "dependency_aware_target_scheduler";
+    dependency_ordering = true;
+    memory_dependence_analysis = true;
+    control_dependence_analysis = true;
+    latency_model = "target_microarchitecture";
+    resource_model = "target_microarchitecture";
+    packetization = false;
+  }
+  register_allocation {
+    strategy = "target_register_allocation";
+    register_classes = ["GPR", "FPR"];
+    fixed_registers = ["g0"];
+    zero_register = "g0";
+    caller_saved = "abi_dependent";
+    callee_saved = "abi_dependent";
+    spill_policy = "target_dependent";
+  }
+  optimization {
+    legality_model = "isa_and_memory_model";
+    transforms = ["constant_folding", "copy_propagation", "dead_code_elimination", "common_subexpression_elimination", "peephole_rewrite", "branch_simplification", "load_store_motion_target_dependent", "strength_reduction_target_dependent", "addressing_mode_folding", "branch_relaxation_target_dependent"];
+    instruction_combining = true;
+    peephole_optimization = true;
+    constant_folding = true;
+    dead_code_elimination = true;
+    common_subexpression_elimination = true;
+    loop_optimization = "target_dependent";
+    vectorization = "target_dependent";
+    if_conversion = "target_dependent";
+    interprocedural_optimization = "abi_and_linkage_dependent";
+  }
+}
+regclass GPR {
+    g0(64)=0,
+    g1(64)=1,
+    g2(64)=2,
+    g3(64)=3,
+    g4(64)=4,
+    g5(64)=5,
+    g6(64)=6,
+    g7(64)=7,
+    o0(64)=8,
+    o1(64)=9,
+    o2(64)=10,
+    o3(64)=11,
+    o4(64)=12,
+    o5(64)=13,
+    o6(64)=14,
+    o7(64)=15,
+    l0(64)=16,
+    l1(64)=17,
+    l2(64)=18,
+    l3(64)=19,
+    l4(64)=20,
+    l5(64)=21,
+    l6(64)=22,
+    l7(64)=23,
+    i0(64)=24,
+    i1(64)=25,
+    i2(64)=26,
+    i3(64)=27,
+    i4(64)=28,
+    i5(64)=29,
+    i6(64)=30,
+    i7(64)=31,
+}
+
+regclass FPR {
+    f0(64)=0,
+    f1(64)=1,
+    f2(64)=2,
+    f3(64)=3,
+    f4(64)=4,
+    f5(64)=5,
+    f6(64)=6,
+    f7(64)=7,
+    f8(64)=8,
+    f9(64)=9,
+    f10(64)=10,
+    f11(64)=11,
+    f12(64)=12,
+    f13(64)=13,
+    f14(64)=14,
+    f15(64)=15,
+    f16(64)=16,
+    f17(64)=17,
+    f18(64)=18,
+    f19(64)=19,
+    f20(64)=20,
+    f21(64)=21,
+    f22(64)=22,
+    f23(64)=23,
+    f24(64)=24,
+    f25(64)=25,
+    f26(64)=26,
+    f27(64)=27,
+    f28(64)=28,
+    f29(64)=29,
+    f30(64)=30,
+    f31(64)=31,
+}
+
+alias sp = o6;
+alias fp = i6;
+
+encoding ADD { width = 32;
+  base = 0x80000000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op add { class = arithmetic; encoding = ADD;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "add %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUB { width = 32;
+  base = 0x80200000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sub { class = arithmetic; encoding = SUB;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sub %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding AND { width = 32;
+  base = 0x80080000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op and { class = arithmetic; encoding = AND;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "and %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding OR { width = 32;
+  base = 0x80100000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op or { class = arithmetic; encoding = OR;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "or %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding XOR { width = 32;
+  base = 0x80180000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op xor { class = arithmetic; encoding = XOR;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "xor %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (xor rs1 rs2))";
+}
+
+encoding ANDN { width = 32;
+  base = 0x80280000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op andn { class = arithmetic; encoding = ANDN;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "andn %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding ORN { width = 32;
+  base = 0x80300000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op orn { class = arithmetic; encoding = ORN;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "orn %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding XNOR { width = 32;
+  base = 0x80380000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op xnor { class = arithmetic; encoding = XNOR;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "xnor %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (xnor rs1 rs2))";
+}
+
+encoding ADDX { width = 32;
+  base = 0x80400000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op addx { class = arithmetic; encoding = ADDX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "addx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUBX { width = 32;
+  base = 0x80600000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op subx { class = arithmetic; encoding = SUBX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "subx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding ADDCC { width = 32;
+  base = 0x80800000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op addcc { class = arithmetic; encoding = ADDCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "addcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUBCC { width = 32;
+  base = 0x80a00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op subcc { class = arithmetic; encoding = SUBCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "subcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding ANDCC { width = 32;
+  base = 0x80880000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op andcc { class = arithmetic; encoding = ANDCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "andcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding ORCC { width = 32;
+  base = 0x80900000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op orcc { class = arithmetic; encoding = ORCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "orcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding XORCC { width = 32;
+  base = 0x80980000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op xorcc { class = arithmetic; encoding = XORCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "xorcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (xor rs1 rs2))";
+}
+
+encoding ADDXCC { width = 32;
+  base = 0x80c00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op addxcc { class = arithmetic; encoding = ADDXCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "addxcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (add rs1 rs2))";
+}
+
+encoding SUBXCC { width = 32;
+  base = 0x80e00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op subxcc { class = arithmetic; encoding = SUBXCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "subxcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (sub rs1 rs2))";
+}
+
+encoding ANDNCC { width = 32;
+  base = 0x80a80000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op andncc { class = arithmetic; encoding = ANDNCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "andncc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (and rs1 rs2))";
+}
+
+encoding ORNCC { width = 32;
+  base = 0x80b00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op orncc { class = arithmetic; encoding = ORNCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "orncc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (or rs1 rs2))";
+}
+
+encoding XNORCC { width = 32;
+  base = 0x80b80000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op xnorcc { class = arithmetic; encoding = XNORCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "xnorcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (xnor rs1 rs2))";
+}
+
+encoding TADDCC { width = 32;
+  base = 0x81000000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op taddcc { class = arithmetic; encoding = TADDCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "taddcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"taddcc\" rs1 rs2))";
+}
+
+encoding TSUBCC { width = 32;
+  base = 0x81080000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op tsubcc { class = arithmetic; encoding = TSUBCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "tsubcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"tsubcc\" rs1 rs2))";
+}
+
+encoding UMUL { width = 32;
+  base = 0x80500000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op umul { class = arithmetic; encoding = UMUL;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "umul %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"umul\" rs1 rs2))";
+}
+
+encoding SMUL { width = 32;
+  base = 0x80580000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op smul { class = arithmetic; encoding = SMUL;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "smul %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"smul\" rs1 rs2))";
+}
+
+encoding SMULCC { width = 32;
+  base = 0x80d80000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op smulcc { class = arithmetic; encoding = SMULCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "smulcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"smulcc\" rs1 rs2))";
+}
+
+encoding MULSCC { width = 32;
+  base = 0x81200000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op mulscc { class = arithmetic; encoding = MULSCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "mulscc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding MULX { width = 32;
+  base = 0x80480000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op mulx { class = arithmetic; encoding = MULX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "mulx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (mul rs1 rs2))";
+}
+
+encoding UDIV { width = 32;
+  base = 0x80700000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op udiv { class = arithmetic; encoding = UDIV;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "udiv %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"udiv\" rs1 rs2))";
+}
+
+encoding SDIV { width = 32;
+  base = 0x80780000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sdiv { class = arithmetic; encoding = SDIV;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sdiv %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"sdiv\" rs1 rs2))";
+}
+
+encoding UDIVX { width = 32;
+  base = 0x80680000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op udivx { class = arithmetic; encoding = UDIVX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "udivx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"udivx\" rs1 rs2))";
+}
+
+encoding SDIVX { width = 32;
+  base = 0x81680000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sdivx { class = arithmetic; encoding = SDIVX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sdivx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"sdivx\" rs1 rs2))";
+}
+
+encoding UDIVCC { width = 32;
+  base = 0x80f00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op udivcc { class = arithmetic; encoding = UDIVCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "udivcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"udivcc\" rs1 rs2))";
+}
+
+encoding SDIVCC { width = 32;
+  base = 0x80f80000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sdivcc { class = arithmetic; encoding = SDIVCC;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sdivcc %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"sdivcc\" rs1 rs2))";
+}
+
+encoding SLLX { width = 32;
+  base = 0x81281000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sllx { class = arithmetic; encoding = SLLX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sllx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (shl rs1 rs2))";
+}
+
+encoding SRLX { width = 32;
+  base = 0x81301000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op srlx { class = arithmetic; encoding = SRLX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "srlx %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (shr rs1 rs2))";
+}
+
+encoding SRAX { width = 32;
+  base = 0x81381000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op srax { class = arithmetic; encoding = SRAX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "srax %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (ashr rs1 rs2))";
+}
+
+encoding SAVE { width = 32;
+  base = 0x81e00000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op save { class = misc; encoding = SAVE;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "save %{rs1}, %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"save\" rd rs1 rs2))";
+}
+
+encoding RESTORE { width = 32;
+  base = 0x81e80000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op restore { class = misc; encoding = RESTORE;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "restore %{rs1}, %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"restore\" rd rs1 rs2))";
+}
+
+encoding LDSB { width = 32;
+  base = 0xc0480000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldsb { class = load; encoding = LDSB;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldsb [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSB_IMM { width = 32;
+  base = 0xc0482000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldsb_imm { class = load; encoding = LDSB_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldsb [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSH { width = 32;
+  base = 0xc0500000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldsh { class = load; encoding = LDSH;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldsh [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSH_IMM { width = 32;
+  base = 0xc0502000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldsh_imm { class = load; encoding = LDSH_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldsh [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDUB { width = 32;
+  base = 0xc0080000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldub { class = load; encoding = LDUB;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldub [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDUB_IMM { width = 32;
+  base = 0xc0082000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldub_imm { class = load; encoding = LDUB_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldub [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDUH { width = 32;
+  base = 0xc0100000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op lduh { class = load; encoding = LDUH;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "lduh [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDUH_IMM { width = 32;
+  base = 0xc0102000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op lduh_imm { class = load; encoding = LDUH_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "lduh [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSW { width = 32;
+  base = 0xc0400000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldsw { class = load; encoding = LDSW;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldsw [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSW_IMM { width = 32;
+  base = 0xc0402000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldsw_imm { class = load; encoding = LDSW_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldsw [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDX { width = 32;
+  base = 0xc0580000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldx { class = load; encoding = LDX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldx [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDX_IMM { width = 32;
+  base = 0xc0582000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldx_imm { class = load; encoding = LDX_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldx [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LD { width = 32;
+  base = 0xc0000000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ld { class = load; encoding = LD;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ld [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LD_IMM { width = 32;
+  base = 0xc0002000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ld_imm { class = load; encoding = LD_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ld [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDD_IMM { width = 32;
+  base = 0xc0182000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldd_imm { class = load; encoding = LDD_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldd [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSTUB { width = 32;
+  base = 0xc0680000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op ldstub { class = load; encoding = LDSTUB;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "ldstub [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding LDSTUB_IMM { width = 32;
+  base = 0xc0682000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op ldstub_imm { class = load; encoding = LDSTUB_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "ldstub [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding SWAP { width = 32;
+  base = 0xc0780000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op swap { class = load; encoding = SWAP;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "swap [%{rs1}+%{rs2}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding SWAP_IMM { width = 32;
+  base = 0xc0782000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op swap_imm { class = load; encoding = SWAP_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "swap [%{rs1}+{offset}], %{rd}";
+  semantics = "(set rd (load target (addr rs1 imm)))";
+}
+
+encoding STB { width = 32;
+  base = 0xc0280000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op stb { class = store; encoding = STB;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "stb %{rd}, [%{rs1}+%{rs2}]";
+  semantics = "(store (addr rs1 imm) rs2)";
+}
+
+encoding STB_IMM { width = 32;
+  base = 0xc0282000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op stb_imm { class = store; encoding = STB_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "stb %{rd}, [%{rs1}+{offset}]";
+  semantics = "(store (memory-address rd offset) rs1)";
+}
+
+encoding STH { width = 32;
+  base = 0xc0300000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op sth { class = store; encoding = STH;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "sth %{rd}, [%{rs1}+%{rs2}]";
+  semantics = "(store (addr rs1 imm) rs2)";
+}
+
+encoding STH_IMM { width = 32;
+  base = 0xc0302000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op sth_imm { class = store; encoding = STH_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "sth %{rd}, [%{rs1}+{offset}]";
+  semantics = "(store (memory-address rd offset) rs1)";
+}
+
+encoding ST { width = 32;
+  base = 0xc0200000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op st { class = store; encoding = ST;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "st %{rd}, [%{rs1}+%{rs2}]";
+  semantics = "(store (addr rs1 imm) rs2)";
+}
+
+encoding ST_IMM { width = 32;
+  base = 0xc0202000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op st_imm { class = store; encoding = ST_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "st %{rd}, [%{rs1}+{offset}]";
+  semantics = "(store (memory-address rd offset) rs1)";
+}
+
+encoding STX { width = 32;
+  base = 0xc0700000;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op stx { class = store; encoding = STX;
+  operands = rd: GPR, rs1: GPR, rs2: GPR;
+  syntax = "stx %{rd}, [%{rs1}+%{rs2}]";
+  semantics = "(store (addr rs1 imm) rs2)";
+}
+
+encoding STX_IMM { width = 32;
+  base = 0xc0702000;
+  rd = 25:5;
+  rs1 = 14:5;
+  offset = 0:13;
+  signed = 1;
+}
+
+op stx_imm { class = store; encoding = STX_IMM;
+  operands = rd: GPR, rs1: GPR, offset: imm;
+  syntax = "stx %{rd}, [%{rs1}+{offset}]";
+  semantics = "(store (memory-address rd offset) rs1)";
+}
+
+encoding SETHI { width = 32;
+  base = 0x1000000;
+  rd = 25:5;
+  imm = 0:22;
+  signed = 1;
+}
+
+op sethi { class = misc; encoding = SETHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "sethi {imm}, %{rd}";
+  semantics = "(set rd (move imm))";
+}
+
+encoding CLR { width = 32;
+  base = 0x80100000;
+  rd = 25:5;
+}
+
+op clr { class = misc; encoding = CLR;
+  operands = rd: GPR;
+  syntax = "clr %{rd}";
+  semantics = "(effect (intrinsic \"clr\" rd))";
+}
+
+encoding BN { width = 32;
+  base = 0x800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bn { class = branch; encoding = BN;
+  operands = offset: rel;
+  syntax = "bn {offset}";
+  semantics = "(effect (branch \"bn\" offset))";
+}
+
+encoding BE { width = 32;
+  base = 0x2800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op be { class = branch; encoding = BE;
+  operands = offset: rel;
+  syntax = "be {offset}";
+  semantics = "(effect (branch \"be\" offset))";
+}
+
+encoding BLE { width = 32;
+  base = 0x4800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op ble { class = branch; encoding = BLE;
+  operands = offset: rel;
+  syntax = "ble {offset}";
+  semantics = "(effect (branch \"ble\" offset))";
+}
+
+encoding BL { width = 32;
+  base = 0x6800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bl { class = branch; encoding = BL;
+  operands = offset: rel;
+  syntax = "bl {offset}";
+  semantics = "(call offset)";
+}
+
+encoding BLEU { width = 32;
+  base = 0x8800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bleu { class = branch; encoding = BLEU;
+  operands = offset: rel;
+  syntax = "bleu {offset}";
+  semantics = "(effect (branch \"bleu\" offset))";
+}
+
+encoding BCS { width = 32;
+  base = 0xa800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bcs { class = branch; encoding = BCS;
+  operands = offset: rel;
+  syntax = "bcs {offset}";
+  semantics = "(effect (branch \"bcs\" offset))";
+}
+
+encoding BNEG { width = 32;
+  base = 0xc800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bneg { class = branch; encoding = BNEG;
+  operands = offset: rel;
+  syntax = "bneg {offset}";
+  semantics = "(effect (branch \"bneg\" offset))";
+}
+
+encoding BVS { width = 32;
+  base = 0xe800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bvs { class = branch; encoding = BVS;
+  operands = offset: rel;
+  syntax = "bvs {offset}";
+  semantics = "(effect (branch \"bvs\" offset))";
+}
+
+encoding BA { width = 32;
+  base = 0x10800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op ba { class = branch; encoding = BA;
+  operands = offset: rel;
+  syntax = "ba {offset}";
+  semantics = "(effect (branch \"ba\" offset))";
+}
+
+encoding BNE { width = 32;
+  base = 0x12800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bne { class = branch; encoding = BNE;
+  operands = offset: rel;
+  syntax = "bne {offset}";
+  semantics = "(if (ne rs1 rs2) (branch offset))";
+}
+
+encoding BG { width = 32;
+  base = 0x14800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bg { class = branch; encoding = BG;
+  operands = offset: rel;
+  syntax = "bg {offset}";
+  semantics = "(effect (branch \"bg\" offset))";
+}
+
+encoding BGE { width = 32;
+  base = 0x16800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bge { class = branch; encoding = BGE;
+  operands = offset: rel;
+  syntax = "bge {offset}";
+  semantics = "(if (sge rs1 rs2) (branch offset))";
+}
+
+encoding BGU { width = 32;
+  base = 0x18800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bgu { class = branch; encoding = BGU;
+  operands = offset: rel;
+  syntax = "bgu {offset}";
+  semantics = "(effect (branch \"bgu\" offset))";
+}
+
+encoding BGEU { width = 32;
+  base = 0x1a800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bgeu { class = branch; encoding = BGEU;
+  operands = offset: rel;
+  syntax = "bgeu {offset}";
+  semantics = "(if (uge rs1 rs2) (branch offset))";
+}
+
+encoding BPOS { width = 32;
+  base = 0x1c800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bpos { class = branch; encoding = BPOS;
+  operands = offset: rel;
+  syntax = "bpos {offset}";
+  semantics = "(effect (branch \"bpos\" offset))";
+}
+
+encoding BVC { width = 32;
+  base = 0x1e800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op bvc { class = branch; encoding = BVC;
+  operands = offset: rel;
+  syntax = "bvc {offset}";
+  semantics = "(effect (branch \"bvc\" offset))";
+}
+
+encoding BA_A { width = 32;
+  base = 0x30800000;
+  offset = 0:22;
+  signed = 1;
+}
+
+op ba_a { class = branch; encoding = BA_A;
+  operands = offset: rel;
+  syntax = "ba,a {offset}";
+  semantics = "(effect (branch \"ba_a\" offset))";
+}
+
+encoding JMPL { width = 32;
+  base = 0x81c00000;
+  rd = 25:5;
+  rs1 = 14:5;
+}
+
+op jmpl { class = branch; encoding = JMPL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "jmpl %{rs1}, %{rd}";
+  semantics = "(effect (branch \"jmpl\" rd rs1))";
+}
+
+encoding POPC { width = 32;
+  base = 0x81700000;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op popc { class = branch; encoding = POPC;
+  operands = rd: GPR, rs2: GPR;
+  syntax = "popc %{rs2}, %{rd}";
+  semantics = "(effect (branch \"popc\" rd rs2))";
+}
+
+encoding FLUSH { width = 32;
+  base = 0x81d82000;
+  imm = 0:12;
+  signed = 1;
+}
+
+op flush { class = misc; encoding = FLUSH;
+  operands = imm: imm;
+  syntax = "flush {imm}";
+  semantics = "(effect (intrinsic \"flush\" imm))";
+}
+
+encoding NOP { width = 32;
+  base = 0x1000000;
+}
+
+op nop { class = misc; encoding = NOP;
+  operands = ;
+  syntax = "nop";
+  semantics = "(effect (intrinsic \"nop\" ))";
+}
+
+encoding RET { width = 32;
+  base = 0x81c7e008;
+}
+
+op ret { class = misc; encoding = RET;
+  operands = ;
+  syntax = "ret";
+  semantics = "(effect (intrinsic \"ret\" ))";
+}
+
+encoding RETL { width = 32;
+  base = 0x81c3e008;
+}
+
+op retl { class = misc; encoding = RETL;
+  operands = ;
+  syntax = "retl";
+  semantics = "(effect (intrinsic \"retl\" ))";
+}
+
+encoding STBAR { width = 32;
+  base = 0x8143c000;
+}
+
+op stbar { class = misc; encoding = STBAR;
+  operands = ;
+  syntax = "stbar";
+  semantics = "(effect (intrinsic \"stbar\" ))";
+}
+
+encoding FADDS { width = 32;
+  base = 0x81a00820;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fadds { class = arithmetic; encoding = FADDS;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fadds %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fadds\" rs1 rs2))";
+}
+
+encoding FSUBS { width = 32;
+  base = 0x81a008a0;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fsubs { class = arithmetic; encoding = FSUBS;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fsubs %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fsubs\" rs1 rs2))";
+}
+
+encoding FMULS { width = 32;
+  base = 0x81a00920;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fmuls { class = arithmetic; encoding = FMULS;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fmuls %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fmuls\" rs1 rs2))";
+}
+
+encoding FDIVS { width = 32;
+  base = 0x81a009a0;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fdivs { class = arithmetic; encoding = FDIVS;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fdivs %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fdivs\" rs1 rs2))";
+}
+
+encoding FADDD { width = 32;
+  base = 0x81a00840;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op faddd { class = arithmetic; encoding = FADDD;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "faddd %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"faddd\" rs1 rs2))";
+}
+
+encoding FSUBD { width = 32;
+  base = 0x81a008c0;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fsubd { class = arithmetic; encoding = FSUBD;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fsubd %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fsubd\" rs1 rs2))";
+}
+
+encoding FMULD { width = 32;
+  base = 0x81a00940;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fmuld { class = arithmetic; encoding = FMULD;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fmuld %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fmuld\" rs1 rs2))";
+}
+
+encoding FDIVD { width = 32;
+  base = 0x81a009c0;
+  rd = 25:5;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fdivd { class = arithmetic; encoding = FDIVD;
+  operands = rd: FPR, rs1: FPR, rs2: FPR;
+  syntax = "fdivd %{rs1}, %{rs2}, %{rd}";
+  semantics = "(set rd (intrinsic \"fdivd\" rs1 rs2))";
+}
+
+encoding FMOVS { width = 32;
+  base = 0x81a00020;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fmovs { class = misc; encoding = FMOVS;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fmovs %{rs2}, %{rd}";
+  semantics = "(set rd (move rs2))";
+}
+
+encoding FMOVD { width = 32;
+  base = 0x81a00040;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fmovd { class = misc; encoding = FMOVD;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fmovd %{rs2}, %{rd}";
+  semantics = "(set rd (move rs2))";
+}
+
+encoding FNEGS { width = 32;
+  base = 0x81a000a0;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fnegs { class = misc; encoding = FNEGS;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fnegs %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"fnegs\" rd rs2))";
+}
+
+encoding FNEGD { width = 32;
+  base = 0x81a000c0;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fnegd { class = misc; encoding = FNEGD;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fnegd %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"fnegd\" rd rs2))";
+}
+
+encoding FABSS { width = 32;
+  base = 0x81a00120;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fabss { class = misc; encoding = FABSS;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fabss %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"fabss\" rd rs2))";
+}
+
+encoding FABSD { width = 32;
+  base = 0x81a00140;
+  rd = 25:5;
+  rs2 = 0:5;
+}
+
+op fabsd { class = misc; encoding = FABSD;
+  operands = rd: FPR, rs2: FPR;
+  syntax = "fabsd %{rs2}, %{rd}";
+  semantics = "(effect (intrinsic \"fabsd\" rd rs2))";
+}
+
+encoding FCMPS { width = 32;
+  base = 0x81a80a20;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fcmps { class = compare; encoding = FCMPS;
+  operands = rs1: FPR, rs2: FPR;
+  syntax = "fcmps %{rs1}, %{rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
+
+encoding FCMPD { width = 32;
+  base = 0x81a80a40;
+  rs1 = 14:5;
+  rs2 = 0:5;
+}
+
+op fcmpd { class = compare; encoding = FCMPD;
+  operands = rs1: FPR, rs2: FPR;
+  syntax = "fcmpd %{rs1}, %{rs2}";
+  semantics = "(effect (flags (compare rs1 rs2)))";
+}
