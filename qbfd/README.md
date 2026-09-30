@@ -104,6 +104,26 @@ stated once rather than re-derived: `Layout` and `rawSections()` on all four
 backends, plus `relocationPointer()`, `relocationCountOffset()` and the
 `rawSymbol*` accessors on COFF and PE, and `symbolSlot()` on Mach-O.
 
+## Inspection helpers
+
+The canonical `ObjectFile` interface also provides format-independent helpers
+for consumers that need analysis rather than raw table traversal:
+
+```cpp
+auto text = object.sectionsWithFlags(sec::Alloc | sec::Code);
+auto relocs = object.allRelocations();
+if (const auto* symbol = object.symbolAtAddress(address))
+  std::cout << symbol->name;
+
+auto bytes = object.bytesAtAddress(address, length);
+auto offset = object.fileOffsetForAddress(address);
+```
+
+`bytesAtAddress()` refuses BSS/NOBITS and truncated file-backed ranges, while
+`symbolAtAddress()` ignores undefined symbols and prefers the most specific
+covering definition. `findSymbol()` searches both the static and dynamic
+symbol collections.
+
 ## Native C++ DSL
 
 The shared DSL uses the `qdsl` toolkit's CRTP `DSL`, `Pipeline`, `Operators`,

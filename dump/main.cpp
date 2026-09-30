@@ -234,7 +234,16 @@ void showDisassembly(std::ostream& out, const ObjectFile& file,
     if (!(s.flags & sec::Code) || (s.flags & sec::Bss)) continue;
     auto bytes = file.sectionContents(s); if (!bytes || bytes->empty()) continue;
     std::size_t begin = 0, end = bytes->size();
-    if (flags.startAddress || flags.stopAddress) { uint64_t lo = flags.startAddress.value_or(s.vma), hi = flags.stopAddress.value_or(UINT64_MAX); if (hi <= s.vma || lo >= s.vma + bytes->size()) continue; begin = std::size_t(std::max(lo, s.vma) - s.vma); end = std::size_t(std::min<uint64_t>(hi, s.vma + bytes->size()) - s.vma); }
+    if (flags.startAddress || flags.stopAddress) {
+      uint64_t endAddress = s.vma;
+      if (bytes->size() > UINT64_MAX - endAddress) endAddress = UINT64_MAX;
+      else endAddress += bytes->size();
+      uint64_t lo = flags.startAddress.value_or(s.vma);
+      uint64_t hi = flags.stopAddress.value_or(UINT64_MAX);
+      if (hi <= s.vma || lo >= endAddress) continue;
+      begin = std::size_t(std::max(lo, s.vma) - s.vma);
+      end = std::size_t(std::min<uint64_t>(hi, endAddress) - s.vma);
+    }
     out << "\n" << s.name << ":\n";
     std::size_t width = key.starts_with("riscv") || key == "aarch64" || key == "arm32" ? 4 : 1;
     for (std::size_t i = begin; i < end; ) {
@@ -348,10 +357,16 @@ void dumpContents(std::ostream& out, const ObjectFile& file, const Section& s,
   if (start || stop) {
     uint64_t low = start.value_or(0);
     uint64_t high = stop.value_or(UINT64_MAX);
-    uint64_t lo = std::max(low, s.vma), hi = std::min(high, s.vma + s.size);
+    uint64_t sectionEnd = s.vma;
+    if (s.size > UINT64_MAX - sectionEnd) sectionEnd = UINT64_MAX;
+    else sectionEnd += s.size;
+    uint64_t lo = std::max(low, s.vma), hi = std::min(high, sectionEnd);
     if (hi <= lo) return;
-    begin = size_t(lo - s.vma);
-    end = size_t(std::min<uint64_t>(hi - s.vma, bytes->size()));
+    uint64_t delta = lo - s.vma;
+    uint64_t upper = std::min<uint64_t>(hi - s.vma, bytes->size());
+    if (delta >= bytes->size()) return;
+    begin = size_t(delta);
+    end = size_t(upper);
   }
   out << "Contents of section " << s.name << ":\n";
   for (size_t i = begin; i < end; i += 16) {
@@ -518,16 +533,30 @@ void showProgramHeaders(std::ostream& out, const ObjectFile& file) {
 void showPrivateHeaders(std::ostream& out, const ObjectFile& file) {
   out << "\nRaw section header table:\n";
   const auto* e = dynamic_cast<const elf::ELFFile*>(&file);
-  if (!e) {
-    out << "  (only ELF exposes its raw section headers)\n";
+  if (e) {
+    for (const auto& h : e->rawSections())
+      out << "  ELF name=0x" << hex(h.name) << " type=" << h.type
+          << " flags=0x" << hex(h.flags) << " addr=0x" << hex(h.addr)
+          << " off=0x" << hex(h.offset) << " size=" << h.size << " link=" << h.link
+          << " info=" << h.info << " align=" << h.align
+          << " entsize=" << h.entsize << '\n';
     return;
   }
-  for (const auto& h : e->rawSections())
-    out << "  name=0x" << hex(h.name) << " type=" << h.type
-        << " flags=0x" << hex(h.flags) << " addr=0x" << hex(h.addr)
-        << " off=0x" << hex(h.offset) << " size=" << h.size << " link=" << h.link
-        << " info=" << h.info << " align=" << h.align
-        << " entsize=" << h.entsize << '\n';
+  if (const auto* p = dynamic_cast<const pe::PEFile*>(&file)) {
+    out << "  PE machine=0x" << hex(p->machine())
+        << " sections=" << p->rawSections().size()
+        << " image-base=0x" << hex(p->imageBase())
+        << " image-size=0x" << hex(p->sizeOfImage()) << '\n';
+    for (size_t i = 0; i < p->rawSections().size(); ++i) {
+      const auto& h = p->rawSections()[i];
+      out << "  PE[" << i + 1 << "] va=0x" << hex(h.virtualAddress)
+          << " vsize=0x" << hex(h.virtualSize)
+          << " raw=0x" << hex(h.rawPtr)
+          << " rawsize=0x" << hex(h.rawSize) << '\n';
+    }
+    return;
+  }
+  out << "  (no raw private-header view for this format)\n";
 }
 
 void showNeeded(std::ostream& out, const ObjectFile& file) {

@@ -266,6 +266,25 @@ class ObjectFile {
     return nullptr;
   }
 
+  std::vector<const Section*> sectionsWithFlags(uint32_t mask) const {
+    std::vector<const Section*> result;
+    for (const auto& s : sections())
+      if ((s.flags & mask) == mask) result.push_back(&s);
+    return result;
+  }
+
+  // Flatten all relocation records into one convenient view.  The returned
+  // vector owns its records and remains valid independently of the file.
+  Expected<std::vector<Relocation>> allRelocations() const {
+    std::vector<Relocation> result;
+    for (const auto& s : sections()) {
+      auto relocs = relocations(s);
+      if (!relocs) return relocs.error();
+      result.insert(result.end(), relocs->begin(), relocs->end());
+    }
+    return result;
+  }
+
   // Symbols: static table plus (if present) dynamic/export table
   virtual const std::vector<Symbol>& symbols() const = 0;
   virtual const std::vector<Symbol>& dynamicSymbols() const {
@@ -275,7 +294,53 @@ class ObjectFile {
   const Symbol* findSymbol(std::string_view name) const {
     for (const auto& s : symbols())
       if (s.name == name) return &s;
+    for (const auto& s : dynamicSymbols())
+      if (s.name == name) return &s;
     return nullptr;
+  }
+
+  // Find the symbol whose value covers an address.  Exact/nearest matches are
+  // useful to tools such as objdump and addr2line-style consumers.
+  const Symbol* symbolAtAddress(uint64_t address,
+                                bool dynamic = false) const {
+    const auto& table = dynamic ? dynamicSymbols() : symbols();
+    const Symbol* best = nullptr;
+    for (const auto& s : table) {
+      if (s.flags & sym::Undefined) continue;
+      if (address < s.value) continue;
+      if (s.size && address - s.value >= s.size) continue;
+      if (!best || s.value > best->value ||
+          (s.value == best->value && s.size > best->size))
+        best = &s;
+    }
+    return best;
+  }
+
+  // Return the file offset corresponding to an in-memory address, when the
+  // address has actual bytes behind it.  Unlike sectionForAddress(), this is
+  // explicitly safe for BSS/NOBITS and truncated file-backed ranges.
+  std::optional<uint64_t> fileOffsetForAddress(uint64_t address) const {
+    return vmaToFileOffset(address);
+  }
+
+  // Read a bounded range by virtual address.  This keeps callers from
+  // accidentally indexing a section span past its file-backed portion.
+  Expected<std::span<const uint8_t>> bytesAtAddress(uint64_t address,
+                                                     uint64_t length) const {
+    const Section* s = sectionForAddress(address);
+    if (!s || (s->flags & sec::Bss))
+      return Error{Error::Code::OutOfRange,
+                   "address is not backed by section data"};
+    uint64_t delta = address - s->vma;
+    if (delta > s->fileSize || length > s->fileSize - delta)
+      return Error{Error::Code::OutOfRange,
+                   "address range exceeds section file contents"};
+    if (s->fileOffset > data_.size() ||
+        delta > data_.size() - s->fileOffset ||
+        length > data_.size() - s->fileOffset - delta)
+      return Error{Error::Code::OutOfRange,
+                   "address range exceeds file contents"};
+    return data_.subspan(size_t(s->fileOffset + delta), size_t(length));
   }
 
   // Relocations that apply to a given section
@@ -693,6 +758,10 @@ inline std::string_view toString(Format f) {
     default:
       return "unknown";
   }
+}
+
+inline std::string_view toString(Endian e) {
+  return e == Endian::Little ? "little" : "big";
 }
 
 inline std::string_view toString(FileType t) {

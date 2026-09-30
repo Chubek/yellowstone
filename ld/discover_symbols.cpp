@@ -53,6 +53,12 @@ bool openCandidate(LinkState& state, ArchiveCandidate& cand,
     error = label + ": archive member class/order mismatch";
     return false;
   }
+  if (opened->object->arch() != state.arch) {
+    error = label + ": archive member architecture mismatch (" +
+            std::string(qbfd::toString(opened->object->arch())) + " vs " +
+            std::string(qbfd::toString(state.arch)) + ")";
+    return false;
+  }
   LoadedObject lo;
   lo.label = label;
   lo.archivePath = archivePath;

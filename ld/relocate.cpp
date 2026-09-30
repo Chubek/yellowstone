@@ -57,9 +57,14 @@ bool applyRelocations(LinkState& state,
     error = "internal error: staged image size mismatch";
     return false;
   }
-  bool isX86_64 =
-      state.arch == qbfd::Arch::X86_64 || state.wide;
+  bool isX86_64 = state.arch == qbfd::Arch::X86_64;
   bool isX86 = state.arch == qbfd::Arch::X86;
+  bool isAArch64 = state.arch == qbfd::Arch::AArch64;
+  bool isRISCV = state.arch == qbfd::Arch::RISCV32 ||
+                 state.arch == qbfd::Arch::RISCV64;
+  bool isARM = state.arch == qbfd::Arch::ARM;
+  bool isPPC = state.arch == qbfd::Arch::PowerPC ||
+               state.arch == qbfd::Arch::PowerPC64;
   bool relocatable = state.options.mode == Mode::Relocatable;
 
   for (const auto& in : state.inputSections) {
@@ -209,7 +214,7 @@ bool applyRelocations(LinkState& state,
         continue;
       }
 
-      if (isX86_64 || (!isX86 && state.wide)) {
+      if (isX86_64) {
         switch (type) {
           case 1: {  // R_X86_64_64
             if (!needBytes(8)) return false;
@@ -285,7 +290,7 @@ bool applyRelocations(LinkState& state,
             break;
           }
         }
-      } else {
+      } else if (isX86) {
         // 32-bit x86.
         switch (type) {
           case 1: {  // R_386_32
@@ -315,6 +320,162 @@ bool applyRelocations(LinkState& state,
             break;
           }
         }
+      } else if (isAArch64 || isRISCV || isARM || isPPC) {
+        // Generic absolute/PC-relative relocations are deliberately handled
+        // here without pretending to implement instruction-field relocations.
+        // The latter require architecture-specific bit packing and are left
+        // as explicit diagnostics instead of silently corrupting code.
+        switch (type) {
+          case 257: {  // R_AARCH64_ABS64
+            if (!isAArch64) break;
+            if (!needBytes(8)) return false;
+            uint64_t v = S + uint64_t(A);
+            if (!r.hasAddend) v = S + readVal(img, loc, 8, state.endian);
+            writeVal(img, loc, v, 8, state.endian);
+            break;
+          }
+          case 258: {  // R_AARCH64_ABS32
+            if (!isAArch64) break;
+            if (!needBytes(4)) return false;
+            uint64_t v = S + uint64_t(A);
+            if (!r.hasAddend) v = S + readVal(img, loc, 4, state.endian);
+            if (v >> 32) {
+              error = obj.label + ": relocation truncated to fit: R_AARCH64_ABS32";
+              return false;
+            }
+            writeVal(img, loc, v, 4, state.endian);
+            break;
+          }
+          case 260: {  // R_AARCH64_PREL64
+            if (!isAArch64) break;
+            if (!needBytes(8)) return false;
+            int64_t v = int64_t(S) + A - int64_t(P);
+            if (!r.hasAddend) v = int64_t(S) + int64_t(readVal(img, loc, 8, state.endian)) - int64_t(P);
+            writeVal(img, loc, uint64_t(v), 8, state.endian);
+            break;
+          }
+          case 261: {  // R_AARCH64_PREL32
+            if (!isAArch64) break;
+            if (!needBytes(4)) return false;
+            int64_t v = int64_t(S) + A - int64_t(P);
+            if (!r.hasAddend) v = int64_t(S) + int32_t(readVal(img, loc, 4, state.endian)) - int64_t(P);
+            if (v != int64_t(int32_t(v))) {
+              error = obj.label + ": relocation truncated to fit: R_AARCH64_PREL32";
+              return false;
+            }
+            writeVal(img, loc, uint64_t(uint32_t(v)), 4, state.endian);
+            break;
+          }
+          case 1: {  // RISC-V 32 / PPC ADDR32
+            unsigned width = 4;
+            if (isAArch64) {
+              if (o.alloc) {
+                error = obj.label + ": unsupported AArch64 relocation type 1";
+                return false;
+              }
+              break;
+            }
+            if (isARM) {
+              if (o.alloc) {
+                error = obj.label + ": unsupported ARM relocation R_ARM_PC24";
+                return false;
+              }
+              break;
+            }
+            if (!needBytes(width)) return false;
+            uint64_t v = S + (uint64_t)A;
+            if (!r.hasAddend) v = S + readVal(img, loc, width, state.endian);
+            if (width == 4 && (v >> 32)) {
+              error = obj.label + ": relocation truncated to fit: " +
+                      r.typeName + " against `" + symName + "'";
+              return false;
+            }
+            writeVal(img, loc, v, width, state.endian);
+            break;
+          }
+          case 2: {  // RISC-V 64 / ARM ABS32
+            if (isAArch64 || isPPC) {
+              if (o.alloc) {
+                error = obj.label + ": unsupported relocation type 2";
+                return false;
+              }
+              break;
+            }
+            unsigned width = state.arch == qbfd::Arch::RISCV64 ? 8 : 4;
+            if (!needBytes(width)) return false;
+            uint64_t v = S + (uint64_t)A;
+            if (!r.hasAddend) v = S + readVal(img, loc, width, state.endian);
+            if (width == 4 && (v >> 32)) {
+              error = obj.label + ": relocation truncated to fit: " +
+                      r.typeName + " against `" + symName + "'";
+              return false;
+            }
+            writeVal(img, loc, v, width, state.endian);
+            break;
+          }
+          case 3: {  // ARM/RISC-V REL32 (RISC-V type 3 is RELATIVE)
+            if (isRISCV && type == 3) {
+              // R_RISCV_RELATIVE is for dynamic images and is not a valid
+              // static ET_REL input.
+              if (o.alloc) {
+                error = obj.label + ": unsupported R_RISCV_RELATIVE in relocatable input";
+                return false;
+              }
+              break;
+            }
+            if (!needBytes(4)) return false;
+            int64_t v = (int64_t)S + A - (int64_t)P;
+            if (!r.hasAddend)
+              v = (int64_t)S + (int32_t)readVal(img, loc, 4, state.endian) -
+                  (int64_t)P;
+            if (v != (int64_t)(int32_t)v) {
+              error = obj.label + ": relocation truncated to fit: " +
+                      r.typeName + " against `" + symName + "'";
+              return false;
+            }
+            writeVal(img, loc, uint64_t(uint32_t(v)), 4, state.endian);
+            break;
+          }
+          case 26: { // PPC/RISC-V 32_PCREL
+            if (!needBytes(4)) return false;
+            int64_t v = (int64_t)S + A - (int64_t)P;
+            if (!r.hasAddend)
+              v = (int64_t)S + (int32_t)readVal(img, loc, 4, state.endian) -
+                  (int64_t)P;
+            if (v != (int64_t)(int32_t)v) {
+              error = obj.label + ": relocation truncated to fit: " +
+                      r.typeName + " against `" + symName + "'";
+              return false;
+            }
+            writeVal(img, loc, uint64_t(uint32_t(v)), 4, state.endian);
+            break;
+          }
+          case 38: { // PPC64 ADDR64
+            if (!needBytes(8)) return false;
+            uint64_t v = S + uint64_t(A);
+            if (!r.hasAddend) v = S + readVal(img, loc, 8, state.endian);
+            writeVal(img, loc, v, 8, state.endian);
+            break;
+          }
+          case 44: { // PPC64 REL64
+            if (!needBytes(8)) return false;
+            int64_t v = int64_t(S) + A - int64_t(P);
+            if (!r.hasAddend) v = int64_t(S) + int64_t(readVal(img, loc, 8, state.endian)) - int64_t(P);
+            writeVal(img, loc, uint64_t(v), 8, state.endian);
+            break;
+          }
+          default:
+            if (o.alloc) {
+              error = obj.label + ": unsupported relocation " + r.typeName +
+                      " (" + std::to_string(type) + ") in " + in.section.name +
+                      " against `" + symName + "'";
+              return false;
+            }
+            break;
+        }
+      } else {
+        error = obj.label + ": relocation architecture is not supported by qobjld";
+        return false;
       }
     }
   }

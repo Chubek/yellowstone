@@ -232,6 +232,7 @@ class PEFile final : public ObjectFile {
   uint32_t sectionAlignment() const { return sectionAlign_; }
   uint32_t fileAlignment() const { return fileAlign_; }
   const std::vector<DataDirectory>& dataDirectories() const { return dirs_; }
+  const std::vector<RawSectionHeader>& rawSections() const { return raw_; }
   std::optional<std::string> exportName() const { return exportDllName_; }
 
   // On-disk table geometry, for a rewriter that patches the COFF symbol table

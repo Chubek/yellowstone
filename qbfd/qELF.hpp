@@ -431,6 +431,51 @@ class ELFFile final : public ObjectFile {
         r.typeName = r.nativeType == 1 ? "R_386_32" : "R_386_PC32";
         r.bitSize = 32;
         r.pcRelative = r.nativeType == 2;
+      } else if (machine_ == 183) {  // AArch64
+        switch (r.nativeType) {
+          case 257: r.typeName = "R_AARCH64_ABS64"; r.bitSize = 64; break;
+          case 258: r.typeName = "R_AARCH64_ABS32"; r.bitSize = 32; break;
+          case 259: r.typeName = "R_AARCH64_ABS16"; r.bitSize = 16; break;
+          case 260: r.typeName = "R_AARCH64_PREL64"; r.bitSize = 64; r.pcRelative = true; break;
+          case 261: r.typeName = "R_AARCH64_PREL32"; r.bitSize = 32; r.pcRelative = true; break;
+          case 262: r.typeName = "R_AARCH64_PREL16"; r.bitSize = 16; r.pcRelative = true; break;
+          case 275: r.typeName = "R_AARCH64_ADR_PREL_PG_HI21"; break;
+          case 277: r.typeName = "R_AARCH64_ADD_ABS_LO12_NC"; break;
+          case 282: r.typeName = "R_AARCH64_JUMP26"; r.bitSize = 26; r.pcRelative = true; break;
+          case 283: r.typeName = "R_AARCH64_CALL26"; r.bitSize = 26; r.pcRelative = true; break;
+        }
+      } else if (machine_ == 243) {  // RISC-V
+        switch (r.nativeType) {
+          case 1: r.typeName = "R_RISCV_32"; r.bitSize = 32; break;
+          case 2: r.typeName = "R_RISCV_64"; r.bitSize = 64; break;
+          case 3: r.typeName = "R_RISCV_RELATIVE"; r.bitSize = wide_ ? 64 : 32; break;
+          case 16: r.typeName = "R_RISCV_JAL"; r.bitSize = 21; r.pcRelative = true; break;
+          case 17: r.typeName = "R_RISCV_CALL"; break;
+          case 18: r.typeName = "R_RISCV_CALL_PLT"; break;
+          case 20: r.typeName = "R_RISCV_HI20"; break;
+          case 21: r.typeName = "R_RISCV_LO12_I"; break;
+          case 22: r.typeName = "R_RISCV_LO12_S"; break;
+          case 23: r.typeName = "R_RISCV_PCREL_HI20"; break;
+          case 24: r.typeName = "R_RISCV_PCREL_LO12_I"; break;
+          case 25: r.typeName = "R_RISCV_PCREL_LO12_S"; break;
+          case 26: r.typeName = "R_RISCV_32_PCREL"; r.bitSize = 32; r.pcRelative = true; break;
+          case 51: r.typeName = "R_RISCV_RELAX"; break;
+        }
+      } else if (machine_ == 40) {  // ARM
+        switch (r.nativeType) {
+          case 2: r.typeName = "R_ARM_ABS32"; r.bitSize = 32; break;
+          case 3: r.typeName = "R_ARM_REL32"; r.bitSize = 32; r.pcRelative = true; break;
+          case 10: r.typeName = "R_ARM_THM_CALL"; break;
+          case 28: r.typeName = "R_ARM_CALL"; break;
+          case 29: r.typeName = "R_ARM_JUMP24"; break;
+        }
+      } else if (machine_ == 20 || machine_ == 21) {  // PowerPC
+        switch (r.nativeType) {
+          case 1: r.typeName = "R_PPC_ADDR32"; r.bitSize = 32; break;
+          case 26: r.typeName = "R_PPC_REL32"; r.bitSize = 32; r.pcRelative = true; break;
+          case 38: r.typeName = "R_PPC64_ADDR64"; r.bitSize = 64; break;
+          case 44: r.typeName = "R_PPC64_REL64"; r.bitSize = 64; r.pcRelative = true; break;
+        }
       }
       if (rela) {
         r.addend = wide_ ? std::bit_cast<int64_t>(r_.u64(o + 16))

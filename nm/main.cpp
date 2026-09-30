@@ -369,10 +369,13 @@ bool keep(const Symbol& s, const Flags& f) {
 void printRows(std::ostream& out, std::vector<Row> rows, const Flags& f) {
   if (!f.noSort) {
     std::stable_sort(rows.begin(), rows.end(), [&](const Row& a, const Row& b) {
-      if (f.bySize && a.size != b.size) return f.reverse ? a.size > b.size
-                                                        : a.size < b.size;
-      if (a.value != b.value) return f.reverse ? a.value > b.value : a.value < b.value;
-      return a.name < b.name;
+      if (f.bySize && a.size != b.size)
+        return f.reverse ? a.size > b.size : a.size < b.size;
+      if (!f.bySize && a.name != b.name)
+        return f.reverse ? a.name > b.name : a.name < b.name;
+      if (a.value != b.value)
+        return f.reverse ? a.value > b.value : a.value < b.value;
+      return f.reverse ? a.name > b.name : a.name < b.name;
     });
   }
   size_t width = 0;

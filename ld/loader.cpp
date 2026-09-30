@@ -197,6 +197,7 @@ bool loadInputs(LinkState& state, std::string& error) {
   }
   // Establish a common ELF geometry from the first real object. Archives
   // contribute later during member selection; their geometry must match.
+  bool geometrySet = false;
   for (const auto& o : state.objects) {
     if (o.isScript || !o.object) continue;
     if (o.object->format() != qbfd::Format::ELF) {
@@ -204,9 +205,12 @@ bool loadInputs(LinkState& state, std::string& error) {
               std::string(qbfd::toString(o.object->format())) + ")";
       return false;
     }
-    state.wide = o.object->is64Bit();
-    state.endian = o.object->endian();
-    state.arch = o.object->arch();
+    if (!geometrySet) {
+      state.wide = o.object->is64Bit();
+      state.endian = o.object->endian();
+      state.arch = o.object->arch();
+      geometrySet = true;
+    }
     break;
   }
   // Validate the rest eagerly so mixed-class links fail fast.
@@ -222,6 +226,12 @@ bool loadInputs(LinkState& state, std::string& error) {
     }
     if (o.object->endian() != state.endian) {
       error = o.label + ": mixing byte orders is unsupported";
+      return false;
+    }
+    if (o.object->arch() != state.arch) {
+      error = o.label + ": mixing architectures is unsupported (" +
+              std::string(qbfd::toString(o.object->arch())) + " vs " +
+              std::string(qbfd::toString(state.arch)) + ")";
       return false;
     }
   }
