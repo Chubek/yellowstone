@@ -95,13 +95,7 @@ Config loadConfig() {
 }
 
 int emitOutput(const std::string& text, const Flags& flags) {
-  if (!flags.tui || !flags.pager ||
-#ifdef _WIN32
-      false
-#else
-      (!isatty(fileno(stdout)) && flags.pagerCommand.empty())
-#endif
-  ) { std::cout << text; return 0; }
+  if (!flags.tui || !flags.pager) { std::cout << text; return 0; }
   if (flags.pagerCommand.empty()) {
     qobj::DomtermPager pager;
     if (pager.run(text)) return 0;
