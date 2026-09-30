@@ -6,8 +6,8 @@
 //   -s section contents  -x all headers       -a archive index
 //   -m architecture      -V version           -b <target>  force a target
 //   -j <section>         -? help
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 using namespace qbfd;
 using qobj::hex;

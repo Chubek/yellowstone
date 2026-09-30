@@ -1,6 +1,6 @@
 // qobjcp - copy a whole object file, or one of its sections.
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 using namespace qbfd;
 using qobj::OptionSpec;

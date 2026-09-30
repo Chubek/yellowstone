@@ -2,8 +2,8 @@
 //
 // The rewriting is done by qBFD's qStrip.hpp, which keeps the file layout
 // intact and renumbers every index that could name a symbol or a section.
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 #include <qStrip.hpp>
 

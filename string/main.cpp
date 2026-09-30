@@ -1,6 +1,6 @@
 // qobjstr - find printable strings in an object file.
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 using namespace qbfd;
 using qobj::OptionSpec;

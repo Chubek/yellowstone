@@ -5,8 +5,8 @@
 //   t list table of contents   x extract
 // Key letters: c create quietly, s write a symbol index, u update only if
 // newer, v be verbose, D make the output deterministic, T make a thin archive.
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 #include <algorithm>
 #include <map>

@@ -2,8 +2,8 @@
 //
 // Option letters follow the conventional nm: -g external only, -u undefined
 // only, -D dynamic symbols, -C demangle, -A archive index, -P no-sort.
-#include "../qobjcommon/cli.hpp"
-#include "../qobjcommon/options.hpp"
+#include "../common/cli.hpp"
+#include "../common/options.hpp"
 
 #include <algorithm>
 
