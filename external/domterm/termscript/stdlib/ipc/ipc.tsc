@@ -1,0 +1,2 @@
+# ipc.tsc -- Termscript companion for std.ipc.
+const ipc_m = G:load "std.ipc" or G:die "std.ipc missing";

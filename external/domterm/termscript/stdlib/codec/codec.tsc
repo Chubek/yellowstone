@@ -1,0 +1,3 @@
+# codec.tsc -- Termscript companion for std.codec.
+const codec_m = G:load "std.codec" or G:die "std.codec missing";
+const codec_hello_b64 = codec_m:b64enc "hello";

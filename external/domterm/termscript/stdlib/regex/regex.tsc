@@ -1,0 +1,3 @@
+# regex.tsc -- Termscript companion for std.regex.
+const regex_m = G:load "std.regex" or G:die "std.regex missing";
+const regex_has_digits = regex_m:search "[0-9]+" "abc123";

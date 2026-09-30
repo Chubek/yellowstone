@@ -1,0 +1,2 @@
+# prompt.tsc -- Termscript companion for std.prompt.
+const prompt_m = G:load "std.prompt" or G:die "std.prompt missing";

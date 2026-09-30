@@ -1,0 +1,1 @@
+const word_motion_m = G:load "std.word_motion" or G:die "std.word_motion missing";

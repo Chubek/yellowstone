@@ -1,0 +1,3 @@
+# autocomp.tsc -- Termscript companion for std.autocomp.
+const autocomp_m = G:load "std.autocomp" or G:die "std.autocomp missing";
+const autocomp_langs = autocomp_m:common "c,sh,csv" ",";

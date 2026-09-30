@@ -1,0 +1,6 @@
+# list.tsc -- Termscript companion for std.list.
+# Binds the native module and pre-builds the empty-list idiom scripts
+# reach for; folds and maps stay in user code as while loops over
+# get/len (the language has no closures by design).
+const list_m = G:load "std.list" or G:die "std.list missing";
+const list_empty = list_m:new;

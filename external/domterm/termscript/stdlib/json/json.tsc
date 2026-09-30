@@ -1,0 +1,4 @@
+# json.tsc -- Termscript companion for std.json.
+# The load-or-die idiom lives here once so scripts just G:import.
+const json_m = G:load "std.json" or G:die "std.json missing";
+const json_null_doc = json_m:parse "null";

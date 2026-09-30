@@ -1,0 +1,3 @@
+# array.tsc -- Termscript companion for std.array.
+const array_m = G:load "std.array" or G:die "std.array missing";
+const array_zero3 = array_m:new 3 0;

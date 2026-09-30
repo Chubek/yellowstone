@@ -1,0 +1,2 @@
+# log.tsc -- Termscript companion for std.log.
+const log_m = G:load "std.log" or G:die "std.log missing";

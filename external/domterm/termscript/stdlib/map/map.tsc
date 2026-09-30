@@ -1,0 +1,3 @@
+# map.tsc -- Termscript companion for std.map.
+const map_m = G:load "std.map" or G:die "std.map missing";
+const map_empty = map_m:new;

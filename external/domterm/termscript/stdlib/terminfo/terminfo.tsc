@@ -1,0 +1,5 @@
+# terminfo.tsc -- Termscript companion for std.tinfo.
+# Note the module name: the full terminfo database lives in DomTERM's
+# std.terminfo (DT adapter); std.tinfo is the standalone-safe subset.
+const tinfo_m = G:load "std.tinfo" or G:die "std.tinfo missing";
+const tinfo_clear = tinfo_m:cap "clear";

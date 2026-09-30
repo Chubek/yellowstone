@@ -1,0 +1,4 @@
+# color.tsc -- Termscript companion for std.color.
+const color_m = G:load "std.color" or G:die "std.color missing";
+const color_red = color_m:fg "red";
+const color_reset = color_m:reset;

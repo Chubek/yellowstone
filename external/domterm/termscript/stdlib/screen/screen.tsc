@@ -1,0 +1,3 @@
+# screen.tsc -- Termscript companion for std.screen.
+const screen_m = G:load "std.screen" or G:die "std.screen missing";
+const screen_small = screen_m:new 5 20;

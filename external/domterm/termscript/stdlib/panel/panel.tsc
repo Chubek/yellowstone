@@ -1,0 +1,3 @@
+# panel.tsc -- Termscript companion for std.panel.
+const panel_m = G:load "std.panel" or G:die "std.panel missing";
+const panel_sample = panel_m:box "hi" "hello";

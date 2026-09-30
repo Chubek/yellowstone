@@ -1,0 +1,1 @@
+const edit_history_m = G:load "std.edit_history" or G:die "std.edit_history missing";

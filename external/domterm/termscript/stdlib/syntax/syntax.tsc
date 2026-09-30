@@ -1,0 +1,3 @@
+# syntax.tsc -- Termscript companion for std.syntax.
+const syntax_m = G:load "std.syntax" or G:die "std.syntax missing";
+const syntax_langs = syntax_m:langs ",";

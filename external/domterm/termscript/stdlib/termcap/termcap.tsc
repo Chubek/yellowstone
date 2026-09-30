@@ -1,0 +1,1 @@
+const termcap_m = G:load "std.termcap" or G:die "std.termcap missing";

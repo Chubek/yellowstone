@@ -1,0 +1,3 @@
+# test.tsc -- Termscript companion for std.test.
+const test_m = G:load "std.test" or G:die "std.test missing";
+const test_demo = test_m:new "demo";

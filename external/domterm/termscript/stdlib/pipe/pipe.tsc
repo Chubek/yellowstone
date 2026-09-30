@@ -1,0 +1,2 @@
+# pipe.tsc -- Termscript companion for std.pipe.
+const pipe_m = G:load "std.pipe" or G:die "std.pipe missing";

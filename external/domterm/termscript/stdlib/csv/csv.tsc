@@ -1,0 +1,3 @@
+# csv.tsc -- Termscript companion for std.csv.
+const csv_m = G:load "std.csv" or G:die "std.csv missing";
+const csv_header = csv_m:parse_line "name,age,city";

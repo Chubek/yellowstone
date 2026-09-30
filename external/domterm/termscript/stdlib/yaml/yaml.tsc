@@ -1,0 +1,3 @@
+# yaml.tsc -- Termscript companion for std.yaml (block subset).
+const yaml_m = G:load "std.yaml" or G:die "std.yaml missing";
+const yaml_null_doc = yaml_m:parse "~";

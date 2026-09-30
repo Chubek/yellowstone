@@ -1,0 +1,2103 @@
+:::::::::::::::::::::::::::::::::::::::::::::::::::: {.md-main role="main" md-component="main"}
+::::::::::::::::::::::::::::::::::::::::::::::::::: {.md-main__inner .md-grid}
+:::::::::::::::::::::::::::::::::: {.md-sidebar .md-sidebar--primary md-component="sidebar" md-type="navigation"}
+::::::::::::::::::::::::::::::::: md-sidebar__scrollwrap
+:::::::::::::::::::::::::::::::: md-sidebar__inner
+[![logo](favicon.svg)](. "Wez's Terminal Emulator"){.md-nav__button
+.md-logo aria-label="Wez's Terminal Emulator" md-component="logo"}
+Wez\'s Terminal Emulator
+
+::::: md-nav__source
+[](https://github.com/wezterm/wezterm "Go to repository"){.md-source
+md-component="source"}
+
+::: {.md-source__icon .md-icon}
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCA0NDggNTEyIj48IS0tISBGb250IEF3ZXNvbWUgRnJlZSA3LjEuMCBieSBAZm9udGF3ZXNvbWUgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbSBMaWNlbnNlIC0gaHR0cHM6Ly9mb250YXdlc29tZS5jb20vbGljZW5zZS9mcmVlIChJY29uczogQ0MgQlkgNC4wLCBGb250czogU0lMIE9GTCAxLjEsIENvZGU6IE1JVCBMaWNlbnNlKSBDb3B5cmlnaHQgMjAyNSBGb250aWNvbnMsIEluYy4tLT48cGF0aCBkPSJNNDM5LjYgMjM2LjEgMjQ0IDQwLjVjLTUuNC01LjUtMTIuOC04LjUtMjAuNC04LjVzLTE1IDMtMjAuNCA4LjRMMTYyLjUgODFsNTEuNSA1MS41YzI3LjEtOS4xIDUyLjcgMTYuOCA0My40IDQzLjdsNDkuNyA0OS43YzM0LjItMTEuOCA2MS4yIDMxIDM1LjUgNTYuNy0yNi41IDI2LjUtNzAuMi0yLjktNTYtMzcuM0wyNDAuMyAxOTl2MTIxLjljMjUuMyAxMi41IDIyLjMgNDEuOCA5LjEgNTUtNi40IDYuNC0xNS4yIDEwLjEtMjQuMyAxMC4xcy0xNy44LTMuNi0yNC4zLTEwLjFjLTE3LjYtMTcuNi0xMS4xLTQ2LjkgMTEuMi01NnYtMTIzYy0yMC44LTguNS0yNC42LTMwLjctMTguNi00NUwxNDIuNiAxMDEgOC41IDIzNS4xQzMgMjQwLjYgMCAyNDcuOSAwIDI1NS41czMgMTUgOC41IDIwLjRsMTk1LjYgMTk1LjdjNS40IDUuNCAxMi43IDguNCAyMC40IDguNHMxNS0zIDIwLjQtOC40bDE5NC43LTE5NC43YzUuNC01LjQgOC40LTEyLjggOC40LTIwLjRzLTMtMTUtOC40LTIwLjQiIC8+PC9zdmc+)
+:::
+
+::: md-source__repository
+wezterm/wezterm
+:::
+:::::
+
+::: {.md-nav__link .md-nav__container}
+[[ WezTerm ]{.md-ellipsis}](index.html){.md-nav__link} []{.md-nav__icon
+.md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} WezTerm
+
+-   [[ Features ]{.md-ellipsis}](features.html){.md-nav__link}
+-   [[ Scrollback ]{.md-ellipsis}](scrollback.html){.md-nav__link}
+-   [[ Quick Select Mode
+    ]{.md-ellipsis}](quickselect.html){.md-nav__link}
+-   [[ Copy Mode ]{.md-ellipsis}](copymode.html){.md-nav__link}
+-   [[ Hyperlinks ]{.md-ellipsis}](hyperlinks.html){.md-nav__link}
+-   [[ Shell Integration
+    ]{.md-ellipsis}](shell-integration.html){.md-nav__link}
+-   [[ iTerm Image Protocol ]{.md-ellipsis}](imgcat.html){.md-nav__link}
+-   [[ SSH ]{.md-ellipsis}](ssh.html){.md-nav__link}
+-   [[ Serial Ports & Arduino
+    ]{.md-ellipsis}](serial.html){.md-nav__link}
+-   [[ Multiplexing ]{.md-ellipsis}](multiplexing.html){.md-nav__link}
+
+[ Download ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} Download
+
+-   [[ Download ]{.md-ellipsis}](installation.html){.md-nav__link}
+-   [[ Windows ]{.md-ellipsis}](install/windows.html){.md-nav__link}
+-   [[ macOS ]{.md-ellipsis}](install/macos.html){.md-nav__link}
+-   [[ Linux ]{.md-ellipsis}](install/linux.html){.md-nav__link}
+-   [[ FreeBSD ]{.md-ellipsis}](install/freebsd.html){.md-nav__link}
+-   [[ NetBSD ]{.md-ellipsis}](install/netbsd.html){.md-nav__link}
+-   [[ Build from source
+    ]{.md-ellipsis}](install/source.html){.md-nav__link}
+
+[ Configuration ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} Configuration
+
+[[ Configuration ]{.md-ellipsis}](config/files.html){.md-nav__link}
+
+[[ Colors & Appearance
+]{.md-ellipsis}](config/appearance.html){.md-nav__link}
+
+[[ Launching Programs
+]{.md-ellipsis}](config/launch.html){.md-nav__link}
+
+[[ Fonts ]{.md-ellipsis}](config/fonts.html){.md-nav__link}
+
+[[ Font Shaping
+]{.md-ellipsis}](config/font-shaping.html){.md-nav__link}
+
+[[ Keyboard Concepts
+]{.md-ellipsis}](config/keyboard-concepts.html){.md-nav__link}
+
+[[ Key Binding ]{.md-ellipsis}](config/keys.html){.md-nav__link}
+
+[[ Key Tables ]{.md-ellipsis}](config/key-tables.html){.md-nav__link}
+
+[[ Default Key Assignments
+]{.md-ellipsis}](config/default-keys.html){.md-nav__link}
+
+[[ Keyboard Encoding
+]{.md-ellipsis}](config/key-encoding.html){.md-nav__link}
+
+[[ Mouse Binding ]{.md-ellipsis}](config/mouse.html){.md-nav__link}
+
+[[ Plugins ]{.md-ellipsis}](config/plugins.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ Color Schemes
+]{.md-ellipsis}](colorschemes/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} Color Schemes
+
+-   [[ 3 ]{.md-ellipsis}](colorschemes/3/index.html){.md-nav__link}
+-   [[ a ]{.md-ellipsis}](colorschemes/a/index.html){.md-nav__link}
+-   [[ b ]{.md-ellipsis}](colorschemes/b/index.html){.md-nav__link}
+-   [[ c ]{.md-ellipsis}](colorschemes/c/index.html){.md-nav__link}
+-   [[ d ]{.md-ellipsis}](colorschemes/d/index.html){.md-nav__link}
+-   [[ e ]{.md-ellipsis}](colorschemes/e/index.html){.md-nav__link}
+-   [[ f ]{.md-ellipsis}](colorschemes/f/index.html){.md-nav__link}
+-   [[ g ]{.md-ellipsis}](colorschemes/g/index.html){.md-nav__link}
+-   [[ h ]{.md-ellipsis}](colorschemes/h/index.html){.md-nav__link}
+-   [[ i ]{.md-ellipsis}](colorschemes/i/index.html){.md-nav__link}
+-   [[ j ]{.md-ellipsis}](colorschemes/j/index.html){.md-nav__link}
+-   [[ k ]{.md-ellipsis}](colorschemes/k/index.html){.md-nav__link}
+-   [[ l ]{.md-ellipsis}](colorschemes/l/index.html){.md-nav__link}
+-   [[ m ]{.md-ellipsis}](colorschemes/m/index.html){.md-nav__link}
+-   [[ n ]{.md-ellipsis}](colorschemes/n/index.html){.md-nav__link}
+-   [[ o ]{.md-ellipsis}](colorschemes/o/index.html){.md-nav__link}
+-   [[ p ]{.md-ellipsis}](colorschemes/p/index.html){.md-nav__link}
+-   [[ q ]{.md-ellipsis}](colorschemes/q/index.html){.md-nav__link}
+-   [[ r ]{.md-ellipsis}](colorschemes/r/index.html){.md-nav__link}
+-   [[ s ]{.md-ellipsis}](colorschemes/s/index.html){.md-nav__link}
+-   [[ t ]{.md-ellipsis}](colorschemes/t/index.html){.md-nav__link}
+-   [[ u ]{.md-ellipsis}](colorschemes/u/index.html){.md-nav__link}
+-   [[ v ]{.md-ellipsis}](colorschemes/v/index.html){.md-nav__link}
+-   [[ w ]{.md-ellipsis}](colorschemes/w/index.html){.md-nav__link}
+-   [[ x ]{.md-ellipsis}](colorschemes/x/index.html){.md-nav__link}
+-   [[ y ]{.md-ellipsis}](colorschemes/y/index.html){.md-nav__link}
+-   [[ z ]{.md-ellipsis}](colorschemes/z/index.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ Recipes ]{.md-ellipsis}](recipes/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} Recipes
+
+-   [[ Use hyperlinks directly in the terminal
+    ]{.md-ellipsis}](recipes/hyperlinks.html){.md-nav__link}
+-   [[ Passing Data from a pane to Lua
+    ]{.md-ellipsis}](recipes/passing-data.html){.md-nav__link}
+-   [[ Workspaces / Sessions
+    ]{.md-ellipsis}](recipes/workspaces.html){.md-nav__link}
+
+[ Full Config & Lua Reference ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} Full Config & Lua Reference
+
+[[ Full Config & Lua Reference
+]{.md-ellipsis}](config/lua/general.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ Config Options
+]{.md-ellipsis}](config/lua/config/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} Config Options
+
+-   [[ adjust_window_size_when_changing_font_size
+    ]{.md-ellipsis}](config/lua/config/adjust_window_size_when_changing_font_size.html){.md-nav__link}
+-   [[ allow_square_glyphs_to_overflow_width
+    ]{.md-ellipsis}](config/lua/config/allow_square_glyphs_to_overflow_width.html){.md-nav__link}
+-   [[ allow_win32_input_mode
+    ]{.md-ellipsis}](config/lua/config/allow_win32_input_mode.html){.md-nav__link}
+-   [[ alternate_buffer_wheel_scroll_speed
+    ]{.md-ellipsis}](config/lua/config/alternate_buffer_wheel_scroll_speed.html){.md-nav__link}
+-   [[ animation_fps
+    ]{.md-ellipsis}](config/lua/config/animation_fps.html){.md-nav__link}
+-   [[ anti_alias_custom_block_glyphs
+    ]{.md-ellipsis}](config/lua/config/anti_alias_custom_block_glyphs.html){.md-nav__link}
+-   [[ audible_bell
+    ]{.md-ellipsis}](config/lua/config/audible_bell.html){.md-nav__link}
+-   [[ automatically_reload_config
+    ]{.md-ellipsis}](config/lua/config/automatically_reload_config.html){.md-nav__link}
+-   [[ background
+    ]{.md-ellipsis}](config/lua/config/background.html){.md-nav__link}
+-   [[ bold_brightens_ansi_colors
+    ]{.md-ellipsis}](config/lua/config/bold_brightens_ansi_colors.html){.md-nav__link}
+-   [[ bypass_mouse_reporting_modifiers
+    ]{.md-ellipsis}](config/lua/config/bypass_mouse_reporting_modifiers.html){.md-nav__link}
+-   [[ canonicalize_pasted_newlines
+    ]{.md-ellipsis}](config/lua/config/canonicalize_pasted_newlines.html){.md-nav__link}
+-   [[ cell_width
+    ]{.md-ellipsis}](config/lua/config/cell_width.html){.md-nav__link}
+-   [[ cell_widths
+    ]{.md-ellipsis}](config/lua/config/cell_widths.html){.md-nav__link}
+-   [[ char_select_bg_color
+    ]{.md-ellipsis}](config/lua/config/char_select_bg_color.html){.md-nav__link}
+-   [[ char_select_fg_color
+    ]{.md-ellipsis}](config/lua/config/char_select_fg_color.html){.md-nav__link}
+-   [[ char_select_font
+    ]{.md-ellipsis}](config/lua/config/char_select_font.html){.md-nav__link}
+-   [[ char_select_font_size
+    ]{.md-ellipsis}](config/lua/config/char_select_font_size.html){.md-nav__link}
+-   [[ check_for_updates
+    ]{.md-ellipsis}](config/lua/config/check_for_updates.html){.md-nav__link}
+-   [[ clean_exit_codes
+    ]{.md-ellipsis}](config/lua/config/clean_exit_codes.html){.md-nav__link}
+-   [[ color_schemes
+    ]{.md-ellipsis}](config/lua/config/color_schemes.html){.md-nav__link}
+-   [[ colors
+    ]{.md-ellipsis}](config/lua/config/colors.html){.md-nav__link}
+-   [[ command_palette_bg_color
+    ]{.md-ellipsis}](config/lua/config/command_palette_bg_color.html){.md-nav__link}
+-   [[ command_palette_fg_color
+    ]{.md-ellipsis}](config/lua/config/command_palette_fg_color.html){.md-nav__link}
+-   [[ command_palette_font
+    ]{.md-ellipsis}](config/lua/config/command_palette_font.html){.md-nav__link}
+-   [[ command_palette_font_size
+    ]{.md-ellipsis}](config/lua/config/command_palette_font_size.html){.md-nav__link}
+-   [[ command_palette_rows
+    ]{.md-ellipsis}](config/lua/config/command_palette_rows.html){.md-nav__link}
+-   [[ cursor_blink_ease_in
+    ]{.md-ellipsis}](config/lua/config/cursor_blink_ease_in.html){.md-nav__link}
+-   [[ cursor_blink_ease_out
+    ]{.md-ellipsis}](config/lua/config/cursor_blink_ease_out.html){.md-nav__link}
+-   [[ cursor_blink_rate
+    ]{.md-ellipsis}](config/lua/config/cursor_blink_rate.html){.md-nav__link}
+-   [[ cursor_thickness
+    ]{.md-ellipsis}](config/lua/config/cursor_thickness.html){.md-nav__link}
+-   [[ custom_block_glyphs
+    ]{.md-ellipsis}](config/lua/config/custom_block_glyphs.html){.md-nav__link}
+-   [[ daemon_options
+    ]{.md-ellipsis}](config/lua/config/daemon_options.html){.md-nav__link}
+-   [[ debug_key_events
+    ]{.md-ellipsis}](config/lua/config/debug_key_events.html){.md-nav__link}
+-   [[ default_cursor_style
+    ]{.md-ellipsis}](config/lua/config/default_cursor_style.html){.md-nav__link}
+-   [[ default_cwd
+    ]{.md-ellipsis}](config/lua/config/default_cwd.html){.md-nav__link}
+-   [[ default_domain
+    ]{.md-ellipsis}](config/lua/config/default_domain.html){.md-nav__link}
+-   [[ default_gui_startup_args
+    ]{.md-ellipsis}](config/lua/config/default_gui_startup_args.html){.md-nav__link}
+-   [[ default_mux_server_domain
+    ]{.md-ellipsis}](config/lua/config/default_mux_server_domain.html){.md-nav__link}
+-   [[ default_prog
+    ]{.md-ellipsis}](config/lua/config/default_prog.html){.md-nav__link}
+-   [[ default_ssh_auth_sock
+    ]{.md-ellipsis}](config/lua/config/default_ssh_auth_sock.html){.md-nav__link}
+-   [[ default_workspace
+    ]{.md-ellipsis}](config/lua/config/default_workspace.html){.md-nav__link}
+-   [[ detect_password_input
+    ]{.md-ellipsis}](config/lua/config/detect_password_input.html){.md-nav__link}
+-   [[ disable_default_mouse_bindings
+    ]{.md-ellipsis}](config/lua/config/disable_default_mouse_bindings.html){.md-nav__link}
+-   [[ disable_default_quick_select_patterns
+    ]{.md-ellipsis}](config/lua/config/disable_default_quick_select_patterns.html){.md-nav__link}
+-   [[ display_pixel_geometry
+    ]{.md-ellipsis}](config/lua/config/display_pixel_geometry.html){.md-nav__link}
+-   [[ dpi ]{.md-ellipsis}](config/lua/config/dpi.html){.md-nav__link}
+-   [[ enable_csi_u_key_encoding
+    ]{.md-ellipsis}](config/lua/config/enable_csi_u_key_encoding.html){.md-nav__link}
+-   [[ enable_kitty_keyboard
+    ]{.md-ellipsis}](config/lua/config/enable_kitty_keyboard.html){.md-nav__link}
+-   [[ enable_scroll_bar
+    ]{.md-ellipsis}](config/lua/config/enable_scroll_bar.html){.md-nav__link}
+-   [[ enable_tab_bar
+    ]{.md-ellipsis}](config/lua/config/enable_tab_bar.html){.md-nav__link}
+-   [[ enable_wayland
+    ]{.md-ellipsis}](config/lua/config/enable_wayland.html){.md-nav__link}
+-   [[ exit_behavior
+    ]{.md-ellipsis}](config/lua/config/exit_behavior.html){.md-nav__link}
+-   [[ exit_behavior_messaging
+    ]{.md-ellipsis}](config/lua/config/exit_behavior_messaging.html){.md-nav__link}
+-   [[ font ]{.md-ellipsis}](config/lua/config/font.html){.md-nav__link}
+-   [[ font_antialias
+    ]{.md-ellipsis}](config/lua/config/font_antialias.html){.md-nav__link}
+-   [[ font_dirs
+    ]{.md-ellipsis}](config/lua/config/font_dirs.html){.md-nav__link}
+-   [[ font_hinting
+    ]{.md-ellipsis}](config/lua/config/font_hinting.html){.md-nav__link}
+-   [[ font_locator
+    ]{.md-ellipsis}](config/lua/config/font_locator.html){.md-nav__link}
+-   [[ font_rasterizer
+    ]{.md-ellipsis}](config/lua/config/font_rasterizer.html){.md-nav__link}
+-   [[ font_rules
+    ]{.md-ellipsis}](config/lua/config/font_rules.html){.md-nav__link}
+-   [[ font_shaper
+    ]{.md-ellipsis}](config/lua/config/font_shaper.html){.md-nav__link}
+-   [[ font_size
+    ]{.md-ellipsis}](config/lua/config/font_size.html){.md-nav__link}
+-   [[ force_reverse_video_cursor
+    ]{.md-ellipsis}](config/lua/config/force_reverse_video_cursor.html){.md-nav__link}
+-   [[ foreground_text_hsb
+    ]{.md-ellipsis}](config/lua/config/foreground_text_hsb.html){.md-nav__link}
+-   [[ freetype_interpreter_version
+    ]{.md-ellipsis}](config/lua/config/freetype_interpreter_version.html){.md-nav__link}
+-   [[ freetype_load_flags
+    ]{.md-ellipsis}](config/lua/config/freetype_load_flags.html){.md-nav__link}
+-   [[ freetype_load_target
+    ]{.md-ellipsis}](config/lua/config/freetype_load_target.html){.md-nav__link}
+-   [[ freetype_pcf_long_family_names
+    ]{.md-ellipsis}](config/lua/config/freetype_pcf_long_family_names.html){.md-nav__link}
+-   [[ freetype_render_target
+    ]{.md-ellipsis}](config/lua/config/freetype_render_target.html){.md-nav__link}
+-   [[ front_end
+    ]{.md-ellipsis}](config/lua/config/front_end.html){.md-nav__link}
+-   [[ harfbuzz_features
+    ]{.md-ellipsis}](config/lua/config/harfbuzz_features.html){.md-nav__link}
+-   [[ hide_mouse_cursor_when_typing
+    ]{.md-ellipsis}](config/lua/config/hide_mouse_cursor_when_typing.html){.md-nav__link}
+-   [[ hide_tab_bar_if_only_one_tab
+    ]{.md-ellipsis}](config/lua/config/hide_tab_bar_if_only_one_tab.html){.md-nav__link}
+-   [[ hyperlink_rules
+    ]{.md-ellipsis}](config/lua/config/hyperlink_rules.html){.md-nav__link}
+-   [[ ime_preedit_rendering
+    ]{.md-ellipsis}](config/lua/config/ime_preedit_rendering.html){.md-nav__link}
+-   [[ initial_cols
+    ]{.md-ellipsis}](config/lua/config/initial_cols.html){.md-nav__link}
+-   [[ initial_rows
+    ]{.md-ellipsis}](config/lua/config/initial_rows.html){.md-nav__link}
+-   [[ integrated_title_button_alignment
+    ]{.md-ellipsis}](config/lua/config/integrated_title_button_alignment.html){.md-nav__link}
+-   [[ integrated_title_button_color
+    ]{.md-ellipsis}](config/lua/config/integrated_title_button_color.html){.md-nav__link}
+-   [[ integrated_title_button_style
+    ]{.md-ellipsis}](config/lua/config/integrated_title_button_style.html){.md-nav__link}
+-   [[ integrated_title_buttons
+    ]{.md-ellipsis}](config/lua/config/integrated_title_buttons.html){.md-nav__link}
+-   [[ kde_window_background_blur
+    ]{.md-ellipsis}](config/lua/config/kde_window_background_blur.html){.md-nav__link}
+-   [[ key_map_preference
+    ]{.md-ellipsis}](config/lua/config/key_map_preference.html){.md-nav__link}
+-   [[ key_tables
+    ]{.md-ellipsis}](config/lua/config/key_tables.html){.md-nav__link}
+-   [[ launch_menu
+    ]{.md-ellipsis}](config/lua/config/launch_menu.html){.md-nav__link}
+-   [[ launcher_alphabet
+    ]{.md-ellipsis}](config/lua/config/launcher_alphabet.html){.md-nav__link}
+-   [[ line_height
+    ]{.md-ellipsis}](config/lua/config/line_height.html){.md-nav__link}
+-   [[ log_unknown_escape_sequences
+    ]{.md-ellipsis}](config/lua/config/log_unknown_escape_sequences.html){.md-nav__link}
+-   [[ macos_forward_to_ime_modifier_mask
+    ]{.md-ellipsis}](config/lua/config/macos_forward_to_ime_modifier_mask.html){.md-nav__link}
+-   [[ macos_fullscreen_extend_behind_notch
+    ]{.md-ellipsis}](config/lua/config/macos_fullscreen_extend_behind_notch.html){.md-nav__link}
+-   [[ macos_window_background_blur
+    ]{.md-ellipsis}](config/lua/config/macos_window_background_blur.html){.md-nav__link}
+-   [[ max_fps
+    ]{.md-ellipsis}](config/lua/config/max_fps.html){.md-nav__link}
+-   [[ min_scroll_bar_height
+    ]{.md-ellipsis}](config/lua/config/min_scroll_bar_height.html){.md-nav__link}
+-   [[ mouse_wheel_scrolls_tabs
+    ]{.md-ellipsis}](config/lua/config/mouse_wheel_scrolls_tabs.html){.md-nav__link}
+-   [[ mux_enable_ssh_agent
+    ]{.md-ellipsis}](config/lua/config/mux_enable_ssh_agent.html){.md-nav__link}
+-   [[ mux_env_remove
+    ]{.md-ellipsis}](config/lua/config/mux_env_remove.html){.md-nav__link}
+-   [[ native_macos_fullscreen_mode
+    ]{.md-ellipsis}](config/lua/config/native_macos_fullscreen_mode.html){.md-nav__link}
+-   [[ normalize_output_to_unicode_nfc
+    ]{.md-ellipsis}](config/lua/config/normalize_output_to_unicode_nfc.html){.md-nav__link}
+-   [[ notification_handling
+    ]{.md-ellipsis}](config/lua/config/notification_handling.html){.md-nav__link}
+-   [[ pane_focus_follows_mouse
+    ]{.md-ellipsis}](config/lua/config/pane_focus_follows_mouse.html){.md-nav__link}
+-   [[ pane_select_font
+    ]{.md-ellipsis}](config/lua/config/pane_select_font.html){.md-nav__link}
+-   [[ prefer_egl
+    ]{.md-ellipsis}](config/lua/config/prefer_egl.html){.md-nav__link}
+-   [[ prefer_to_spawn_tabs
+    ]{.md-ellipsis}](config/lua/config/prefer_to_spawn_tabs.html){.md-nav__link}
+-   [[ quick_select_alphabet
+    ]{.md-ellipsis}](config/lua/config/quick_select_alphabet.html){.md-nav__link}
+-   [[ quick_select_patterns
+    ]{.md-ellipsis}](config/lua/config/quick_select_patterns.html){.md-nav__link}
+-   [[ quick_select_remove_styling
+    ]{.md-ellipsis}](config/lua/config/quick_select_remove_styling.html){.md-nav__link}
+-   [[ quit_when_all_windows_are_closed
+    ]{.md-ellipsis}](config/lua/config/quit_when_all_windows_are_closed.html){.md-nav__link}
+-   [[ quote_dropped_files
+    ]{.md-ellipsis}](config/lua/config/quote_dropped_files.html){.md-nav__link}
+-   [[ reverse_video_cursor_min_contrast
+    ]{.md-ellipsis}](config/lua/config/reverse_video_cursor_min_contrast.html){.md-nav__link}
+-   [[ scroll_to_bottom_on_input
+    ]{.md-ellipsis}](config/lua/config/scroll_to_bottom_on_input.html){.md-nav__link}
+-   [[ scrollback_lines
+    ]{.md-ellipsis}](config/lua/config/scrollback_lines.html){.md-nav__link}
+-   [[ selection_word_boundary
+    ]{.md-ellipsis}](config/lua/config/selection_word_boundary.html){.md-nav__link}
+-   [[ serial_ports
+    ]{.md-ellipsis}](config/lua/config/serial_ports.html){.md-nav__link}
+-   [[ set_environment_variables
+    ]{.md-ellipsis}](config/lua/config/set_environment_variables.html){.md-nav__link}
+-   [[ show_close_tab_button_in_tabs
+    ]{.md-ellipsis}](config/lua/config/show_close_tab_button_in_tabs.html){.md-nav__link}
+-   [[ show_new_tab_button_in_tab_bar
+    ]{.md-ellipsis}](config/lua/config/show_new_tab_button_in_tab_bar.html){.md-nav__link}
+-   [[ show_tab_index_in_tab_bar
+    ]{.md-ellipsis}](config/lua/config/show_tab_index_in_tab_bar.html){.md-nav__link}
+-   [[ show_tabs_in_tab_bar
+    ]{.md-ellipsis}](config/lua/config/show_tabs_in_tab_bar.html){.md-nav__link}
+-   [[ show_update_window
+    ]{.md-ellipsis}](config/lua/config/show_update_window.html){.md-nav__link}
+-   [[ skip_close_confirmation_for_processes_named
+    ]{.md-ellipsis}](config/lua/config/skip_close_confirmation_for_processes_named.html){.md-nav__link}
+-   [[ ssh_backend
+    ]{.md-ellipsis}](config/lua/config/ssh_backend.html){.md-nav__link}
+-   [[ ssh_domains
+    ]{.md-ellipsis}](config/lua/config/ssh_domains.html){.md-nav__link}
+-   [[ status_update_interval
+    ]{.md-ellipsis}](config/lua/config/status_update_interval.html){.md-nav__link}
+-   [[ strikethrough_position
+    ]{.md-ellipsis}](config/lua/config/strikethrough_position.html){.md-nav__link}
+-   [[ swallow_mouse_click_on_pane_focus
+    ]{.md-ellipsis}](config/lua/config/swallow_mouse_click_on_pane_focus.html){.md-nav__link}
+-   [[ swallow_mouse_click_on_window_focus
+    ]{.md-ellipsis}](config/lua/config/swallow_mouse_click_on_window_focus.html){.md-nav__link}
+-   [[ swap_backspace_and_delete
+    ]{.md-ellipsis}](config/lua/config/swap_backspace_and_delete.html){.md-nav__link}
+-   [[ switch_to_last_active_tab_when_closing_tab
+    ]{.md-ellipsis}](config/lua/config/switch_to_last_active_tab_when_closing_tab.html){.md-nav__link}
+-   [[ tab_and_split_indices_are_zero_based
+    ]{.md-ellipsis}](config/lua/config/tab_and_split_indices_are_zero_based.html){.md-nav__link}
+-   [[ tab_bar_at_bottom
+    ]{.md-ellipsis}](config/lua/config/tab_bar_at_bottom.html){.md-nav__link}
+-   [[ tab_bar_style
+    ]{.md-ellipsis}](config/lua/config/tab_bar_style.html){.md-nav__link}
+-   [[ tab_max_width
+    ]{.md-ellipsis}](config/lua/config/tab_max_width.html){.md-nav__link}
+-   [[ term ]{.md-ellipsis}](config/lua/config/term.html){.md-nav__link}
+-   [[ text_blink_ease_in
+    ]{.md-ellipsis}](config/lua/config/text_blink_ease_in.html){.md-nav__link}
+-   [[ text_blink_ease_out
+    ]{.md-ellipsis}](config/lua/config/text_blink_ease_out.html){.md-nav__link}
+-   [[ text_blink_rapid_ease_in
+    ]{.md-ellipsis}](config/lua/config/text_blink_rapid_ease_in.html){.md-nav__link}
+-   [[ text_blink_rapid_ease_out
+    ]{.md-ellipsis}](config/lua/config/text_blink_rapid_ease_out.html){.md-nav__link}
+-   [[ text_blink_rate
+    ]{.md-ellipsis}](config/lua/config/text_blink_rate.html){.md-nav__link}
+-   [[ text_blink_rate_rapid
+    ]{.md-ellipsis}](config/lua/config/text_blink_rate_rapid.html){.md-nav__link}
+-   [[ text_min_contrast_ratio
+    ]{.md-ellipsis}](config/lua/config/text_min_contrast_ratio.html){.md-nav__link}
+-   [[ tiling_desktop_environments
+    ]{.md-ellipsis}](config/lua/config/tiling_desktop_environments.html){.md-nav__link}
+-   [[ tls_clients
+    ]{.md-ellipsis}](config/lua/config/tls_clients.html){.md-nav__link}
+-   [[ tls_servers
+    ]{.md-ellipsis}](config/lua/config/tls_servers.html){.md-nav__link}
+-   [[ treat_east_asian_ambiguous_width_as_wide
+    ]{.md-ellipsis}](config/lua/config/treat_east_asian_ambiguous_width_as_wide.html){.md-nav__link}
+-   [[ treat_left_ctrlalt_as_altgr
+    ]{.md-ellipsis}](config/lua/config/treat_left_ctrlalt_as_altgr.html){.md-nav__link}
+-   [[ ui_key_cap_rendering
+    ]{.md-ellipsis}](config/lua/config/ui_key_cap_rendering.html){.md-nav__link}
+-   [[ ulimit_nofile
+    ]{.md-ellipsis}](config/lua/config/ulimit_nofile.html){.md-nav__link}
+-   [[ ulimit_nproc
+    ]{.md-ellipsis}](config/lua/config/ulimit_nproc.html){.md-nav__link}
+-   [[ underline_position
+    ]{.md-ellipsis}](config/lua/config/underline_position.html){.md-nav__link}
+-   [[ underline_thickness
+    ]{.md-ellipsis}](config/lua/config/underline_thickness.html){.md-nav__link}
+-   [[ unicode_version
+    ]{.md-ellipsis}](config/lua/config/unicode_version.html){.md-nav__link}
+-   [[ unix_domains
+    ]{.md-ellipsis}](config/lua/config/unix_domains.html){.md-nav__link}
+-   [[ unzoom_on_switch_pane
+    ]{.md-ellipsis}](config/lua/config/unzoom_on_switch_pane.html){.md-nav__link}
+-   [[ use_cap_height_to_scale_fallback_fonts
+    ]{.md-ellipsis}](config/lua/config/use_cap_height_to_scale_fallback_fonts.html){.md-nav__link}
+-   [[ use_fancy_tab_bar
+    ]{.md-ellipsis}](config/lua/config/use_fancy_tab_bar.html){.md-nav__link}
+-   [[ use_ime
+    ]{.md-ellipsis}](config/lua/config/use_ime.html){.md-nav__link}
+-   [[ use_resize_increments
+    ]{.md-ellipsis}](config/lua/config/use_resize_increments.html){.md-nav__link}
+-   [[ visual_bell
+    ]{.md-ellipsis}](config/lua/config/visual_bell.html){.md-nav__link}
+-   [[ warn_about_missing_glyphs
+    ]{.md-ellipsis}](config/lua/config/warn_about_missing_glyphs.html){.md-nav__link}
+-   [[ wayland_window_background_blur
+    ]{.md-ellipsis}](config/lua/config/wayland_window_background_blur.html){.md-nav__link}
+-   [[ webgpu_force_fallback_adapter
+    ]{.md-ellipsis}](config/lua/config/webgpu_force_fallback_adapter.html){.md-nav__link}
+-   [[ webgpu_power_preference
+    ]{.md-ellipsis}](config/lua/config/webgpu_power_preference.html){.md-nav__link}
+-   [[ webgpu_preferred_adapter
+    ]{.md-ellipsis}](config/lua/config/webgpu_preferred_adapter.html){.md-nav__link}
+-   [[ win32_acrylic_accent_color
+    ]{.md-ellipsis}](config/lua/config/win32_acrylic_accent_color.html){.md-nav__link}
+-   [[ win32_system_backdrop
+    ]{.md-ellipsis}](config/lua/config/win32_system_backdrop.html){.md-nav__link}
+-   [[ window_background_gradient
+    ]{.md-ellipsis}](config/lua/config/window_background_gradient.html){.md-nav__link}
+-   [[ window_close_confirmation
+    ]{.md-ellipsis}](config/lua/config/window_close_confirmation.html){.md-nav__link}
+-   [[ window_content_alignment
+    ]{.md-ellipsis}](config/lua/config/window_content_alignment.html){.md-nav__link}
+-   [[ window_decorations
+    ]{.md-ellipsis}](config/lua/config/window_decorations.html){.md-nav__link}
+-   [[ window_frame
+    ]{.md-ellipsis}](config/lua/config/window_frame.html){.md-nav__link}
+-   [[ window_padding
+    ]{.md-ellipsis}](config/lua/config/window_padding.html){.md-nav__link}
+-   [[ wsl_domains
+    ]{.md-ellipsis}](config/lua/config/wsl_domains.html){.md-nav__link}
+-   [[ xim_im_name
+    ]{.md-ellipsis}](config/lua/config/xim_im_name.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm
+]{.md-ellipsis}](config/lua/wezterm/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm
+
+-   [[ GLOBAL
+    ]{.md-ellipsis}](config/lua/wezterm/GLOBAL.html){.md-nav__link}
+-   [[ action
+    ]{.md-ellipsis}](config/lua/wezterm/action.html){.md-nav__link}
+-   [[ action_callback
+    ]{.md-ellipsis}](config/lua/wezterm/action_callback.html){.md-nav__link}
+-   [[ add_to_config_reload_watch_list
+    ]{.md-ellipsis}](config/lua/wezterm/add_to_config_reload_watch_list.html){.md-nav__link}
+-   [[ background_child_process
+    ]{.md-ellipsis}](config/lua/wezterm/background_child_process.html){.md-nav__link}
+-   [[ battery_info
+    ]{.md-ellipsis}](config/lua/wezterm/battery_info.html){.md-nav__link}
+-   [[ column_width
+    ]{.md-ellipsis}](config/lua/wezterm/column_width.html){.md-nav__link}
+-   [[ config_builder
+    ]{.md-ellipsis}](config/lua/wezterm/config_builder.html){.md-nav__link}
+-   [[ config_dir
+    ]{.md-ellipsis}](config/lua/wezterm/config_dir.html){.md-nav__link}
+-   [[ config_file
+    ]{.md-ellipsis}](config/lua/wezterm/config_file.html){.md-nav__link}
+-   [[ default_hyperlink_rules
+    ]{.md-ellipsis}](config/lua/wezterm/default_hyperlink_rules.html){.md-nav__link}
+-   [[ default_ssh_domains
+    ]{.md-ellipsis}](config/lua/wezterm/default_ssh_domains.html){.md-nav__link}
+-   [[ default_wsl_domains
+    ]{.md-ellipsis}](config/lua/wezterm/default_wsl_domains.html){.md-nav__link}
+-   [[ emit
+    ]{.md-ellipsis}](config/lua/wezterm/emit.html){.md-nav__link}
+-   [[ enumerate_ssh_hosts
+    ]{.md-ellipsis}](config/lua/wezterm/enumerate_ssh_hosts.html){.md-nav__link}
+-   [[ executable_dir
+    ]{.md-ellipsis}](config/lua/wezterm/executable_dir.html){.md-nav__link}
+-   [[ font
+    ]{.md-ellipsis}](config/lua/wezterm/font.html){.md-nav__link}
+-   [[ font_with_fallback
+    ]{.md-ellipsis}](config/lua/wezterm/font_with_fallback.html){.md-nav__link}
+-   [[ format
+    ]{.md-ellipsis}](config/lua/wezterm/format.html){.md-nav__link}
+-   [[ get_builtin_color_schemes
+    ]{.md-ellipsis}](config/lua/wezterm/get_builtin_color_schemes.html){.md-nav__link}
+-   [[ glob
+    ]{.md-ellipsis}](config/lua/wezterm/glob.html){.md-nav__link}
+-   [[ gradient_colors
+    ]{.md-ellipsis}](config/lua/wezterm/gradient_colors.html){.md-nav__link}
+-   [[ has_action
+    ]{.md-ellipsis}](config/lua/wezterm/has_action.html){.md-nav__link}
+-   [[ home_dir
+    ]{.md-ellipsis}](config/lua/wezterm/home_dir.html){.md-nav__link}
+-   [[ hostname
+    ]{.md-ellipsis}](config/lua/wezterm/hostname.html){.md-nav__link}
+-   [[ json_encode
+    ]{.md-ellipsis}](config/lua/wezterm/json_encode.html){.md-nav__link}
+-   [[ json_parse
+    ]{.md-ellipsis}](config/lua/wezterm/json_parse.html){.md-nav__link}
+-   [[ log_error
+    ]{.md-ellipsis}](config/lua/wezterm/log_error.html){.md-nav__link}
+-   [[ log_info
+    ]{.md-ellipsis}](config/lua/wezterm/log_info.html){.md-nav__link}
+-   [[ log_warn
+    ]{.md-ellipsis}](config/lua/wezterm/log_warn.html){.md-nav__link}
+-   [[ nerdfonts
+    ]{.md-ellipsis}](config/lua/wezterm/nerdfonts.html){.md-nav__link}
+-   [[ on ]{.md-ellipsis}](config/lua/wezterm/on.html){.md-nav__link}
+-   [[ open_with
+    ]{.md-ellipsis}](config/lua/wezterm/open_with.html){.md-nav__link}
+-   [[ pad_left
+    ]{.md-ellipsis}](config/lua/wezterm/pad_left.html){.md-nav__link}
+-   [[ pad_right
+    ]{.md-ellipsis}](config/lua/wezterm/pad_right.html){.md-nav__link}
+-   [[ permute_any_mods
+    ]{.md-ellipsis}](config/lua/wezterm/permute_any_mods.html){.md-nav__link}
+-   [[ permute_any_or_no_mods
+    ]{.md-ellipsis}](config/lua/wezterm/permute_any_or_no_mods.html){.md-nav__link}
+-   [[ read_dir
+    ]{.md-ellipsis}](config/lua/wezterm/read_dir.html){.md-nav__link}
+-   [[ reload_configuration
+    ]{.md-ellipsis}](config/lua/wezterm/reload_configuration.html){.md-nav__link}
+-   [[ run_child_process
+    ]{.md-ellipsis}](config/lua/wezterm/run_child_process.html){.md-nav__link}
+-   [[ running_under_wsl
+    ]{.md-ellipsis}](config/lua/wezterm/running_under_wsl.html){.md-nav__link}
+-   [[ shell_join_args
+    ]{.md-ellipsis}](config/lua/wezterm/shell_join_args.html){.md-nav__link}
+-   [[ shell_quote_arg
+    ]{.md-ellipsis}](config/lua/wezterm/shell_quote_arg.html){.md-nav__link}
+-   [[ shell_split
+    ]{.md-ellipsis}](config/lua/wezterm/shell_split.html){.md-nav__link}
+-   [[ sleep_ms
+    ]{.md-ellipsis}](config/lua/wezterm/sleep_ms.html){.md-nav__link}
+-   [[ split_by_newlines
+    ]{.md-ellipsis}](config/lua/wezterm/split_by_newlines.html){.md-nav__link}
+-   [[ strftime
+    ]{.md-ellipsis}](config/lua/wezterm/strftime.html){.md-nav__link}
+-   [[ strftime_utc
+    ]{.md-ellipsis}](config/lua/wezterm/strftime_utc.html){.md-nav__link}
+-   [[ target_triple
+    ]{.md-ellipsis}](config/lua/wezterm/target_triple.html){.md-nav__link}
+-   [[ to_string
+    ]{.md-ellipsis}](config/lua/wezterm/to_string.html){.md-nav__link}
+-   [[ truncate_left
+    ]{.md-ellipsis}](config/lua/wezterm/truncate_left.html){.md-nav__link}
+-   [[ truncate_right
+    ]{.md-ellipsis}](config/lua/wezterm/truncate_right.html){.md-nav__link}
+-   [[ utf16_to_utf8
+    ]{.md-ellipsis}](config/lua/wezterm/utf16_to_utf8.html){.md-nav__link}
+-   [[ version
+    ]{.md-ellipsis}](config/lua/wezterm/version.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.color
+]{.md-ellipsis}](config/lua/wezterm.color/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.color
+
+-   [[ extract_colors_from_image
+    ]{.md-ellipsis}](config/lua/wezterm.color/extract_colors_from_image.html){.md-nav__link}
+-   [[ from_hsla
+    ]{.md-ellipsis}](config/lua/wezterm.color/from_hsla.html){.md-nav__link}
+-   [[ get_builtin_schemes
+    ]{.md-ellipsis}](config/lua/wezterm.color/get_builtin_schemes.html){.md-nav__link}
+-   [[ get_default_colors
+    ]{.md-ellipsis}](config/lua/wezterm.color/get_default_colors.html){.md-nav__link}
+-   [[ gradient
+    ]{.md-ellipsis}](config/lua/wezterm.color/gradient.html){.md-nav__link}
+-   [[ load_base16_scheme
+    ]{.md-ellipsis}](config/lua/wezterm.color/load_base16_scheme.html){.md-nav__link}
+-   [[ load_scheme
+    ]{.md-ellipsis}](config/lua/wezterm.color/load_scheme.html){.md-nav__link}
+-   [[ load_terminal_sexy_scheme
+    ]{.md-ellipsis}](config/lua/wezterm.color/load_terminal_sexy_scheme.html){.md-nav__link}
+-   [[ parse
+    ]{.md-ellipsis}](config/lua/wezterm.color/parse.html){.md-nav__link}
+-   [[ save_scheme
+    ]{.md-ellipsis}](config/lua/wezterm.color/save_scheme.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.gui
+]{.md-ellipsis}](config/lua/wezterm.gui/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.gui
+
+-   [[ default_key_tables
+    ]{.md-ellipsis}](config/lua/wezterm.gui/default_key_tables.html){.md-nav__link}
+-   [[ default_keys
+    ]{.md-ellipsis}](config/lua/wezterm.gui/default_keys.html){.md-nav__link}
+-   [[ enumerate_gpus
+    ]{.md-ellipsis}](config/lua/wezterm.gui/enumerate_gpus.html){.md-nav__link}
+-   [[ get_appearance
+    ]{.md-ellipsis}](config/lua/wezterm.gui/get_appearance.html){.md-nav__link}
+-   [[ gui_window_for_mux_window
+    ]{.md-ellipsis}](config/lua/wezterm.gui/gui_window_for_mux_window.html){.md-nav__link}
+-   [[ gui_windows
+    ]{.md-ellipsis}](config/lua/wezterm.gui/gui_windows.html){.md-nav__link}
+-   [[ screens
+    ]{.md-ellipsis}](config/lua/wezterm.gui/screens.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.mux
+]{.md-ellipsis}](config/lua/wezterm.mux/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.mux
+
+-   [[ all_domains
+    ]{.md-ellipsis}](config/lua/wezterm.mux/all_domains.html){.md-nav__link}
+-   [[ all_windows
+    ]{.md-ellipsis}](config/lua/wezterm.mux/all_windows.html){.md-nav__link}
+-   [[ get_active_workspace
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_active_workspace.html){.md-nav__link}
+-   [[ get_domain
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_domain.html){.md-nav__link}
+-   [[ get_pane
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_pane.html){.md-nav__link}
+-   [[ get_tab
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_tab.html){.md-nav__link}
+-   [[ get_window
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_window.html){.md-nav__link}
+-   [[ get_workspace_names
+    ]{.md-ellipsis}](config/lua/wezterm.mux/get_workspace_names.html){.md-nav__link}
+-   [[ rename_workspace
+    ]{.md-ellipsis}](config/lua/wezterm.mux/rename_workspace.html){.md-nav__link}
+-   [[ set_active_workspace
+    ]{.md-ellipsis}](config/lua/wezterm.mux/set_active_workspace.html){.md-nav__link}
+-   [[ set_default_domain
+    ]{.md-ellipsis}](config/lua/wezterm.mux/set_default_domain.html){.md-nav__link}
+-   [[ spawn_window
+    ]{.md-ellipsis}](config/lua/wezterm.mux/spawn_window.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.plugin
+]{.md-ellipsis}](config/lua/wezterm.plugin/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.plugin
+
+-   [[ list
+    ]{.md-ellipsis}](config/lua/wezterm.plugin/list.html){.md-nav__link}
+-   [[ require
+    ]{.md-ellipsis}](config/lua/wezterm.plugin/require.html){.md-nav__link}
+-   [[ update_all
+    ]{.md-ellipsis}](config/lua/wezterm.plugin/update_all.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.procinfo
+]{.md-ellipsis}](config/lua/wezterm.procinfo/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.procinfo
+
+-   [[ current_working_dir_for_pid
+    ]{.md-ellipsis}](config/lua/wezterm.procinfo/current_working_dir_for_pid.html){.md-nav__link}
+-   [[ executable_path_for_pid
+    ]{.md-ellipsis}](config/lua/wezterm.procinfo/executable_path_for_pid.html){.md-nav__link}
+-   [[ get_info_for_pid
+    ]{.md-ellipsis}](config/lua/wezterm.procinfo/get_info_for_pid.html){.md-nav__link}
+-   [[ pid
+    ]{.md-ellipsis}](config/lua/wezterm.procinfo/pid.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.serde
+]{.md-ellipsis}](config/lua/wezterm.serde/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.serde
+
+-   [[ json_decode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/json_decode.html){.md-nav__link}
+-   [[ json_encode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/json_encode.html){.md-nav__link}
+-   [[ json_encode_pretty
+    ]{.md-ellipsis}](config/lua/wezterm.serde/json_encode_pretty.html){.md-nav__link}
+-   [[ toml_decode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/toml_decode.html){.md-nav__link}
+-   [[ toml_encode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/toml_encode.html){.md-nav__link}
+-   [[ toml_encode_pretty
+    ]{.md-ellipsis}](config/lua/wezterm.serde/toml_encode_pretty.html){.md-nav__link}
+-   [[ yaml_decode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/yaml_decode.html){.md-nav__link}
+-   [[ yaml_encode
+    ]{.md-ellipsis}](config/lua/wezterm.serde/yaml_encode.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.time
+]{.md-ellipsis}](config/lua/wezterm.time/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.time
+
+-   [[ call_after
+    ]{.md-ellipsis}](config/lua/wezterm.time/call_after.html){.md-nav__link}
+-   [[ now
+    ]{.md-ellipsis}](config/lua/wezterm.time/now.html){.md-nav__link}
+-   [[ parse
+    ]{.md-ellipsis}](config/lua/wezterm.time/parse.html){.md-nav__link}
+-   [[ parse_rfc3339
+    ]{.md-ellipsis}](config/lua/wezterm.time/parse_rfc3339.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ module: wezterm.url
+]{.md-ellipsis}](config/lua/wezterm.url/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} module: wezterm.url
+
+-   [[ Url
+    ]{.md-ellipsis}](config/lua/wezterm.url/Url.html){.md-nav__link}
+-   [[ parse
+    ]{.md-ellipsis}](config/lua/wezterm.url/parse.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ enum: KeyAssignment
+]{.md-ellipsis}](config/lua/keyassignment/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} enum: KeyAssignment
+
+-   [[ ActivateCommandPalette
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateCommandPalette.html){.md-nav__link}
+-   [[ ActivateCopyMode
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateCopyMode.html){.md-nav__link}
+-   [[ ActivateKeyTable
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateKeyTable.html){.md-nav__link}
+-   [[ ActivateLastTab
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateLastTab.html){.md-nav__link}
+-   [[ ActivatePaneByIndex
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivatePaneByIndex.html){.md-nav__link}
+-   [[ ActivatePaneDirection
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivatePaneDirection.html){.md-nav__link}
+-   [[ ActivateTab
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateTab.html){.md-nav__link}
+-   [[ ActivateTabRelative
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateTabRelative.html){.md-nav__link}
+-   [[ ActivateTabRelativeNoWrap
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateTabRelativeNoWrap.html){.md-nav__link}
+-   [[ ActivateWindow
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateWindow.html){.md-nav__link}
+-   [[ ActivateWindowRelative
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateWindowRelative.html){.md-nav__link}
+-   [[ ActivateWindowRelativeNoWrap
+    ]{.md-ellipsis}](config/lua/keyassignment/ActivateWindowRelativeNoWrap.html){.md-nav__link}
+-   [[ AdjustPaneSize
+    ]{.md-ellipsis}](config/lua/keyassignment/AdjustPaneSize.html){.md-nav__link}
+-   [[ AttachDomain
+    ]{.md-ellipsis}](config/lua/keyassignment/AttachDomain.html){.md-nav__link}
+-   [[ CharSelect
+    ]{.md-ellipsis}](config/lua/keyassignment/CharSelect.html){.md-nav__link}
+-   [[ ClearKeyTableStack
+    ]{.md-ellipsis}](config/lua/keyassignment/ClearKeyTableStack.html){.md-nav__link}
+-   [[ ClearScrollback
+    ]{.md-ellipsis}](config/lua/keyassignment/ClearScrollback.html){.md-nav__link}
+-   [[ ClearSelection
+    ]{.md-ellipsis}](config/lua/keyassignment/ClearSelection.html){.md-nav__link}
+-   [[ CloseCurrentPane
+    ]{.md-ellipsis}](config/lua/keyassignment/CloseCurrentPane.html){.md-nav__link}
+-   [[ CloseCurrentTab
+    ]{.md-ellipsis}](config/lua/keyassignment/CloseCurrentTab.html){.md-nav__link}
+-   [[ CompleteSelection
+    ]{.md-ellipsis}](config/lua/keyassignment/CompleteSelection.html){.md-nav__link}
+-   [[ CompleteSelectionOrOpenLinkAtMouseCursor
+    ]{.md-ellipsis}](config/lua/keyassignment/CompleteSelectionOrOpenLinkAtMouseCursor.html){.md-nav__link}
+-   [[ Confirmation
+    ]{.md-ellipsis}](config/lua/keyassignment/Confirmation.html){.md-nav__link}
+-   [[ Copy
+    ]{.md-ellipsis}](config/lua/keyassignment/Copy.html){.md-nav__link}
+-   [[ CopyTo
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyTo.html){.md-nav__link}
+-   [[ DecreaseFontSize
+    ]{.md-ellipsis}](config/lua/keyassignment/DecreaseFontSize.html){.md-nav__link}
+-   [[ DetachDomain
+    ]{.md-ellipsis}](config/lua/keyassignment/DetachDomain.html){.md-nav__link}
+-   [[ DisableDefaultAssignment
+    ]{.md-ellipsis}](config/lua/keyassignment/DisableDefaultAssignment.html){.md-nav__link}
+-   [[ EmitEvent
+    ]{.md-ellipsis}](config/lua/keyassignment/EmitEvent.html){.md-nav__link}
+-   [[ ExtendSelectionToMouseCursor
+    ]{.md-ellipsis}](config/lua/keyassignment/ExtendSelectionToMouseCursor.html){.md-nav__link}
+-   [[ Hide
+    ]{.md-ellipsis}](config/lua/keyassignment/Hide.html){.md-nav__link}
+-   [[ HideApplication
+    ]{.md-ellipsis}](config/lua/keyassignment/HideApplication.html){.md-nav__link}
+-   [[ IncreaseFontSize
+    ]{.md-ellipsis}](config/lua/keyassignment/IncreaseFontSize.html){.md-nav__link}
+-   [[ InputSelector
+    ]{.md-ellipsis}](config/lua/keyassignment/InputSelector.html){.md-nav__link}
+-   [[ MoveTab
+    ]{.md-ellipsis}](config/lua/keyassignment/MoveTab.html){.md-nav__link}
+-   [[ MoveTabRelative
+    ]{.md-ellipsis}](config/lua/keyassignment/MoveTabRelative.html){.md-nav__link}
+-   [[ Multiple
+    ]{.md-ellipsis}](config/lua/keyassignment/Multiple.html){.md-nav__link}
+-   [[ Nop
+    ]{.md-ellipsis}](config/lua/keyassignment/Nop.html){.md-nav__link}
+-   [[ OpenLinkAtMouseCursor
+    ]{.md-ellipsis}](config/lua/keyassignment/OpenLinkAtMouseCursor.html){.md-nav__link}
+-   [[ PaneSelect
+    ]{.md-ellipsis}](config/lua/keyassignment/PaneSelect.html){.md-nav__link}
+-   [[ Paste
+    ]{.md-ellipsis}](config/lua/keyassignment/Paste.html){.md-nav__link}
+-   [[ PasteFrom
+    ]{.md-ellipsis}](config/lua/keyassignment/PasteFrom.html){.md-nav__link}
+-   [[ PastePrimarySelection
+    ]{.md-ellipsis}](config/lua/keyassignment/PastePrimarySelection.html){.md-nav__link}
+-   [[ PopKeyTable
+    ]{.md-ellipsis}](config/lua/keyassignment/PopKeyTable.html){.md-nav__link}
+-   [[ PromptInputLine
+    ]{.md-ellipsis}](config/lua/keyassignment/PromptInputLine.html){.md-nav__link}
+-   [[ QuickSelect
+    ]{.md-ellipsis}](config/lua/keyassignment/QuickSelect.html){.md-nav__link}
+-   [[ QuickSelectArgs
+    ]{.md-ellipsis}](config/lua/keyassignment/QuickSelectArgs.html){.md-nav__link}
+-   [[ QuitApplication
+    ]{.md-ellipsis}](config/lua/keyassignment/QuitApplication.html){.md-nav__link}
+-   [[ ReloadConfiguration
+    ]{.md-ellipsis}](config/lua/keyassignment/ReloadConfiguration.html){.md-nav__link}
+-   [[ ResetFontAndWindowSize
+    ]{.md-ellipsis}](config/lua/keyassignment/ResetFontAndWindowSize.html){.md-nav__link}
+-   [[ ResetFontSize
+    ]{.md-ellipsis}](config/lua/keyassignment/ResetFontSize.html){.md-nav__link}
+-   [[ ResetTerminal
+    ]{.md-ellipsis}](config/lua/keyassignment/ResetTerminal.html){.md-nav__link}
+-   [[ RotatePanes
+    ]{.md-ellipsis}](config/lua/keyassignment/RotatePanes.html){.md-nav__link}
+-   [[ ScrollByCurrentEventWheelDelta
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollByCurrentEventWheelDelta.html){.md-nav__link}
+-   [[ ScrollByLine
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollByLine.html){.md-nav__link}
+-   [[ ScrollByPage
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollByPage.html){.md-nav__link}
+-   [[ ScrollToBottom
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollToBottom.html){.md-nav__link}
+-   [[ ScrollToPrompt
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollToPrompt.html){.md-nav__link}
+-   [[ ScrollToTop
+    ]{.md-ellipsis}](config/lua/keyassignment/ScrollToTop.html){.md-nav__link}
+-   [[ Search
+    ]{.md-ellipsis}](config/lua/keyassignment/Search.html){.md-nav__link}
+-   [[ SelectTextAtMouseCursor
+    ]{.md-ellipsis}](config/lua/keyassignment/SelectTextAtMouseCursor.html){.md-nav__link}
+-   [[ SendKey
+    ]{.md-ellipsis}](config/lua/keyassignment/SendKey.html){.md-nav__link}
+-   [[ SendString
+    ]{.md-ellipsis}](config/lua/keyassignment/SendString.html){.md-nav__link}
+-   [[ SetPaneZoomState
+    ]{.md-ellipsis}](config/lua/keyassignment/SetPaneZoomState.html){.md-nav__link}
+-   [[ SetWindowLevel
+    ]{.md-ellipsis}](config/lua/keyassignment/SetWindowLevel.html){.md-nav__link}
+-   [[ Show
+    ]{.md-ellipsis}](config/lua/keyassignment/Show.html){.md-nav__link}
+-   [[ ShowDebugOverlay
+    ]{.md-ellipsis}](config/lua/keyassignment/ShowDebugOverlay.html){.md-nav__link}
+-   [[ ShowLauncher
+    ]{.md-ellipsis}](config/lua/keyassignment/ShowLauncher.html){.md-nav__link}
+-   [[ ShowLauncherArgs
+    ]{.md-ellipsis}](config/lua/keyassignment/ShowLauncherArgs.html){.md-nav__link}
+-   [[ ShowTabNavigator
+    ]{.md-ellipsis}](config/lua/keyassignment/ShowTabNavigator.html){.md-nav__link}
+-   [[ SpawnCommandInNewTab
+    ]{.md-ellipsis}](config/lua/keyassignment/SpawnCommandInNewTab.html){.md-nav__link}
+-   [[ SpawnCommandInNewWindow
+    ]{.md-ellipsis}](config/lua/keyassignment/SpawnCommandInNewWindow.html){.md-nav__link}
+-   [[ SpawnTab
+    ]{.md-ellipsis}](config/lua/keyassignment/SpawnTab.html){.md-nav__link}
+-   [[ SpawnWindow
+    ]{.md-ellipsis}](config/lua/keyassignment/SpawnWindow.html){.md-nav__link}
+-   [[ SplitHorizontal
+    ]{.md-ellipsis}](config/lua/keyassignment/SplitHorizontal.html){.md-nav__link}
+-   [[ SplitPane
+    ]{.md-ellipsis}](config/lua/keyassignment/SplitPane.html){.md-nav__link}
+-   [[ SplitVertical
+    ]{.md-ellipsis}](config/lua/keyassignment/SplitVertical.html){.md-nav__link}
+-   [[ StartWindowDrag
+    ]{.md-ellipsis}](config/lua/keyassignment/StartWindowDrag.html){.md-nav__link}
+-   [[ SwitchToWorkspace
+    ]{.md-ellipsis}](config/lua/keyassignment/SwitchToWorkspace.html){.md-nav__link}
+-   [[ SwitchWorkspaceRelative
+    ]{.md-ellipsis}](config/lua/keyassignment/SwitchWorkspaceRelative.html){.md-nav__link}
+-   [[ ToggleAlwaysOnBottom
+    ]{.md-ellipsis}](config/lua/keyassignment/ToggleAlwaysOnBottom.html){.md-nav__link}
+-   [[ ToggleAlwaysOnTop
+    ]{.md-ellipsis}](config/lua/keyassignment/ToggleAlwaysOnTop.html){.md-nav__link}
+-   [[ ToggleFullScreen
+    ]{.md-ellipsis}](config/lua/keyassignment/ToggleFullScreen.html){.md-nav__link}
+-   [[ TogglePaneZoomState
+    ]{.md-ellipsis}](config/lua/keyassignment/TogglePaneZoomState.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ enum: CopyModeAssignment
+]{.md-ellipsis}](config/lua/keyassignment/CopyMode/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} enum: CopyModeAssignment
+
+-   [[ AcceptPattern
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/AcceptPattern.html){.md-nav__link}
+-   [[ ClearPattern
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/ClearPattern.html){.md-nav__link}
+-   [[ ClearSelectionMode
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/ClearSelectionMode.html){.md-nav__link}
+-   [[ Close
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/Close.html){.md-nav__link}
+-   [[ CycleMatchType
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/CycleMatchType.html){.md-nav__link}
+-   [[ EditPattern
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/EditPattern.html){.md-nav__link}
+-   [[ MoveBackwardSemanticZone
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveBackwardSemanticZone.html){.md-nav__link}
+-   [[ MoveBackwardSemanticZoneOfType
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveBackwardSemanticZoneOfType.html){.md-nav__link}
+-   [[ MoveBackwardWord
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveBackwardWord.html){.md-nav__link}
+-   [[ MoveDown
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveDown.html){.md-nav__link}
+-   [[ MoveForwardSemanticZone
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveForwardSemanticZone.html){.md-nav__link}
+-   [[ MoveForwardSemanticZoneOfType
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveForwardSemanticZoneOfType.html){.md-nav__link}
+-   [[ MoveForwardWord
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveForwardWord.html){.md-nav__link}
+-   [[ MoveForwardWordEnd
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveForwardWordEnd.html){.md-nav__link}
+-   [[ MoveLeft
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveLeft.html){.md-nav__link}
+-   [[ MoveRight
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveRight.html){.md-nav__link}
+-   [[ MoveToEndOfLineContent
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToEndOfLineContent.html){.md-nav__link}
+-   [[ MoveToScrollbackBottom
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToScrollbackBottom.html){.md-nav__link}
+-   [[ MoveToScrollbackTop
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToScrollbackTop.html){.md-nav__link}
+-   [[ MoveToSelectionOtherEnd
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToSelectionOtherEnd.html){.md-nav__link}
+-   [[ MoveToSelectionOtherEndHoriz
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToSelectionOtherEndHoriz.html){.md-nav__link}
+-   [[ MoveToStartOfLine
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToStartOfLine.html){.md-nav__link}
+-   [[ MoveToStartOfLineContent
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToStartOfLineContent.html){.md-nav__link}
+-   [[ MoveToStartOfNextLine
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToStartOfNextLine.html){.md-nav__link}
+-   [[ MoveToViewportBottom
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToViewportBottom.html){.md-nav__link}
+-   [[ MoveToViewportMiddle
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToViewportMiddle.html){.md-nav__link}
+-   [[ MoveToViewportTop
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveToViewportTop.html){.md-nav__link}
+-   [[ MoveUp
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/MoveUp.html){.md-nav__link}
+-   [[ NextMatch
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/NextMatch.html){.md-nav__link}
+-   [[ NextMatchPage
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/NextMatchPage.html){.md-nav__link}
+-   [[ PriorMatch
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/PriorMatch.html){.md-nav__link}
+-   [[ PriorMatchPage
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/PriorMatchPage.html){.md-nav__link}
+-   [[ SetSelectionMode
+    ]{.md-ellipsis}](config/lua/keyassignment/CopyMode/SetSelectionMode.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: Color
+]{.md-ellipsis}](config/lua/color/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: Color
+
+-   [[ adjust_hue_fixed
+    ]{.md-ellipsis}](config/lua/color/adjust_hue_fixed.html){.md-nav__link}
+-   [[ adjust_hue_fixed_ryb
+    ]{.md-ellipsis}](config/lua/color/adjust_hue_fixed_ryb.html){.md-nav__link}
+-   [[ complement
+    ]{.md-ellipsis}](config/lua/color/complement.html){.md-nav__link}
+-   [[ complement_ryb
+    ]{.md-ellipsis}](config/lua/color/complement_ryb.html){.md-nav__link}
+-   [[ contrast_ratio
+    ]{.md-ellipsis}](config/lua/color/contrast_ratio.html){.md-nav__link}
+-   [[ darken
+    ]{.md-ellipsis}](config/lua/color/darken.html){.md-nav__link}
+-   [[ darken_fixed
+    ]{.md-ellipsis}](config/lua/color/darken_fixed.html){.md-nav__link}
+-   [[ delta_e
+    ]{.md-ellipsis}](config/lua/color/delta_e.html){.md-nav__link}
+-   [[ desaturate
+    ]{.md-ellipsis}](config/lua/color/desaturate.html){.md-nav__link}
+-   [[ desaturate_fixed
+    ]{.md-ellipsis}](config/lua/color/desaturate_fixed.html){.md-nav__link}
+-   [[ hsla ]{.md-ellipsis}](config/lua/color/hsla.html){.md-nav__link}
+-   [[ laba ]{.md-ellipsis}](config/lua/color/laba.html){.md-nav__link}
+-   [[ lighten
+    ]{.md-ellipsis}](config/lua/color/lighten.html){.md-nav__link}
+-   [[ lighten_fixed
+    ]{.md-ellipsis}](config/lua/color/lighten_fixed.html){.md-nav__link}
+-   [[ linear_rgba
+    ]{.md-ellipsis}](config/lua/color/linear_rgba.html){.md-nav__link}
+-   [[ saturate
+    ]{.md-ellipsis}](config/lua/color/saturate.html){.md-nav__link}
+-   [[ saturate_fixed
+    ]{.md-ellipsis}](config/lua/color/saturate_fixed.html){.md-nav__link}
+-   [[ square
+    ]{.md-ellipsis}](config/lua/color/square.html){.md-nav__link}
+-   [[ srgb_u8
+    ]{.md-ellipsis}](config/lua/color/srgb_u8.html){.md-nav__link}
+-   [[ triad
+    ]{.md-ellipsis}](config/lua/color/triad.html){.md-nav__link}
+
+[[ object: ExecDomain
+]{.md-ellipsis}](config/lua/ExecDomain.html){.md-nav__link}
+
+[[ object: LocalProcessInfo
+]{.md-ellipsis}](config/lua/LocalProcessInfo.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: MuxDomain
+]{.md-ellipsis}](config/lua/MuxDomain/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: MuxDomain
+
+-   [[ attach
+    ]{.md-ellipsis}](config/lua/MuxDomain/attach.html){.md-nav__link}
+-   [[ detach
+    ]{.md-ellipsis}](config/lua/MuxDomain/detach.html){.md-nav__link}
+-   [[ domain_id
+    ]{.md-ellipsis}](config/lua/MuxDomain/domain_id.html){.md-nav__link}
+-   [[ has_any_panes
+    ]{.md-ellipsis}](config/lua/MuxDomain/has_any_panes.html){.md-nav__link}
+-   [[ is_spawnable
+    ]{.md-ellipsis}](config/lua/MuxDomain/is_spawnable.html){.md-nav__link}
+-   [[ label
+    ]{.md-ellipsis}](config/lua/MuxDomain/label.html){.md-nav__link}
+-   [[ name
+    ]{.md-ellipsis}](config/lua/MuxDomain/name.html){.md-nav__link}
+-   [[ state
+    ]{.md-ellipsis}](config/lua/MuxDomain/state.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: MuxWindow
+]{.md-ellipsis}](config/lua/mux-window/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: MuxWindow
+
+-   [[ active_pane
+    ]{.md-ellipsis}](config/lua/mux-window/active_pane.html){.md-nav__link}
+-   [[ active_tab
+    ]{.md-ellipsis}](config/lua/mux-window/active_tab.html){.md-nav__link}
+-   [[ get_title
+    ]{.md-ellipsis}](config/lua/mux-window/get_title.html){.md-nav__link}
+-   [[ get_workspace
+    ]{.md-ellipsis}](config/lua/mux-window/get_workspace.html){.md-nav__link}
+-   [[ gui_window
+    ]{.md-ellipsis}](config/lua/mux-window/gui_window.html){.md-nav__link}
+-   [[ set_title
+    ]{.md-ellipsis}](config/lua/mux-window/set_title.html){.md-nav__link}
+-   [[ set_workspace
+    ]{.md-ellipsis}](config/lua/mux-window/set_workspace.html){.md-nav__link}
+-   [[ spawn_tab
+    ]{.md-ellipsis}](config/lua/mux-window/spawn_tab.html){.md-nav__link}
+-   [[ tabs
+    ]{.md-ellipsis}](config/lua/mux-window/tabs.html){.md-nav__link}
+-   [[ tabs_with_info
+    ]{.md-ellipsis}](config/lua/mux-window/tabs_with_info.html){.md-nav__link}
+-   [[ window_id
+    ]{.md-ellipsis}](config/lua/mux-window/window_id.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: MuxTab
+]{.md-ellipsis}](config/lua/MuxTab/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: MuxTab
+
+-   [[ activate
+    ]{.md-ellipsis}](config/lua/MuxTab/activate.html){.md-nav__link}
+-   [[ active_pane
+    ]{.md-ellipsis}](config/lua/MuxTab/active_pane.html){.md-nav__link}
+-   [[ get_pane_direction
+    ]{.md-ellipsis}](config/lua/MuxTab/get_pane_direction.html){.md-nav__link}
+-   [[ get_size
+    ]{.md-ellipsis}](config/lua/MuxTab/get_size.html){.md-nav__link}
+-   [[ get_title
+    ]{.md-ellipsis}](config/lua/MuxTab/get_title.html){.md-nav__link}
+-   [[ panes
+    ]{.md-ellipsis}](config/lua/MuxTab/panes.html){.md-nav__link}
+-   [[ panes_with_info
+    ]{.md-ellipsis}](config/lua/MuxTab/panes_with_info.html){.md-nav__link}
+-   [[ rotate_clockwise
+    ]{.md-ellipsis}](config/lua/MuxTab/rotate_clockwise.html){.md-nav__link}
+-   [[ rotate_counter_clockwise
+    ]{.md-ellipsis}](config/lua/MuxTab/rotate_counter_clockwise.html){.md-nav__link}
+-   [[ set_title
+    ]{.md-ellipsis}](config/lua/MuxTab/set_title.html){.md-nav__link}
+-   [[ set_zoomed
+    ]{.md-ellipsis}](config/lua/MuxTab/set_zoomed.html){.md-nav__link}
+-   [[ tab_id
+    ]{.md-ellipsis}](config/lua/MuxTab/tab_id.html){.md-nav__link}
+-   [[ window
+    ]{.md-ellipsis}](config/lua/MuxTab/window.html){.md-nav__link}
+
+[[ object: PaneInformation
+]{.md-ellipsis}](config/lua/PaneInformation.html){.md-nav__link}
+
+[[ object: TabInformation
+]{.md-ellipsis}](config/lua/TabInformation.html){.md-nav__link}
+
+[[ object: SshDomain
+]{.md-ellipsis}](config/lua/SshDomain.html){.md-nav__link}
+
+[[ object: SpawnCommand
+]{.md-ellipsis}](config/lua/SpawnCommand.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: Time
+]{.md-ellipsis}](config/lua/wezterm.time/Time/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: Time
+
+-   [[ format
+    ]{.md-ellipsis}](config/lua/wezterm.time/Time/format.html){.md-nav__link}
+-   [[ format_utc
+    ]{.md-ellipsis}](config/lua/wezterm.time/Time/format_utc.html){.md-nav__link}
+-   [[ sun_times
+    ]{.md-ellipsis}](config/lua/wezterm.time/Time/sun_times.html){.md-nav__link}
+
+[[ object: TlsDomainClient
+]{.md-ellipsis}](config/lua/TlsDomainClient.html){.md-nav__link}
+
+[[ object: TlsDomainServer
+]{.md-ellipsis}](config/lua/TlsDomainServer.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: Pane
+]{.md-ellipsis}](config/lua/pane/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: Pane
+
+-   [[ activate
+    ]{.md-ellipsis}](config/lua/pane/activate.html){.md-nav__link}
+-   [[ get_current_working_dir
+    ]{.md-ellipsis}](config/lua/pane/get_current_working_dir.html){.md-nav__link}
+-   [[ get_cursor_position
+    ]{.md-ellipsis}](config/lua/pane/get_cursor_position.html){.md-nav__link}
+-   [[ get_dimensions
+    ]{.md-ellipsis}](config/lua/pane/get_dimensions.html){.md-nav__link}
+-   [[ get_domain_name
+    ]{.md-ellipsis}](config/lua/pane/get_domain_name.html){.md-nav__link}
+-   [[ get_foreground_process_info
+    ]{.md-ellipsis}](config/lua/pane/get_foreground_process_info.html){.md-nav__link}
+-   [[ get_foreground_process_name
+    ]{.md-ellipsis}](config/lua/pane/get_foreground_process_name.html){.md-nav__link}
+-   [[ get_lines_as_escapes
+    ]{.md-ellipsis}](config/lua/pane/get_lines_as_escapes.html){.md-nav__link}
+-   [[ get_lines_as_text
+    ]{.md-ellipsis}](config/lua/pane/get_lines_as_text.html){.md-nav__link}
+-   [[ get_logical_lines_as_text
+    ]{.md-ellipsis}](config/lua/pane/get_logical_lines_as_text.html){.md-nav__link}
+-   [[ get_metadata
+    ]{.md-ellipsis}](config/lua/pane/get_metadata.html){.md-nav__link}
+-   [[ get_progress
+    ]{.md-ellipsis}](config/lua/pane/get_progress.html){.md-nav__link}
+-   [[ get_semantic_zone_at
+    ]{.md-ellipsis}](config/lua/pane/get_semantic_zone_at.html){.md-nav__link}
+-   [[ get_semantic_zones
+    ]{.md-ellipsis}](config/lua/pane/get_semantic_zones.html){.md-nav__link}
+-   [[ get_text_from_region
+    ]{.md-ellipsis}](config/lua/pane/get_text_from_region.html){.md-nav__link}
+-   [[ get_text_from_semantic_zone
+    ]{.md-ellipsis}](config/lua/pane/get_text_from_semantic_zone.html){.md-nav__link}
+-   [[ get_title
+    ]{.md-ellipsis}](config/lua/pane/get_title.html){.md-nav__link}
+-   [[ get_tty_name
+    ]{.md-ellipsis}](config/lua/pane/get_tty_name.html){.md-nav__link}
+-   [[ get_user_vars
+    ]{.md-ellipsis}](config/lua/pane/get_user_vars.html){.md-nav__link}
+-   [[ has_unseen_output
+    ]{.md-ellipsis}](config/lua/pane/has_unseen_output.html){.md-nav__link}
+-   [[ inject_output
+    ]{.md-ellipsis}](config/lua/pane/inject_output.html){.md-nav__link}
+-   [[ is_alt_screen_active
+    ]{.md-ellipsis}](config/lua/pane/is_alt_screen_active.html){.md-nav__link}
+-   [[ move_to_new_tab
+    ]{.md-ellipsis}](config/lua/pane/move_to_new_tab.html){.md-nav__link}
+-   [[ move_to_new_window
+    ]{.md-ellipsis}](config/lua/pane/move_to_new_window.html){.md-nav__link}
+-   [[ mux_pane
+    ]{.md-ellipsis}](config/lua/pane/mux_pane.html){.md-nav__link}
+-   [[ pane_id
+    ]{.md-ellipsis}](config/lua/pane/pane_id.html){.md-nav__link}
+-   [[ paste ]{.md-ellipsis}](config/lua/pane/paste.html){.md-nav__link}
+-   [[ send_paste
+    ]{.md-ellipsis}](config/lua/pane/send_paste.html){.md-nav__link}
+-   [[ send_text
+    ]{.md-ellipsis}](config/lua/pane/send_text.html){.md-nav__link}
+-   [[ split ]{.md-ellipsis}](config/lua/pane/split.html){.md-nav__link}
+-   [[ tab ]{.md-ellipsis}](config/lua/pane/tab.html){.md-nav__link}
+-   [[ window
+    ]{.md-ellipsis}](config/lua/pane/window.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ object: Window
+]{.md-ellipsis}](config/lua/window/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} object: Window
+
+-   [[ active_key_table
+    ]{.md-ellipsis}](config/lua/window/active_key_table.html){.md-nav__link}
+-   [[ active_pane
+    ]{.md-ellipsis}](config/lua/window/active_pane.html){.md-nav__link}
+-   [[ active_tab
+    ]{.md-ellipsis}](config/lua/window/active_tab.html){.md-nav__link}
+-   [[ active_workspace
+    ]{.md-ellipsis}](config/lua/window/active_workspace.html){.md-nav__link}
+-   [[ composition_status
+    ]{.md-ellipsis}](config/lua/window/composition_status.html){.md-nav__link}
+-   [[ copy_to_clipboard
+    ]{.md-ellipsis}](config/lua/window/copy_to_clipboard.html){.md-nav__link}
+-   [[ current_event
+    ]{.md-ellipsis}](config/lua/window/current_event.html){.md-nav__link}
+-   [[ effective_config
+    ]{.md-ellipsis}](config/lua/window/effective_config.html){.md-nav__link}
+-   [[ focus
+    ]{.md-ellipsis}](config/lua/window/focus.html){.md-nav__link}
+-   [[ get_appearance
+    ]{.md-ellipsis}](config/lua/window/get_appearance.html){.md-nav__link}
+-   [[ get_config_overrides
+    ]{.md-ellipsis}](config/lua/window/get_config_overrides.html){.md-nav__link}
+-   [[ get_dimensions
+    ]{.md-ellipsis}](config/lua/window/get_dimensions.html){.md-nav__link}
+-   [[ get_selection_escapes_for_pane
+    ]{.md-ellipsis}](config/lua/window/get_selection_escapes_for_pane.html){.md-nav__link}
+-   [[ get_selection_text_for_pane
+    ]{.md-ellipsis}](config/lua/window/get_selection_text_for_pane.html){.md-nav__link}
+-   [[ is_focused
+    ]{.md-ellipsis}](config/lua/window/is_focused.html){.md-nav__link}
+-   [[ keyboard_modifiers
+    ]{.md-ellipsis}](config/lua/window/keyboard_modifiers.html){.md-nav__link}
+-   [[ leader_is_active
+    ]{.md-ellipsis}](config/lua/window/leader_is_active.html){.md-nav__link}
+-   [[ maximize
+    ]{.md-ellipsis}](config/lua/window/maximize.html){.md-nav__link}
+-   [[ mux_window
+    ]{.md-ellipsis}](config/lua/window/mux_window.html){.md-nav__link}
+-   [[ perform_action
+    ]{.md-ellipsis}](config/lua/window/perform_action.html){.md-nav__link}
+-   [[ restore
+    ]{.md-ellipsis}](config/lua/window/restore.html){.md-nav__link}
+-   [[ set_config_overrides
+    ]{.md-ellipsis}](config/lua/window/set_config_overrides.html){.md-nav__link}
+-   [[ set_inner_size
+    ]{.md-ellipsis}](config/lua/window/set_inner_size.html){.md-nav__link}
+-   [[ set_left_status
+    ]{.md-ellipsis}](config/lua/window/set_left_status.html){.md-nav__link}
+-   [[ set_position
+    ]{.md-ellipsis}](config/lua/window/set_position.html){.md-nav__link}
+-   [[ set_right_status
+    ]{.md-ellipsis}](config/lua/window/set_right_status.html){.md-nav__link}
+-   [[ toast_notification
+    ]{.md-ellipsis}](config/lua/window/toast_notification.html){.md-nav__link}
+-   [[ toggle_fullscreen
+    ]{.md-ellipsis}](config/lua/window/toggle_fullscreen.html){.md-nav__link}
+-   [[ window_id
+    ]{.md-ellipsis}](config/lua/window/window_id.html){.md-nav__link}
+
+[[ object: WslDomain
+]{.md-ellipsis}](config/lua/WslDomain.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ events: Gui
+]{.md-ellipsis}](config/lua/gui-events/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} events: Gui
+
+-   [[ gui-attached
+    ]{.md-ellipsis}](config/lua/gui-events/gui-attached.html){.md-nav__link}
+-   [[ gui-startup
+    ]{.md-ellipsis}](config/lua/gui-events/gui-startup.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ events: Multiplexer
+]{.md-ellipsis}](config/lua/mux-events/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} events: Multiplexer
+
+-   [[ mux-is-process-stateful
+    ]{.md-ellipsis}](config/lua/mux-events/mux-is-process-stateful.html){.md-nav__link}
+-   [[ mux-startup
+    ]{.md-ellipsis}](config/lua/mux-events/mux-startup.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ events: Window
+]{.md-ellipsis}](config/lua/window-events/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} events: Window
+
+-   [[ augment-command-palette
+    ]{.md-ellipsis}](config/lua/window-events/augment-command-palette.html){.md-nav__link}
+-   [[ bell
+    ]{.md-ellipsis}](config/lua/window-events/bell.html){.md-nav__link}
+-   [[ format-tab-title
+    ]{.md-ellipsis}](config/lua/window-events/format-tab-title.html){.md-nav__link}
+-   [[ format-window-title
+    ]{.md-ellipsis}](config/lua/window-events/format-window-title.html){.md-nav__link}
+-   [[ new-tab-button-click
+    ]{.md-ellipsis}](config/lua/window-events/new-tab-button-click.html){.md-nav__link}
+-   [[ open-uri
+    ]{.md-ellipsis}](config/lua/window-events/open-uri.html){.md-nav__link}
+-   [[ update-right-status
+    ]{.md-ellipsis}](config/lua/window-events/update-right-status.html){.md-nav__link}
+-   [[ update-status
+    ]{.md-ellipsis}](config/lua/window-events/update-status.html){.md-nav__link}
+-   [[ user-var-changed
+    ]{.md-ellipsis}](config/lua/window-events/user-var-changed.html){.md-nav__link}
+-   [[ window-config-reloaded
+    ]{.md-ellipsis}](config/lua/window-events/window-config-reloaded.html){.md-nav__link}
+-   [[ window-focus-changed
+    ]{.md-ellipsis}](config/lua/window-events/window-focus-changed.html){.md-nav__link}
+-   [[ window-resized
+    ]{.md-ellipsis}](config/lua/window-events/window-resized.html){.md-nav__link}
+
+[ CLI Reference ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} CLI Reference
+
+[[ CLI Reference ]{.md-ellipsis}](cli/general.html){.md-nav__link}
+
+::: {.md-nav__link .md-nav__container}
+[[ wezterm cli ]{.md-ellipsis}](cli/cli/index.html){.md-nav__link}
+[]{.md-nav__icon .md-icon}
+:::
+
+[]{.md-nav__icon .md-icon} wezterm cli
+
+-   [[ activate-pane-direction
+    ]{.md-ellipsis}](cli/cli/activate-pane-direction.html){.md-nav__link}
+-   [[ activate-pane
+    ]{.md-ellipsis}](cli/cli/activate-pane.html){.md-nav__link}
+-   [[ activate-tab
+    ]{.md-ellipsis}](cli/cli/activate-tab.html){.md-nav__link}
+-   [[ adjust-pane-size
+    ]{.md-ellipsis}](cli/cli/adjust-pane-size.html){.md-nav__link}
+-   [[ get-pane-direction
+    ]{.md-ellipsis}](cli/cli/get-pane-direction.html){.md-nav__link}
+-   [[ get-text ]{.md-ellipsis}](cli/cli/get-text.html){.md-nav__link}
+-   [[ kill-pane ]{.md-ellipsis}](cli/cli/kill-pane.html){.md-nav__link}
+-   [[ list-clients
+    ]{.md-ellipsis}](cli/cli/list-clients.html){.md-nav__link}
+-   [[ list ]{.md-ellipsis}](cli/cli/list.html){.md-nav__link}
+-   [[ move-pane-to-new-tab
+    ]{.md-ellipsis}](cli/cli/move-pane-to-new-tab.html){.md-nav__link}
+-   [[ rename-workspace
+    ]{.md-ellipsis}](cli/cli/rename-workspace.html){.md-nav__link}
+-   [[ send-text ]{.md-ellipsis}](cli/cli/send-text.html){.md-nav__link}
+-   [[ set-tab-title
+    ]{.md-ellipsis}](cli/cli/set-tab-title.html){.md-nav__link}
+-   [[ set-window-title
+    ]{.md-ellipsis}](cli/cli/set-window-title.html){.md-nav__link}
+-   [[ spawn ]{.md-ellipsis}](cli/cli/spawn.html){.md-nav__link}
+-   [[ split-pane
+    ]{.md-ellipsis}](cli/cli/split-pane.html){.md-nav__link}
+-   [[ zoom-pane ]{.md-ellipsis}](cli/cli/zoom-pane.html){.md-nav__link}
+
+[[ wezterm connect ]{.md-ellipsis}](cli/connect.html){.md-nav__link}
+
+[[ wezterm imgcat ]{.md-ellipsis}](cli/imgcat.html){.md-nav__link}
+
+[[ wezterm ls-fonts ]{.md-ellipsis}](cli/ls-fonts.html){.md-nav__link}
+
+[[ wezterm record ]{.md-ellipsis}](cli/record.html){.md-nav__link}
+
+[[ wezterm replay ]{.md-ellipsis}](cli/replay.html){.md-nav__link}
+
+[[ wezterm serial ]{.md-ellipsis}](cli/serial.html){.md-nav__link}
+
+[[ wezterm set-working-directory
+]{.md-ellipsis}](cli/set-working-directory.html){.md-nav__link}
+
+[[ wezterm show-keys ]{.md-ellipsis}](cli/show-keys.html){.md-nav__link}
+
+[[ wezterm ssh ]{.md-ellipsis}](cli/ssh.html){.md-nav__link}
+
+[[ wezterm start ]{.md-ellipsis}](cli/start.html){.md-nav__link}
+
+[ Reference ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} Reference
+
+[ Escape Sequences ]{.md-ellipsis} []{.md-nav__icon .md-icon} [[ Escape
+Sequences ]{.md-ellipsis}](escape-sequences.html){.md-nav__link
+.md-nav__link--active}
+
+[]{.md-nav__icon .md-icon} Table of contents
+
+-   [Output/Escape Sequences](#outputescape-sequences){.md-nav__link}
+    -   [Printable Codepoints](#printable-codepoints){.md-nav__link}
+    -   [C0 Control Codes](#c0-control-codes){.md-nav__link}
+    -   [C1 Control Codes](#c1-control-codes){.md-nav__link}
+    -   [Other Escape Sequences](#other-escape-sequences){.md-nav__link}
+    -   [CSI - Control Sequence Introducer
+        Sequences](#csi-control-sequence-introducer-sequences){.md-nav__link}
+        -   [Graphic Rendition
+            (SGR)](#graphic-rendition-sgr){.md-nav__link}
+            -   [CSI 38:5 - foreground color palette
+                index](#csi-385-foreground-color-palette-index){.md-nav__link}
+            -   [CSI 48:5 - background color palette
+                index](#csi-485-background-color-palette-index){.md-nav__link}
+            -   [CSI 58:5 - underline color palette
+                index](#csi-585-underline-color-palette-index){.md-nav__link}
+            -   [CSI 38:2 - foreground color:
+                RGB](#csi-382-foreground-color-rgb){.md-nav__link}
+            -   [CSI 38:6 - foreground color:
+                RGBA](#csi-386-foreground-color-rgba){.md-nav__link}
+            -   [CSI 48:2 - background color:
+                RGB](#csi-482-background-color-rgb){.md-nav__link}
+            -   [CSI 48:6 - background color:
+                RGBA](#csi-486-background-color-rgba){.md-nav__link}
+            -   [CSI 58:2 - underline color:
+                RGB](#csi-582-underline-color-rgb){.md-nav__link}
+            -   [CSI 58:6 - underline color:
+                RGBA](#csi-586-underline-color-rgba){.md-nav__link}
+        -   [Cursor Movement](#cursor-movement){.md-nav__link}
+        -   [Editing Functions](#editing-functions){.md-nav__link}
+        -   [Mode Functions](#mode-functions){.md-nav__link}
+        -   [Device Functions](#device-functions){.md-nav__link}
+        -   [Window Functions](#window-functions){.md-nav__link}
+    -   [DCS - Device Control
+        String](#dcs-device-control-string){.md-nav__link}
+    -   [Operating System Command
+        Sequences](#operating-system-command-sequences){.md-nav__link}
+-   [Additional Resources](#additional-resources){.md-nav__link}
+
+[[ What is a Terminal?
+]{.md-ellipsis}](what-is-a-terminal.html){.md-nav__link}
+
+[ Get Help ]{.md-ellipsis} []{.md-nav__icon .md-icon}
+
+[]{.md-nav__icon .md-icon} Get Help
+
+-   [[ Troubleshooting
+    ]{.md-ellipsis}](troubleshooting.html){.md-nav__link}
+-   [[ F.A.Q. ]{.md-ellipsis}](faq.html){.md-nav__link}
+-   [[ Getting Help ]{.md-ellipsis}](help.html){.md-nav__link}
+-   [[ Contributing ]{.md-ellipsis}](contributing.html){.md-nav__link}
+
+[[ Change Log ]{.md-ellipsis}](changelog.html){.md-nav__link}
+
+[[ Sponsor ]{.md-ellipsis}](sponsor.html){.md-nav__link}
+::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::
+
+::::: {.md-sidebar .md-sidebar--secondary md-component="sidebar" md-type="toc"}
+:::: md-sidebar__scrollwrap
+::: md-sidebar__inner
+[]{.md-nav__icon .md-icon} Table of contents
+
+-   [Output/Escape Sequences](#outputescape-sequences){.md-nav__link}
+    -   [Printable Codepoints](#printable-codepoints){.md-nav__link}
+    -   [C0 Control Codes](#c0-control-codes){.md-nav__link}
+    -   [C1 Control Codes](#c1-control-codes){.md-nav__link}
+    -   [Other Escape Sequences](#other-escape-sequences){.md-nav__link}
+    -   [CSI - Control Sequence Introducer
+        Sequences](#csi-control-sequence-introducer-sequences){.md-nav__link}
+        -   [Graphic Rendition
+            (SGR)](#graphic-rendition-sgr){.md-nav__link}
+            -   [CSI 38:5 - foreground color palette
+                index](#csi-385-foreground-color-palette-index){.md-nav__link}
+            -   [CSI 48:5 - background color palette
+                index](#csi-485-background-color-palette-index){.md-nav__link}
+            -   [CSI 58:5 - underline color palette
+                index](#csi-585-underline-color-palette-index){.md-nav__link}
+            -   [CSI 38:2 - foreground color:
+                RGB](#csi-382-foreground-color-rgb){.md-nav__link}
+            -   [CSI 38:6 - foreground color:
+                RGBA](#csi-386-foreground-color-rgba){.md-nav__link}
+            -   [CSI 48:2 - background color:
+                RGB](#csi-482-background-color-rgb){.md-nav__link}
+            -   [CSI 48:6 - background color:
+                RGBA](#csi-486-background-color-rgba){.md-nav__link}
+            -   [CSI 58:2 - underline color:
+                RGB](#csi-582-underline-color-rgb){.md-nav__link}
+            -   [CSI 58:6 - underline color:
+                RGBA](#csi-586-underline-color-rgba){.md-nav__link}
+        -   [Cursor Movement](#cursor-movement){.md-nav__link}
+        -   [Editing Functions](#editing-functions){.md-nav__link}
+        -   [Mode Functions](#mode-functions){.md-nav__link}
+        -   [Device Functions](#device-functions){.md-nav__link}
+        -   [Window Functions](#window-functions){.md-nav__link}
+    -   [DCS - Device Control
+        String](#dcs-device-control-string){.md-nav__link}
+    -   [Operating System Command
+        Sequences](#operating-system-command-sequences){.md-nav__link}
+-   [Additional Resources](#additional-resources){.md-nav__link}
+:::
+::::
+:::::
+
+::::::::::::::: {.md-content md-component="content"}
+[![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEwIDIwSDZWNGg3djVoNXYzLjFsMi0yVjhsLTYtNkg2Yy0xLjEgMC0yIC45LTIgMnYxNmMwIDEuMS45IDIgMiAyaDR6bTEwLjItN2MuMSAwIC4zLjEuNC4ybDEuMyAxLjNjLjIuMi4yLjYgMCAuOGwtMSAxLTIuMS0yLjEgMS0xYy4xLS4xLjItLjIuNC0uMm0wIDMuOUwxNC4xIDIzSDEydi0yLjFsNi4xLTYuMXoiIC8+PC9zdmc+)](https://github.com/wezterm/wezterm/edit/main/docs/escape-sequences.md "Edit this page"){.md-content__button
+.md-icon rel="edit"}
+[![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTE3IDE4Yy41NiAwIDEgLjQ0IDEgMXMtLjQ0IDEtMSAxLTEtLjQ0LTEtMSAuNDQtMSAxLTFtMC0zYy0yLjczIDAtNS4wNiAxLjY2LTYgNCAuOTQgMi4zNCAzLjI3IDQgNiA0czUuMDYtMS42NiA2LTRjLS45NC0yLjM0LTMuMjctNC02LTRtMCA2LjVhMi41IDIuNSAwIDAgMS0yLjUtMi41IDIuNSAyLjUgMCAwIDEgMi41LTIuNSAyLjUgMi41IDAgMCAxIDIuNSAyLjUgMi41IDIuNSAwIDAgMS0yLjUgMi41TTkuMjcgMjBINlY0aDd2NWg1djQuMDdjLjcuMDggMS4zNi4yNSAyIC40OVY4bC02LTZINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoNC41YTguMiA4LjIgMCAwIDEtMS4yMy0yIiAvPjwvc3ZnPg==)](https://github.com/wezterm/wezterm/raw/main/docs/escape-sequences.md "View source of this page"){.md-content__button
+.md-icon}
+
+> Please note that this is a \"living document\" and may lag or lead the
+> state of the current stable release in a number of areas\--as you
+> might imagine, precisely documenting escape codes and their behaviors
+> and cross-checking with the various technical documents is laborious
+> and tedious and I only have so much spare time!
+>
+> If you notice that something is inaccurate or missing, please do [file
+> an issue](https://github.com/wezterm/wezterm/issues/new/choose) so
+> that it can be resolved!
+
+## Output/Escape Sequences[¶](#outputescape-sequences "Permanent link"){.headerlink}
+
+WezTerm considers the output from the terminal to be a UTF-8 encoded
+stream of codepoints. No other encoding is supported. As described
+below, some C1 control codes have both 7-bit ASCII compatible as well as
+8-bit representations. As ASCII is a compatible subset of UTF-8, the
+7-bit representations are preferred and processed without any special
+consideration.
+
+The 8-bit values *are* recognized, but only if the 8-bit value is
+treated as a unicode code point and encoded via a UTF-8 multi-byte
+sequence.
+
+### Printable Codepoints[¶](#printable-codepoints "Permanent link"){.headerlink}
+
+Codepoints with value 0x20 and higher are considered to be printable and
+are applied to the terminal display using the following rules:
+
+-   Codepoints are buffered until a C0, C1 or other escape/control
+    sequence is encountered, which triggers a flush and processing
+    continues with the next step.
+-   The buffered codepoint sequence is split into unicode graphemes,
+    which means that combining sequences and emoji are decoded.
+    Processing continues for below for each individually recognized
+    grapheme.
+-   If DEC line drawing mode is active, graphemes `j-n`, `q`, `t-x` are
+    translated to equivalent line drawing graphemes and processing
+    continues.
+-   If prior output/actions require it, the cursor position may be moved
+    to a new line and the terminal display may be scrolled to make
+    accommodate it.
+-   An appropriate number of cells, starting at the current cursor
+    position, are allocated based on the column width of the current
+    grapheme and are assigned to the grapheme. The current current
+    graphics rendition state (such as colors and other presentation
+    attributes) is also applied to those cells. If insert mode is
+    active, those cells will be inserted at the current cursor position,
+    otherwise they will overwrite cells at the current cursor position.
+-   The cursor position will be updated based on the column width of the
+    grapheme.
+
+After the graphemes are applied to the terminal display, the rendering
+portion of WezTerm will attempt to apply your [font
+shaping](config/font-shaping.html) configuration based on runs of
+graphemes with matching graphic attributes to determine which glyphs
+should be rendered from your fonts; it is at this stage that emoji and
+ligatures are resolved.
+
+### C0 Control Codes[¶](#c0-control-codes "Permanent link"){.headerlink}
+
+Codepoints in the range `0x00-0x1F` are considered to be `C0` control
+codes. `C0` controls will flush any buffered printable codepoints before
+triggering the action described below.
+
+  Seq    Hex    Name   Description              Action
+  ------ ------ ------ ------------------------ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  \^@    0x00   NUL    Null                     Ignored
+  \^A    0x01   SOH    Start of Heading         Ignored
+  \^B    0x02   STX    Start of Text            Ignored
+  \^C    0x03   ETX    End of Text              Ignored
+  \^D    0x04   EOT    End of Transmission      Ignored
+  \^E    0x05   ENQ    Enquiry                  Ignored
+  \^F    0x06   ACK    Acknowledge              Ignored
+  \^G    0x07   BEL    Bell                     Logs `Ding! (this is the bell)` to stderr of the WezTerm process. See [#3](https://github.com/wezterm/wezterm/issues/3)
+  \^H    0x08   BS     Backspace                Move cursor left by 1, constrained by the left margin. If Reverse Wraparound and dec auto wrap modes are enabled, moving left of the left margin will jump the cursor to the right margin, jumping to bottom right margin if it was at the top left.
+  \^I    0x09   HT     Horizontal Tab           Move cursor right to the next tab stop
+  \^J    0x0A   LF     Line Feed                If cursor is at the bottom margin, scroll the region up, otherwise move cursor down 1 row
+  \^K    0x0B   VT     Vertical Tab             Treated as Line Feed
+  \^L    0x0C   FF     Form Feed                Treated as Line Feed
+  \^M    0x0D   CR     Carriage Return          If cursor is left of leftmost margin, move to column 0. Otherwise move to left margin
+  \^N    0x0E   SO     Shift Out                Ignored
+  \^O    0x0F   SI     Shift In                 Ignored
+  \^P    0x10   DLE    Data Link Escape         Ignored
+  \^Q    0x11   DC1    Device Control One       Ignored
+  \^R    0x12   DC2    Device Control Two       Ignored
+  \^S    0x13   DC3    Device Control Three     Ignored
+  \^T    0x14   DC4    Device Control Four      Ignored
+  \^U    0x15   NAK    Negative Acknowledge     Ignored
+  \^V    0x16   SYN    Synchronous Idle         Ignored
+  \^W    0x17   ETB    End Transmission Block   Ignored
+  \^X    0x18   CAN    Cancel                   Ignored
+  \^Y    0x19   EM     End of Medium            Ignored
+  \^Z    0x1A   SUB    Substitute               Ignored
+  \^\[   0x1B   ESC    Escape                   Introduces various escape sequences described below
+  \^\\   0x1C   FS     File Separator           Ignored
+  \^\]   0x1D   GS     Group Separator          Ignored
+  \^\^   0x1E   RS     Record Separator         Ignored
+  \^\_   0x1F   US     Unit Separator           Ignored
+
+### C1 Control Codes[¶](#c1-control-codes "Permanent link"){.headerlink}
+
+As mentioned above, WezTerm only supports UTF-8 encoding. C1 control
+codes have an 8-bit representation as well as a multi-codepoint 7-bit
+escape sequence.
+
+The 8-bit representation is recognized if the 8-bit value is treated as
+a unicode code point and encoded as a multi-byte UTF-8 sequence. Sending
+the 8-bit binary value will not be recognized as intended, as those
+bitsequences are passing through a UTF-8 decoder.
+
+The table below lists the 7-bit `C1` sequence (which is preferred) as
+well as the codepoint value, along with the corresponding meaning.
+
+As with `C0` control codes, `C1` controls will flush any buffered
+printable codepoints before triggering the action described below.
+
+  Seq      Codepoint   Name   Description                   Action
+  -------- ----------- ------ ----------------------------- -----------------------------------------------------------------------------------------------------------------
+  ESC D    0x84        IND    Index                         Moves the cursor down one line in the same column. If the cursor is at the bottom margin, the page scrolls up
+  ESC E    0x85        NEL    Next Line                     Moves the cursor to the left margin on the next line. If the cursor is at the bottom margin, scroll the page up
+  ESC H    0x88        HTS    Horizontal Tab Set            Sets a horizontal tab stop at the column where the cursor is
+  ESC M    0x8D        RI     Reverse Index                 Move the cursor up one line. If the cursor is at the top margin, scroll the region down
+  ESC P    0x90        DCS    Device Control String         Discussed below
+  ESC \[   0x9B        CSI    Control Sequence Introducer   Discussed below
+  ESC \\   0x9C        ST     String Terminator             No direct effect; ST is used to delimit the end of OSC style escape sequences
+
+### Other Escape Sequences[¶](#other-escape-sequences "Permanent link"){.headerlink}
+
+As these sequences start with an `ESC`, which is a `C0` control, these
+will flush any buffered printable codepoints before triggering the
+associated action.
+
+  Seq                                                                                                                                       Name                                                    Description                      Action
+  ----------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------- -------------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------
+  ESC c                                                                                                                                     [RIS](https://vt100.net/docs/vt510-rm/RIS.html)         Reset to Initial State           Resets tab stops, margins, modes, graphic rendition, palette, activates primary screen, erases the display and moves cursor to home position
+  ESC 7                                                                                                                                     [DECSC](https://vt100.net/docs/vt510-rm/DECSC.html)     Save Cursor Position             Records cursor position
+  ESC 8                                                                                                                                     [DECRC](https://vt100.net/docs/vt510-rm/DECRC.html)     Restored Saved Cursor Position   Moves cursor to location it had when DECSC was used
+  ESC =                                                                                                                                     [DECPAM](https://vt100.net/docs/vt510-rm/DECPAM.html)   Application Keypad               Enable Application Keypad Mode
+  ESC \>                                                                                                                                    [DECPNM](https://vt100.net/docs/vt510-rm/DECPNM.html)   Normal Keypad                    Set Normal Keypad Mode
+  ESC (0                                                                                                                                                                                            DEC Line Drawing character set   Translate characters `j-x` to line drawing glyphs
+  ESC (B                                                                                                                                                                                            US ASCII character set           Disables DEC Line Drawing character translation
+  ESC [#8](https://github.com/wezterm/wezterm/issues/8 "GitHub Issue: wezterm/wezterm #8"){.magiclink .magiclink-github .magiclink-issue}   [DECALN](https://vt100.net/docs/vt510-rm/DECALN.html)   Screen Alignment Display         Fills the display with `E` characters for diagnostic/test purposes (for vttest)
+
+### CSI - Control Sequence Introducer Sequences[¶](#csi-control-sequence-introducer-sequences "Permanent link"){.headerlink} {#csi-control-sequence-introducer-sequences}
+
+CSI sequences begin with the `C1` `CSI` sequence, which is either the
+7-bit `ESC [` sequence or the codepoint `0x9B`.
+
+WezTerm classifies these sequences into a number of functional families
+which are broken out below.
+
+#### Graphic Rendition (SGR)[¶](#graphic-rendition-sgr "Permanent link"){.headerlink}
+
+SGR sequences are of the form `CSI DIGITS [; DIGITS ]+ m`. That is, any
+number of semicolon separated numbers, terminated by the `m` codepoint.
+There are a handful of slightly more modern sequences that use colon `:`
+codepoints to encode additional context.
+
+The digits map to one of the codes in the table below, which manipulate
+the presentation attributes of subsequently printed characters.
+
+It is valid to omit the code number; for example `CSI m` is equivalent
+to `CSI 0 m` which resets the presentation attributes.
+
+  Code   Description                Action
+  ------ -------------------------- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  0      Reset                      Reset to default foreground/background colors, reset all presentation attributes, clear any explicit hyperlinks
+  1      IntensityBold              Set the intensity level to Bold. This causes subsequent text to be rendered in a bold font variant and, if the foreground color is set to a palette index in the 0-7 range, effectively shifts it to the brighter value in the 8-15 range
+  2      IntensityDim               Set the intensity level to Dim or Half-Bright. This causes text to be rendered in a lighter weight font variant
+  3      ItalicOn                   Sets the italic attribute on the text, causing an italic font variant to be selected
+  4      UnderlineOn                Text will have a single underline
+  4:0    UnderlineOff               Text will have no underline
+  4:1    UnderlineOn                Text will have a single underline
+  4:2    UnderlineDouble            Text will be rendered with double underline
+  4:3    UnderlineCurly             Text will be rendered with a curly underline
+  4:4    UnderlineDotted            Text will be rendered with a dotted underline
+  4:5    UnderlineDashed            Text will be rendered with a dashed underline
+  5      BlinkOn                    Indicates that the text should blink \<150 times per minute
+  6      RapidBlinkOn               Indicates that the text should blink \>150 times per minute
+  7      InverseOn                  Causes the foreground and background colors to be swapped
+  8      InvisibleOn                Marks text as invisible.
+  9      StrikeThroughOn            Text will be rendered with a single line struck through the middle
+  21     UnderlineDouble            Text will be rendered with double underline
+  22     NormalIntensity            Cancels the effect of IntensityBold and IntensityDim, returning the text to normal intensity
+  23     ItalicOff                  Cancels the effect of ItalicOn
+  24     UnderlineOff               Text will have no underline
+  25     BlinkOff                   Cancels the effect of BlinkOn and RapidBlinkOn
+  27     InverseOff                 Cancels the effect of InverseOn
+  28     InvisibleOff               cancels the effect of InvisibleOn
+  29     StrikeThroughOff           Cancels the effect of StrikeThroughOn
+  30     ForegroundBlack            Sets the foreground color to ANSI Black, which is palette index 0
+  31     ForegroundRed              Sets the foreground color to ANSI Red, which is palette index 1
+  32     ForegroundGreen            Sets the foreground color to ANSI Green, which is palette index 2
+  33     ForegroundYellow           Sets the foreground color to ANSI Yellow, which is palette index 3
+  34     ForegroundBlue             Sets the foreground color to ANSI Blue, which is palette index 4
+  35     ForegroundMagenta          Sets the foreground color to ANSI Magenta, which is palette index 5
+  36     ForegroundCyan             Sets the foreground color to ANSI Cyan, which is palette index 6
+  37     ForegroundWhite            Sets the foreground color to ANSI White, which is palette index 7
+  39     ForegroundDefault          Sets the foreground color to the user\'s configured default text color
+  40     BackgroundBlack            Sets the background color to ANSI Black, which is palette index 0
+  41     BackgroundRed              Sets the background color to ANSI Red, which is palette index 1
+  42     BackgroundGreen            Sets the background color to ANSI Green, which is palette index 2
+  43     BackgroundYellow           Sets the background color to ANSI Yellow, which is palette index 3
+  44     BackgroundBlue             Sets the background color to ANSI Blue, which is palette index 4
+  45     BackgroundMagenta          Sets the background color to ANSI Magenta, which is palette index 5
+  46     BackgroundCyan             Sets the background color to ANSI Cyan, which is palette index 6
+  47     BackgroundWhite            Sets the background color to ANSI White, which is palette index 7
+  49     BackgroundDefault          Sets the background color to the user\'s configured default background color
+  53     OverlineOn                 Renders text with a single overline/overbar
+  55     OverlineOff                Cancels OverlineOn
+  59     UnderlineColorDefault      Resets the underline color to default, which is to match the foreground color
+  73     VerticalAlignSuperScript   Adjusts the baseline of the text so that it renders as superscript (*Since: Version 20221119-145034-49b9839f*)
+  74     VerticalAlignSubScript     Adjusts the baseline of the text so that it renders as subscript (*Since: Version 20221119-145034-49b9839f*)
+  75     VerticalAlignBaseLine      Reset the baseline of the text to normal (*Since: Version 20221119-145034-49b9839f*)
+  90     ForegroundBrightBlack      Sets the foreground color to Bright Black, which is palette index 8
+  91     ForegroundBrightRed        Sets the foreground color to Bright Red, which is palette index 9
+  92     ForegroundBrightGreen      Sets the foreground color to Bright Green, which is palette index 10
+  93     ForegroundBrightYellow     Sets the foreground color to Bright Yellow, which is palette index 11
+  94     ForegroundBrightBlue       Sets the foreground color to Bright Blue, which is palette index 12
+  95     ForegroundBrightMagenta    Sets the foreground color to Bright Magenta, which is palette index 13
+  96     ForegroundBrightCyan       Sets the foreground color to Bright Cyan, which is palette index 14
+  97     ForegroundBrightWhite      Sets the foreground color to Bright White, which is palette index 15
+  100    BackgroundBrightBlack      Sets the background color to Bright Black, which is palette index 8
+  101    BackgroundBrightRed        Sets the background color to Bright Red, which is palette index 9
+  102    BackgroundBrightGreen      Sets the background color to Bright Green, which is palette index 10
+  103    BackgroundBrightYellow     Sets the background color to Bright Yellow, which is palette index 11
+  104    BackgroundBrightBlue       Sets the background color to Bright Blue, which is palette index 12
+  105    BackgroundBrightMagenta    Sets the background color to Bright Magenta, which is palette index 13
+  106    BackgroundBrightCyan       Sets the background color to Bright Cyan, which is palette index 14
+  107    BackgroundBrightWhite      Sets the background color to Bright White, which is palette index 15
+
+There are a handful of additional SGR codes that allow setting extended
+colors; unlike the codes above, which are activated by a single numeric
+parameter out of SGR sequence, these the extended color codes require
+multiple parameters. The canonical representation of these sequences is
+to have the multiple parameters be separated by colons (`:`), but for
+compatibility reasons WezTerm also accepts an ambiguous semicolon (`;`)
+separated variation. The colon form is unambiguous and should be
+preferred; the semicolon form should not be used by new applications and
+is not documented here in the interest of avoiding accidental new
+implementations.
+
+##### CSI 38:5 - foreground color palette index[¶](#csi-385-foreground-color-palette-index "Permanent link"){.headerlink} {#csi-385-foreground-color-palette-index}
+
+This sequence will set the *foreground color* to the specified palette
+INDEX, which can be a decimal number in the range `0-255`.
+
+::: {.language-text .highlight}
+    CSI 38 : 5 : INDEX m
+:::
+
+##### CSI 48:5 - background color palette index[¶](#csi-485-background-color-palette-index "Permanent link"){.headerlink} {#csi-485-background-color-palette-index}
+
+This sequence will set the *background color* to the specified palette
+INDEX, which can be a decimal number in the range `0-255`.
+
+::: {.language-text .highlight}
+    CSI 48 : 5 : INDEX m
+:::
+
+##### CSI 58:5 - underline color palette index[¶](#csi-585-underline-color-palette-index "Permanent link"){.headerlink} {#csi-585-underline-color-palette-index}
+
+This sequence will set the *underline color* to the specified palette
+INDEX, which can be a decimal number in the range `0-255`.
+
+::: {.language-text .highlight}
+    CSI 58 : 5 : INDEX m
+:::
+
+##### CSI 38:2 - foreground color: RGB[¶](#csi-382-foreground-color-rgb "Permanent link"){.headerlink} {#csi-382-foreground-color-rgb}
+
+This sequence will set the *foreground color* to an arbitrary color in
+RGB colorspace. The `R`, `G` and `B` symbols below are decimal numbers
+in the range `0-255`. Note that after the `2` parameter two colons are
+present; its really an omitted *colorspace ID* parameter but that nature
+of that parameter is not specified in the accompanying ITU T.416
+specification and is ignored by `WezTerm` and most (all?) other terminal
+emulators:
+
+::: {.language-text .highlight}
+    CSI 38 : 2 : : R : G : B m
+:::
+
+(*Since 20210814-124438-54e29167*) For the sake of compatibility with
+some other terminal emulators this additional form is also supported
+where the colorspace ID argument is not specified:
+
+::: {.language-text .highlight}
+    CSI 38 : 2 : R : G : B m
+:::
+
+##### CSI 38:6 - foreground color: RGBA[¶](#csi-386-foreground-color-rgba "Permanent link"){.headerlink} {#csi-386-foreground-color-rgba}
+
+*Since: Version 20220807-113146-c2fee766*
+
+*The functionality described in this section requires version
+20220807-113146-c2fee766 of wezterm, or a more recent version.*
+
+This is a wezterm extension: wezterm considers color mode `6` as RGBA,
+allowing you to specify the alpha channel in addition to the RGB
+channels.
+
+::: {.language-text .highlight}
+    CSI 38 : 6 : : R : G : B : A m
+:::
+
+##### CSI 48:2 - background color: RGB[¶](#csi-482-background-color-rgb "Permanent link"){.headerlink} {#csi-482-background-color-rgb}
+
+This sequence will set the *background color* to an arbitrary color in
+RGB colorspace. The `R`, `G` and `B` symbols below are decimal numbers
+in the range `0-255`:
+
+::: {.language-text .highlight}
+    CSI 48 : 2 : : R : G : B m
+:::
+
+(*Since 20210814-124438-54e29167*) For the sake of compatibility with
+some other terminal emulators this additional form is also supported
+where the colorspace ID argument is not specified:
+
+::: {.language-text .highlight}
+    CSI 48 : 2 : R : G : B m
+:::
+
+##### CSI 48:6 - background color: RGBA[¶](#csi-486-background-color-rgba "Permanent link"){.headerlink} {#csi-486-background-color-rgba}
+
+*Since: Version 20220807-113146-c2fee766*
+
+*The functionality described in this section requires version
+20220807-113146-c2fee766 of wezterm, or a more recent version.*
+
+This is a wezterm extension: wezterm considers color mode `6` as RGBA,
+allowing you to specify the alpha channel in addition to the RGB
+channels.
+
+::: {.language-text .highlight}
+    CSI 48 : 6 : : R : G : B : A m
+:::
+
+##### CSI 58:2 - underline color: RGB[¶](#csi-582-underline-color-rgb "Permanent link"){.headerlink} {#csi-582-underline-color-rgb}
+
+This sequence will set the *underline color* to an arbitrary color in
+RGB colorspace. The `R`, `G` and `B` symbols below are decimal numbers
+in the range `0-255`:
+
+::: {.language-text .highlight}
+    CSI 58 : 2 : : R : G : B m
+:::
+
+(*Since 20210814-124438-54e29167*) For the sake of compatibility with
+some other terminal emulators this additional form is also supported
+where the colorspace ID argument is not specified:
+
+::: {.language-text .highlight}
+    CSI 58 : 2 : R : G : B m
+:::
+
+##### CSI 58:6 - underline color: RGBA[¶](#csi-586-underline-color-rgba "Permanent link"){.headerlink} {#csi-586-underline-color-rgba}
+
+*Since: Version 20220807-113146-c2fee766*
+
+*The functionality described in this section requires version
+20220807-113146-c2fee766 of wezterm, or a more recent version.*
+
+This is a wezterm extension: wezterm considers color mode `6` as RGBA,
+allowing you to specify the alpha channel in addition to the RGB
+channels.
+
+::: {.language-text .highlight}
+    CSI 58 : 6 : : R : G : B : A m
+:::
+
+#### Cursor Movement[¶](#cursor-movement "Permanent link"){.headerlink}
+
+#### Editing Functions[¶](#editing-functions "Permanent link"){.headerlink}
+
+#### Mode Functions[¶](#mode-functions "Permanent link"){.headerlink}
+
+*Since: Version 20210814-124438-54e29167*
+
+*The functionality described in this section requires version
+20210814-124438-54e29167 of wezterm, or a more recent version.*
+
+WezTerm supports [Synchronized
+Rendering](https://gist.github.com/christianparpart/d8a62cc1ab659194337d73e399004036).
+DECSET 2026 is set to batch (hold) rendering until DECSET 2026 is reset
+to flush the queued screen data.
+
+#### Device Functions[¶](#device-functions "Permanent link"){.headerlink}
+
+#### Window Functions[¶](#window-functions "Permanent link"){.headerlink}
+
+### DCS - Device Control String[¶](#dcs-device-control-string "Permanent link"){.headerlink} {#dcs-device-control-string}
+
+The `C1` `DCS` escape places the terminal parser into a device control
+mode until the `C1` `ST` is encountered.
+
+In the table below, `DCS` can be either the 7-bit representation
+(`ESC P`) or the 8-bit codepoint (`0x90`).
+
+  Seq                            Name                                                                                                                  Description
+  ------------------------------ --------------------------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  DCS \$ q \" p ST               [DECRQSS](https://vt100.net/docs/vt510-rm/DECRQSS.html) for [DECSCL](https://vt100.net/docs/vt510-rm/DECSCL.html)     Request Conformance Level; Reports the conformance level
+  DCS \$ q r ST                  [DECRQSS](https://vt100.net/docs/vt510-rm/DECRQSS.html) for [DECSTBM](https://vt100.net/docs/vt510-rm/DECSTBM.html)   Request top and bottom margin report; Reports the margins
+  DCS \$ q s ST                  [DECRQSS](https://vt100.net/docs/vt510-rm/DECRQSS.html) for [DECSLRM](https://vt100.net/docs/vt510-rm/DECSLRM.html)   Request left and right margin report; Reports the margins
+  DCS \[PARAMS\] q \[DATA\] ST   Sixel Graphic Data                                                                                                    Decodes [Sixel graphic data](https://vt100.net/docs/vt3xx-gp/chapter14.html) and apply the image to the terminal model. Support is preliminary and incomplete; see [this issue](https://github.com/wezterm/wezterm/issues/217) for status.
+  DCS 1000 q                     tmux control mode                                                                                                     Bridges tmux into the WezTerm multiplexer. Currently incomplete, see [this issue](https://github.com/wezterm/wezterm/issues/336) for status.
+
+### Operating System Command Sequences[¶](#operating-system-command-sequences "Permanent link"){.headerlink}
+
+Operating System Command (OSC) sequences are introduced via `ESC ]`
+followed by a numeric code and typically have parameters delimited by
+`;`. OSC sequences are canonically delimited by the `ST` (String
+Terminator) sequence, but WezTerm also accepts delimiting them with the
+`BEL` control.
+
+The table below is keyed by the OSC code.
+
+  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  OSC               Description       Action                                                                                    Example
+  ----------------- ----------------- ----------------------------------------------------------------------------------------- ---------------------------------------------------
+  0                 Set Icon Name and Clears Icon Name, sets Window Title.                                                      `\x1b]0;title\x1b\\`
+                    Window Title                                                                                                
+
+  1                 Set Icon Name     Sets Icon Name, which is used as the Tab title when it is non-empty                       `\x1b]1;tab-title\x1b\\`
+
+  2                 Set Window Title  Set Window Title                                                                          `\x1b]2;window-title\x1b\\`
+
+  3                 Set X11 Window    Ignored                                                                                   
+                    Property                                                                                                    
+
+  4                 Change/Query      Set or query color palette entries 0-255.                                                 query color number 1: `\x1b]4;1;?\x1b\\`\
+                    Color Number                                                                                                Set color number 2: `\x1b]4;2;#cccccc\x1b\\`
+
+  5                 Change/Query      Ignored                                                                                   
+                    Special Color                                                                                               
+                    Number                                                                                                      
+
+  6                 iTerm2 Change     Ignored                                                                                   
+                    Title Tab Color                                                                                             
+
+  7                 Set Current       [See Shell                                                                                
+                    Working Directory Integration](shell-integration.html#osc-7-escape-sequence-to-set-the-working-directory)   
+
+  8                 Set Hyperlink     [See Explicit Hyperlinks](hyperlinks.html#explicit-hyperlinks)                            
+
+  9                 iTerm2 Show       Show a \"toast\" notification                                                             `printf "\e]9;%s\e\\" "hello there"`
+                    System                                                                                                      
+                    Notification                                                                                                
+
+  10                Set Default Text                                                                                            `\x1b]10;#ff0000\x1b\\`.\
+                    Foreground Color                                                                                            Also supports RGBA in nightly builds:
+                                                                                                                                `printf "\e]10;rgba(127,127,127,0.4)\x07"`
+
+  11                Set Default Text                                                                                            `\x1b]11;#0000ff\x1b\\`.\
+                    Background Color                                                                                            Also supports RGBA in nightly builds:
+                                                                                                                                `printf "\e]11;rgba:efff/ecff/f4ff/d000\x07"`
+
+  12                Set Text Cursor                                                                                             `\x1b]12;#00ff00\x1b\\`.\
+                    Color                                                                                                       Also supports RGBA in nightly builds.
+
+  52                Manipulate        Requests to query the clipboard are ignored. Allows setting or clearing the clipboard     
+                    clipboard                                                                                                   
+
+  104               ResetColors       Reset color palette entries to their default values                                       
+
+  133               FinalTerm         Informs the terminal about Input, Output and Prompt regions on the display                [See Shell Integration](shell-integration.html)
+                    semantic escapes                                                                                            
+
+  777               Call rxvt         Only the notify extension is supported; it shows a \"toast\" notification                 `printf "\e]777;notify;%s;%s\e\\" "title" "body"`
+                    extension                                                                                                   
+
+  1337              iTerm2 File       Allows displaying images inline                                                           [See iTerm Image Protocol](imgcat.html)
+                    Upload Protocol                                                                                             
+
+  L                 Set Icon Name     Same as OSC 1                                                                             `\x1b]Ltab-title\x1b\\`
+                    (Sun)                                                                                                       
+
+  l                 Set Window Title  Same as OSC 2                                                                             `\x1b]lwindow-title\x1b\\`
+                    (Sun)                                                                                                       
+  ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Additional Resources[¶](#additional-resources "Permanent link"){.headerlink}
+
+-   [xterm\'s escape
+    sequences](http://invisible-island.net/xterm/ctlseqs/ctlseqs.txt)
+-   [iTerm2\'s escape
+    sequences](https://iterm2.com/documentation-escape-codes.html)
+-   [kitty\'s escape
+    sequences](https://sw.kovidgoyal.net/kitty/protocol-extensions.html)
+-   [Terminology\'s escape
+    sequences](https://github.com/billiob/terminology#extended-escapes-for-terminology-only)
+-   [This Google
+    spreadsheet](https://docs.google.com/spreadsheets/d/19W-lXWS9jYwqCK-LwgYo31GucPPxYVld_hVEcfpNpXg/edit?usp=sharing)
+    aims to document all the known escape sequences.
+-   [Wikipedia\'s ANSI escape code
+    page](https://en.wikipedia.org/wiki/ANSI_escape_code)
+:::::::::::::::
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+![](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTEzIDIwaC0yVjhsLTUuNSA1LjUtMS40Mi0xLjQyTDEyIDQuMTZsNy45MiA3LjkyLTEuNDIgMS40MkwxMyA4eiIgLz48L3N2Zz4=)
+Back to top
+::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -1,0 +1,3 @@
+# stream.tsc -- Termscript companion for std.stream.
+const stream_m = G:load "std.stream" or G:die "std.stream missing";
+const stream_empty = stream_m:new;

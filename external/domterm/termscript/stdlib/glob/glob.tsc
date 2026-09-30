@@ -1,0 +1,3 @@
+# glob.tsc -- Termscript companion for std.glob.
+const glob_m = G:load "std.glob" or G:die "std.glob missing";
+const glob_ts_files = glob_m:glob "*.ts";

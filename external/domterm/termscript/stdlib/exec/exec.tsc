@@ -1,0 +1,3 @@
+# exec.tsc -- Termscript companion for std.exec.
+const exec_m = G:load "std.exec" or G:die "std.exec missing";
+const exec_true_ok = exec_m:ok "true";

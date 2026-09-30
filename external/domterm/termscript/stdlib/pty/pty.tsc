@@ -1,0 +1,2 @@
+# pty.tsc -- Termscript companion for std.pty.
+const pty_m = G:load "std.pty" or G:die "std.pty missing";

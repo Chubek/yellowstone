@@ -1,0 +1,3 @@
+# readline.tsc -- Termscript companion for std.readline.
+# No line() call here: importing must never block on stdin.
+const readline_m = G:load "std.readline" or G:die "std.readline missing";

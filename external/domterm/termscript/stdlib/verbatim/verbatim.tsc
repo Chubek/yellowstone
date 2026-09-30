@@ -1,0 +1,2 @@
+# verbatim.tsc -- Termscript companion for std.verbatim.
+const verbatim_m = G:load "std.verbatim" or G:die "std.verbatim missing";

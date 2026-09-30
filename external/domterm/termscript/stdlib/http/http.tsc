@@ -1,0 +1,3 @@
+# http.tsc -- Termscript companion for std.http.
+const http_m = G:load "std.http" or G:die "std.http missing";
+const http_local = http_m:url_parse "http://127.0.0.1:80/path";

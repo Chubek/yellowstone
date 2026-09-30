@@ -1,0 +1,2 @@
+# table.tsc -- Termscript companion for std.table.
+const table_m = G:load "std.table" or G:die "std.table missing";

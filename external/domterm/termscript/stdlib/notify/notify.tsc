@@ -1,0 +1,3 @@
+# notify.tsc -- Termscript companion for std.notify.
+const notify_m = G:load "std.notify" or G:die "std.notify missing";
+const notify_bell = notify_m:bell;

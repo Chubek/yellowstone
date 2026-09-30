@@ -1,0 +1,3 @@
+# fsm.tsc -- Termscript companion for std.fsm.
+const fsm_m = G:load "std.fsm" or G:die "std.fsm missing";
+const fsm_demo = fsm_m:new "idle";

@@ -1,0 +1,2 @@
+# io.tsc -- Termscript companion for std.io.
+const io_m = G:load "std.io" or G:die "std.io missing";

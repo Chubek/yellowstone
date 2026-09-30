@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 3.20)
-project(qobjfile LANGUAGES CXX)
+project(qobjfile LANGUAGES C CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(QobjDSL)
 
 option(QOBJFILE_WERROR "Treat warnings as errors" OFF)
+option(QOBJFILE_DOMTERM "Build DomTERM terminal and Termscript support" ON)
+
+if(QOBJFILE_DOMTERM)
+  set(DOMWEAVE_BUILD_TERMSCRIPT_STDLIB OFF CACHE BOOL "" FORCE)
+  add_subdirectory(external/domterm ${CMAKE_CURRENT_BINARY_DIR}/domterm)
+endif()
 
 # The inspection tools share argument parsing, formatting and archive-aware
 # input, so that lives in one interface target rather than a header each tool
@@ -16,6 +22,10 @@ add_library(qobjfile::qobjcommon ALIAS qobjcommon)
 add_library(qobjfile_qobjcommon ALIAS qobjcommon)
 target_compile_features(qobjcommon INTERFACE cxx_std_20)
 target_link_libraries(qobjcommon INTERFACE qbfd::qbfd)
+if(QOBJFILE_DOMTERM)
+  target_link_libraries(qobjcommon INTERFACE domterm termscript_standalone)
+  target_include_directories(qobjcommon INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/external/domterm)
+endif()
 target_include_directories(qobjcommon INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/common
@@ -47,6 +57,28 @@ qobjfile_tool(qobjstrip strip)
 qobjfile_tool(qobjnm nm)
 qobjfile_tool(qobjar ar)
 
+# Format specific inspection front ends share qbfd's canonical object model.
+foreach(reader readelf readexe readmacho)
+  add_executable(${reader} read/main.cpp)
+  target_link_libraries(${reader} PRIVATE qobjcommon qbfd::qbfd)
+  target_include_directories(${reader} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+endforeach()
+
+add_library(binscript STATIC binscript/binscript.c)
+target_include_directories(binscript PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/binscript)
+add_executable(binscript_cli binscript/main.c)
+target_link_libraries(binscript_cli PRIVATE binscript)
+set_target_properties(binscript_cli PROPERTIES OUTPUT_NAME binscript)
+find_program(YELLOWSTONE_PERL perl)
+if(YELLOWSTONE_PERL)
+  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/binscript_parser.c
+    COMMAND ${YELLOWSTONE_PERL} ${CMAKE_CURRENT_SOURCE_DIR}/scripts/aurocks.pl --entrypoint bs_parse
+            ${CMAKE_CURRENT_SOURCE_DIR}/binscript/binscript.g > ${CMAKE_CURRENT_BINARY_DIR}/binscript_parser.c
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/scripts/aurocks.pl ${CMAKE_CURRENT_SOURCE_DIR}/binscript/binscript.g)
+  add_custom_target(binscript_parser DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/binscript_parser.c)
+  add_dependencies(binscript binscript_parser)
+endif()
+
 # The Unix-style linker (qobjld library + CLI) in ld/.
 add_subdirectory(ld)
 
@@ -73,7 +105,7 @@ if(BUILD_TESTING)
                    -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/run-ld-tests.cmake)
 endif()
 
-install(TARGETS qobjdump qobjsize qobjcp qobjstr qobjstrip qobjnm qobjar qobjld
+install(TARGETS qobjdump qobjsize qobjcp qobjstr qobjstrip qobjnm qobjar qobjld readelf readexe readmacho binscript_cli
         RUNTIME DESTINATION bin)
 install(TARGETS qld
         ARCHIVE DESTINATION lib

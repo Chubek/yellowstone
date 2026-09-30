@@ -1,0 +1,3 @@
+# signal.tsc -- Termscript companion for std.signal.
+const signal_m = G:load "std.signal" or G:die "std.signal missing";
+const signal_term = signal_m:num "TERM";

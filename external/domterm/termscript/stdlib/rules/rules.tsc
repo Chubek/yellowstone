@@ -1,0 +1,2 @@
+# rules.tsc -- Termscript companion for std.rules.
+const rules_m = G:load "std.rules" or G:die "std.rules missing";

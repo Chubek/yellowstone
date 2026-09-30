@@ -1,0 +1,3 @@
+# widget.tsc -- Termscript companion for std.widget.
+const widget_m = G:load "std.widget" or G:die "std.widget missing";
+const widget_half = widget_m:progress 1 2;

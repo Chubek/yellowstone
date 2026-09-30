@@ -1,0 +1,3 @@
+# draw.tsc -- Termscript companion for std.draw.
+const draw_m = G:load "std.draw" or G:die "std.draw missing";
+const draw_rule = draw_m:hline 40 "-";

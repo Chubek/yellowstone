@@ -1,0 +1,2 @@
+# socket.tsc -- Termscript companion for std.socket.
+const socket_m = G:load "std.socket" or G:die "std.socket missing";

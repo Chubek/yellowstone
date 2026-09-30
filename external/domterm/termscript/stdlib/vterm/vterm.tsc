@@ -1,0 +1,3 @@
+# vterm.tsc -- Termscript companion for std.vterm.
+const vterm_m = G:load "std.vterm" or G:die "std.vterm missing";
+const vterm_small = vterm_m:new 5 20;

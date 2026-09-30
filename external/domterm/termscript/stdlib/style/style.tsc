@@ -1,0 +1,3 @@
+# style.tsc -- Termscript companion for std.style.
+const style_m = G:load "std.style" or G:die "std.style missing";
+const style_bold = style_m:sgr 1;

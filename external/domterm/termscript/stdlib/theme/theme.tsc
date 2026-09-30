@@ -1,0 +1,4 @@
+# theme.tsc -- Termscript companion for std.theme.
+const theme_m = G:load "std.theme" or G:die "std.theme missing";
+const theme_default = theme_m:load "default";
+const theme_error = theme_m:fg theme_default "error";
