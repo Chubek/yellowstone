@@ -2,7 +2,7 @@
 #
 # The core is a static library (qobjld) built from the per-area translation
 # units; the CLI (qobjld) links it. ld.c exposes the C API and is compiled
-# as C++ (LANGUAGE CXX) so it can use the header-only readers in ../fd/.
+# as C++ (LANGUAGE CXX) so it can use the header-only readers in ../qbfd/.
 # ld.hpp is the C++ wrapper over that C API.
 
 add_library(qld STATIC
@@ -28,7 +28,7 @@ set_source_files_properties(ld.c PROPERTIES LANGUAGE CXX)
 target_compile_features(qld PUBLIC cxx_std_20)
 target_include_directories(qld PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../fd
+  ${CMAKE_CURRENT_SOURCE_DIR}/../qbfd
 )
 target_link_libraries(qld PUBLIC qbfd::qbfd)
 

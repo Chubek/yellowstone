@@ -1,0 +1,155 @@
+# DirectX DXIL is LLVM IR/bitcode, so every form renders a typed SSA fragment
+# rather than fabricated opcodes, and nothing is encoded.  The encodings are
+# text, the register class is the set of virtual registers an instruction may
+# name, and the floating point forms read the float register class.
+#
+# DXIL is LLVM IR in disguise, so the mnemonics are the LLVM instruction names
+# with the DXIL scalar and vector type spellings, and a fragment is one SSA
+# assignment with its operands written after the type.
+arch directx { word_size = 32; addr_size = 64; endian = little; align = 1; }
+
+regclass GPR {
+    v0(32)=0,
+    v1(32)=1,
+    v2(32)=2,
+    v3(32)=3,
+    v4(32)=4,
+    v5(32)=5,
+    v6(32)=6,
+    v7(32)=7,
+    v8(32)=8,
+    v9(32)=9,
+    v10(32)=10,
+    v11(32)=11,
+    v12(32)=12,
+    v13(32)=13,
+    v14(32)=14,
+    v15(32)=15,
+}
+
+regclass FPR {
+    f0(32)=0,
+    f1(32)=1,
+    f2(32)=2,
+    f3(32)=3,
+    f4(32)=4,
+    f5(32)=5,
+    f6(32)=6,
+    f7(32)=7,
+    f8(32)=8,
+    f9(32)=9,
+    f10(32)=10,
+    f11(32)=11,
+    f12(32)=12,
+    f13(32)=13,
+    f14(32)=14,
+    f15(32)=15,
+}
+
+# the integer binary group
+encoding ADD { width = text; }
+op add { class = arithmetic; encoding = ADD; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = add i32 %{rs1}, %{rs2}"; }
+
+encoding SUB { width = text; }
+op sub { class = arithmetic; encoding = SUB; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = sub i32 %{rs1}, %{rs2}"; }
+
+encoding MUL { width = text; }
+op mul { class = arithmetic; encoding = MUL; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = mul i32 %{rs1}, %{rs2}"; }
+
+encoding UDIV { width = text; }
+op udiv { class = arithmetic; encoding = UDIV; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = udiv i32 %{rs1}, %{rs2}"; }
+
+encoding SDIV { width = text; }
+op sdiv { class = arithmetic; encoding = SDIV; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = sdiv i32 %{rs1}, %{rs2}"; }
+
+encoding UREM { width = text; }
+op urem { class = arithmetic; encoding = UREM; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = urem i32 %{rs1}, %{rs2}"; }
+
+encoding SREM { width = text; }
+op srem { class = arithmetic; encoding = SREM; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = srem i32 %{rs1}, %{rs2}"; }
+
+# the bitwise group
+encoding AND { width = text; }
+op and { class = arithmetic; encoding = AND; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = and i32 %{rs1}, %{rs2}"; }
+
+encoding OR { width = text; }
+op or { class = arithmetic; encoding = OR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = or i32 %{rs1}, %{rs2}"; }
+
+encoding XOR { width = text; }
+op xor { class = arithmetic; encoding = XOR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = xor i32 %{rs1}, %{rs2}"; }
+
+encoding SHL { width = text; }
+op shl { class = arithmetic; encoding = SHL; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = shl i32 %{rs1}, %{rs2}"; }
+
+encoding LSHR { width = text; }
+op lshr { class = arithmetic; encoding = LSHR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = lshr i32 %{rs1}, %{rs2}"; }
+
+encoding ASHR { width = text; }
+op ashr { class = arithmetic; encoding = ASHR; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = ashr i32 %{rs1}, %{rs2}"; }
+
+# the floating point group
+encoding FADD { width = text; }
+op fadd { class = arithmetic; encoding = FADD; operands = rd: FPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fadd float %{rs1}, %{rs2}"; }
+
+encoding FSUB { width = text; }
+op fsub { class = arithmetic; encoding = FSUB; operands = rd: FPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fsub float %{rs1}, %{rs2}"; }
+
+encoding FMUL { width = text; }
+op fmul { class = arithmetic; encoding = FMUL; operands = rd: FPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fmul float %{rs1}, %{rs2}"; }
+
+encoding FDIV { width = text; }
+op fdiv { class = arithmetic; encoding = FDIV; operands = rd: FPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fdiv float %{rs1}, %{rs2}"; }
+
+encoding FREM { width = text; }
+op frem { class = arithmetic; encoding = FREM; operands = rd: FPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = frem float %{rs1}, %{rs2}"; }
+
+# the compare group
+encoding ICMP_EQ { width = text; }
+op icmp_eq { class = compare; encoding = ICMP_EQ; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = icmp eq i32 %{rs1}, %{rs2}"; }
+
+encoding ICMP_ULT { width = text; }
+op icmp_ult { class = compare; encoding = ICMP_ULT; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = icmp ult i32 %{rs1}, %{rs2}"; }
+
+encoding ICMP_SLT { width = text; }
+op icmp_slt { class = compare; encoding = ICMP_SLT; operands = rd: GPR, rs1: GPR, rs2: GPR; syntax = "%{rd} = icmp slt i32 %{rs1}, %{rs2}"; }
+
+encoding FCMP_OEQ { width = text; }
+op fcmp_oeq { class = compare; encoding = FCMP_OEQ; operands = rd: GPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fcmp oeq float %{rs1}, %{rs2}"; }
+
+encoding FCMP_OLT { width = text; }
+op fcmp_olt { class = compare; encoding = FCMP_OLT; operands = rd: GPR, rs1: FPR, rs2: FPR; syntax = "%{rd} = fcmp olt float %{rs1}, %{rs2}"; }
+
+# the select, the conversions and the memory group
+encoding SELECT { width = text; }
+op select { class = arithmetic; encoding = SELECT; operands = rd: GPR, rs1: GPR, rs2: GPR, rs3: GPR; syntax = "%{rd} = select i1 %{rs1}, i32 %{rs2}, i32 %{rs3}"; }
+
+encoding SITOFP { width = text; }
+op sitofp { class = arithmetic; encoding = SITOFP; operands = rd: FPR, rs1: GPR; syntax = "%{rd} = sitofp i32 %{rs1} to float"; }
+
+encoding FPTOUI { width = text; }
+op fptoui { class = arithmetic; encoding = FPTOUI; operands = rd: GPR, rs1: FPR; syntax = "%{rd} = fptoui float %{rs1} to i32"; }
+
+encoding LOAD { width = text; }
+op load { class = load; encoding = LOAD; operands = rd: GPR, rs1: GPR; syntax = "%{rd} = load i32, ptr %{rs1}"; }
+
+encoding STORE { width = text; }
+op store { class = store; encoding = STORE; operands = rs1: GPR, rs2: GPR; syntax = "store i32 %{rs1}, ptr %{rs2}"; }
+
+# the control group
+encoding RET_VOID { width = text; }
+op ret_void { class = branch; encoding = RET_VOID; operands = ; syntax = "ret void"; }
+
+encoding RET_I32 { width = text; }
+op ret_i32 { class = branch; encoding = RET_I32; operands = rd: GPR; syntax = "ret i32 %{rd}"; }
+
+encoding BR { width = text; }
+op br { class = branch; encoding = BR; operands = target: rel; syntax = "br label %{target}"; }
+
+encoding BR_COND { width = text; }
+op br_cond { class = branch; encoding = BR_COND; operands = rs1: GPR, then: rel, else: rel; syntax = "br i1 %{rs1}, label %{then}, label %{else}"; }
+
+encoding CALL { width = text; }
+op call { class = branch; encoding = CALL; operands = rd: GPR, target: rel; syntax = "%{rd} = call i32 %{target}()"; }
+
+encoding UNREACHABLE { width = text; }
+op unreachable { class = branch; encoding = UNREACHABLE; operands = ; syntax = "unreachable"; }

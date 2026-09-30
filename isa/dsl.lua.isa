@@ -1,0 +1,2 @@
+# Legacy name marker: the simple ISA grammar is parsed by ../simple_isa.py.
+# The Lua DSL for complex databanks lives in ../compiler/stdspec/dsl.lua.

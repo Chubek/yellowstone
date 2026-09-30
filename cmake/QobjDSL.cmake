@@ -47,10 +47,9 @@ elseif(TARGET qDSL)
   target_link_libraries(qobjfile_qdsl INTERFACE qDSL)
   set(qobjfile_qdsl_SOURCE "installed package")
 else()
-  # A bare include path still satisfies a header-only dependency.
-  message(WARNING
-    "qobjfile: could not locate qDSL.hpp; set -DQOBJFILE_QDSL_DIR=<dir> "
-    "or install the qDSL package. Compilation of qBFD will likely fail.")
-  set(qobjfile_qdsl_SOURCE "not found")
+  # The repository carries the full DSL toolkit in common/qdsl.hpp.
+  target_include_directories(qobjfile_qdsl SYSTEM INTERFACE
+    "${CMAKE_CURRENT_LIST_DIR}/../common")
+  set(qobjfile_qdsl_SOURCE "common/qdsl.hpp")
 endif()
 add_library(qobjfile::qdsl ALIAS qobjfile_qdsl)

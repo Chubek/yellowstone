@@ -1,0 +1,1752 @@
+# Linux eBPF. Every form is one little-endian 64-bit word with opcode:8, the
+# # register byte (src:4 at bit 12, dst:4 at bit 8), off:16 at bit 16 and imm:32 at
+# # bit 32. Unsuffixed operations take a source register and the 'i' forms a signed
+# # 32-bit immediate. For the stx forms rd is the stored value and rs1 the address,
+# # which is the register order the instruction set specification uses; llvm-mc spells
+# # those forms with the two registers the other way round.
+arch bpf { word_size = 64; addr_size = 64; endian = little; align = 8; }
+
+regclass GPR {
+    r0(64)=0,
+    r1(64)=1,
+    r2(64)=2,
+    r3(64)=3,
+    r4(64)=4,
+    r5(64)=5,
+    r6(64)=6,
+    r7(64)=7,
+    r8(64)=8,
+    r9(64)=9,
+    r10(64)=10,
+}
+
+
+
+encoding B_ADD64 { width = 64;
+  base = 0xf;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op add64 { class = arithmetic; encoding = B_ADD64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "add64 {rd}, {rs1}";
+}
+
+encoding B_ADD64I { width = 64;
+  base = 0x7;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op add64i { class = arithmetic; encoding = B_ADD64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "add64 {rd}, {imm}";
+}
+
+encoding B_SUB64 { width = 64;
+  base = 0x1f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op sub64 { class = arithmetic; encoding = B_SUB64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sub64 {rd}, {rs1}";
+}
+
+encoding B_SUB64I { width = 64;
+  base = 0x17;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op sub64i { class = arithmetic; encoding = B_SUB64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "sub64 {rd}, {imm}";
+}
+
+encoding B_MUL64 { width = 64;
+  base = 0x2f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mul64 { class = arithmetic; encoding = B_MUL64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mul64 {rd}, {rs1}";
+}
+
+encoding B_MUL64I { width = 64;
+  base = 0x27;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mul64i { class = arithmetic; encoding = B_MUL64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mul64 {rd}, {imm}";
+}
+
+encoding B_DIV64 { width = 64;
+  base = 0x3f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op div64 { class = arithmetic; encoding = B_DIV64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "div64 {rd}, {rs1}";
+}
+
+encoding B_DIV64I { width = 64;
+  base = 0x37;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op div64i { class = arithmetic; encoding = B_DIV64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "div64 {rd}, {imm}";
+}
+
+encoding B_OR64 { width = 64;
+  base = 0x4f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op or64 { class = arithmetic; encoding = B_OR64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "or64 {rd}, {rs1}";
+}
+
+encoding B_OR64I { width = 64;
+  base = 0x47;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op or64i { class = arithmetic; encoding = B_OR64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "or64 {rd}, {imm}";
+}
+
+encoding B_AND64 { width = 64;
+  base = 0x5f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op and64 { class = arithmetic; encoding = B_AND64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "and64 {rd}, {rs1}";
+}
+
+encoding B_AND64I { width = 64;
+  base = 0x57;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op and64i { class = arithmetic; encoding = B_AND64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "and64 {rd}, {imm}";
+}
+
+encoding B_LSH64 { width = 64;
+  base = 0x6f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op lsh64 { class = arithmetic; encoding = B_LSH64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lsh64 {rd}, {rs1}";
+}
+
+encoding B_LSH64I { width = 64;
+  base = 0x67;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op lsh64i { class = arithmetic; encoding = B_LSH64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "lsh64 {rd}, {imm}";
+}
+
+encoding B_RSH64 { width = 64;
+  base = 0x7f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op rsh64 { class = arithmetic; encoding = B_RSH64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "rsh64 {rd}, {rs1}";
+}
+
+encoding B_RSH64I { width = 64;
+  base = 0x77;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op rsh64i { class = arithmetic; encoding = B_RSH64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "rsh64 {rd}, {imm}";
+}
+
+encoding B_MOD64 { width = 64;
+  base = 0x9f;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mod64 { class = arithmetic; encoding = B_MOD64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mod64 {rd}, {rs1}";
+}
+
+encoding B_MOD64I { width = 64;
+  base = 0x97;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mod64i { class = arithmetic; encoding = B_MOD64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mod64 {rd}, {imm}";
+}
+
+encoding B_XOR64 { width = 64;
+  base = 0xaf;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op xor64 { class = arithmetic; encoding = B_XOR64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xor64 {rd}, {rs1}";
+}
+
+encoding B_XOR64I { width = 64;
+  base = 0xa7;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op xor64i { class = arithmetic; encoding = B_XOR64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "xor64 {rd}, {imm}";
+}
+
+encoding B_MOV64 { width = 64;
+  base = 0xbf;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mov64 { class = arithmetic; encoding = B_MOV64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mov64 {rd}, {rs1}";
+}
+
+encoding B_MOV64I { width = 64;
+  base = 0xb7;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mov64i { class = arithmetic; encoding = B_MOV64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mov64 {rd}, {imm}";
+}
+
+encoding B_ARSH64 { width = 64;
+  base = 0xcf;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op arsh64 { class = arithmetic; encoding = B_ARSH64;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "arsh64 {rd}, {rs1}";
+}
+
+encoding B_ARSH64I { width = 64;
+  base = 0xc7;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op arsh64i { class = arithmetic; encoding = B_ARSH64I;
+  operands = rd: GPR, imm: imm;
+  syntax = "arsh64 {rd}, {imm}";
+}
+
+encoding B_NEG64 { width = 64;
+  base = 0x87;
+  rd = 8:4;
+  signed = 1;
+}
+
+op neg64 { class = arithmetic; encoding = B_NEG64;
+  operands = rd: GPR;
+  syntax = "neg64 {rd}";
+}
+
+encoding B_ADD32 { width = 64;
+  base = 0xc;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op add32 { class = arithmetic; encoding = B_ADD32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "add32 {rd}, {rs1}";
+}
+
+encoding B_ADD32I { width = 64;
+  base = 0x4;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op add32i { class = arithmetic; encoding = B_ADD32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "add32 {rd}, {imm}";
+}
+
+encoding B_SUB32 { width = 64;
+  base = 0x1c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op sub32 { class = arithmetic; encoding = B_SUB32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sub32 {rd}, {rs1}";
+}
+
+encoding B_SUB32I { width = 64;
+  base = 0x14;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op sub32i { class = arithmetic; encoding = B_SUB32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "sub32 {rd}, {imm}";
+}
+
+encoding B_MUL32 { width = 64;
+  base = 0x2c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mul32 { class = arithmetic; encoding = B_MUL32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mul32 {rd}, {rs1}";
+}
+
+encoding B_MUL32I { width = 64;
+  base = 0x24;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mul32i { class = arithmetic; encoding = B_MUL32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mul32 {rd}, {imm}";
+}
+
+encoding B_DIV32 { width = 64;
+  base = 0x3c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op div32 { class = arithmetic; encoding = B_DIV32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "div32 {rd}, {rs1}";
+}
+
+encoding B_DIV32I { width = 64;
+  base = 0x34;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op div32i { class = arithmetic; encoding = B_DIV32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "div32 {rd}, {imm}";
+}
+
+encoding B_OR32 { width = 64;
+  base = 0x4c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op or32 { class = arithmetic; encoding = B_OR32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "or32 {rd}, {rs1}";
+}
+
+encoding B_OR32I { width = 64;
+  base = 0x44;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op or32i { class = arithmetic; encoding = B_OR32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "or32 {rd}, {imm}";
+}
+
+encoding B_AND32 { width = 64;
+  base = 0x5c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op and32 { class = arithmetic; encoding = B_AND32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "and32 {rd}, {rs1}";
+}
+
+encoding B_AND32I { width = 64;
+  base = 0x54;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op and32i { class = arithmetic; encoding = B_AND32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "and32 {rd}, {imm}";
+}
+
+encoding B_LSH32 { width = 64;
+  base = 0x6c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op lsh32 { class = arithmetic; encoding = B_LSH32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lsh32 {rd}, {rs1}";
+}
+
+encoding B_LSH32I { width = 64;
+  base = 0x64;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op lsh32i { class = arithmetic; encoding = B_LSH32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "lsh32 {rd}, {imm}";
+}
+
+encoding B_RSH32 { width = 64;
+  base = 0x7c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op rsh32 { class = arithmetic; encoding = B_RSH32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "rsh32 {rd}, {rs1}";
+}
+
+encoding B_RSH32I { width = 64;
+  base = 0x74;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op rsh32i { class = arithmetic; encoding = B_RSH32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "rsh32 {rd}, {imm}";
+}
+
+encoding B_MOD32 { width = 64;
+  base = 0x9c;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mod32 { class = arithmetic; encoding = B_MOD32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mod32 {rd}, {rs1}";
+}
+
+encoding B_MOD32I { width = 64;
+  base = 0x94;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mod32i { class = arithmetic; encoding = B_MOD32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mod32 {rd}, {imm}";
+}
+
+encoding B_XOR32 { width = 64;
+  base = 0xac;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op xor32 { class = arithmetic; encoding = B_XOR32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xor32 {rd}, {rs1}";
+}
+
+encoding B_XOR32I { width = 64;
+  base = 0xa4;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op xor32i { class = arithmetic; encoding = B_XOR32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "xor32 {rd}, {imm}";
+}
+
+encoding B_MOV32 { width = 64;
+  base = 0xbc;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op mov32 { class = arithmetic; encoding = B_MOV32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mov32 {rd}, {rs1}";
+}
+
+encoding B_MOV32I { width = 64;
+  base = 0xb4;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op mov32i { class = arithmetic; encoding = B_MOV32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "mov32 {rd}, {imm}";
+}
+
+encoding B_ARSH32 { width = 64;
+  base = 0xcc;
+  rd = 8:4;
+  rs1 = 12:4;
+  signed = 1;
+}
+
+op arsh32 { class = arithmetic; encoding = B_ARSH32;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "arsh32 {rd}, {rs1}";
+}
+
+encoding B_ARSH32I { width = 64;
+  base = 0xc4;
+  rd = 8:4;
+  imm = 32:32;
+  signed = 1;
+}
+
+op arsh32i { class = arithmetic; encoding = B_ARSH32I;
+  operands = rd: GPR, imm: imm;
+  syntax = "arsh32 {rd}, {imm}";
+}
+
+encoding B_NEG32 { width = 64;
+  base = 0x84;
+  rd = 8:4;
+  signed = 1;
+}
+
+op neg32 { class = arithmetic; encoding = B_NEG32;
+  operands = rd: GPR;
+  syntax = "neg32 {rd}";
+}
+
+encoding B_LE16 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op le16 { class = misc; encoding = B_LE16;
+  operands = rd: GPR;
+  syntax = "le16 {rd}";
+}
+
+encoding B_BE16 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op be16 { class = misc; encoding = B_BE16;
+  operands = rd: GPR;
+  syntax = "be16 {rd}";
+}
+
+encoding B_LE32 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op le32 { class = misc; encoding = B_LE32;
+  operands = rd: GPR;
+  syntax = "le32 {rd}";
+}
+
+encoding B_BE32 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op be32 { class = misc; encoding = B_BE32;
+  operands = rd: GPR;
+  syntax = "be32 {rd}";
+}
+
+encoding B_LE64 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op le64 { class = misc; encoding = B_LE64;
+  operands = rd: GPR;
+  syntax = "le64 {rd}";
+}
+
+encoding B_BE64 { width = 64;
+  base = 0xdc;
+  rd = 8:4;
+  signed = 1;
+}
+
+op be64 { class = misc; encoding = B_BE64;
+  operands = rd: GPR;
+  syntax = "be64 {rd}";
+}
+
+encoding B_LDXW { width = 64;
+  base = 0x61;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op ldxw { class = load; encoding = B_LDXW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "ldxw {rd}, [{rs1}+{off}]";
+}
+
+encoding B_STW { width = 64;
+  base = 0x62;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stw { class = store; encoding = B_STW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "st [{rs1}+{off}], {rd}";
+}
+
+encoding B_STXW { width = 64;
+  base = 0x63;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stxw { class = store; encoding = B_STXW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "stx [{rs1}+{off}], {rd}";
+}
+
+encoding B_LDXH { width = 64;
+  base = 0x69;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op ldxh { class = load; encoding = B_LDXH;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "ldxh {rd}, [{rs1}+{off}]";
+}
+
+encoding B_STH { width = 64;
+  base = 0x6a;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op sth { class = store; encoding = B_STH;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "st [{rs1}+{off}], {rd}";
+}
+
+encoding B_STXH { width = 64;
+  base = 0x6b;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stxh { class = store; encoding = B_STXH;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "stx [{rs1}+{off}], {rd}";
+}
+
+encoding B_LDXB { width = 64;
+  base = 0x71;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op ldxb { class = load; encoding = B_LDXB;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "ldxb {rd}, [{rs1}+{off}]";
+}
+
+encoding B_STB { width = 64;
+  base = 0x72;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stb { class = store; encoding = B_STB;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "st [{rs1}+{off}], {rd}";
+}
+
+encoding B_STXB { width = 64;
+  base = 0x73;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stxb { class = store; encoding = B_STXB;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "stx [{rs1}+{off}], {rd}";
+}
+
+encoding B_LDXDW { width = 64;
+  base = 0x79;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op ldxdw { class = load; encoding = B_LDXDW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "ldxdw {rd}, [{rs1}+{off}]";
+}
+
+encoding B_STDW { width = 64;
+  base = 0x7a;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stdw { class = store; encoding = B_STDW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "st [{rs1}+{off}], {rd}";
+}
+
+encoding B_STXDW { width = 64;
+  base = 0x7b;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op stxdw { class = store; encoding = B_STXDW;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "stx [{rs1}+{off}], {rd}";
+}
+
+encoding B_LDDW { width = 64;
+  base = 0x18;
+  rd = 8:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op lddw { class = load; encoding = B_LDDW;
+  operands = rd: GPR, off: imm, imm: imm;
+  syntax = "lddw {rd}, {off}, {imm}";
+}
+
+encoding B_LD_ABSW { width = 64;
+  base = 0x20;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_absw { class = load; encoding = B_LD_ABSW;
+  operands = off: imm, imm: imm;
+  syntax = "ld_absw {off}, {imm}";
+}
+
+encoding B_LD_ABSDW { width = 64;
+  base = 0x28;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_absdw { class = load; encoding = B_LD_ABSDW;
+  operands = off: imm, imm: imm;
+  syntax = "ld_absdw {off}, {imm}";
+}
+
+encoding B_LD_ABSB { width = 64;
+  base = 0x30;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_absb { class = load; encoding = B_LD_ABSB;
+  operands = off: imm, imm: imm;
+  syntax = "ld_absb {off}, {imm}";
+}
+
+encoding B_LD_ABSH { width = 64;
+  base = 0x38;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_absh { class = load; encoding = B_LD_ABSH;
+  operands = off: imm, imm: imm;
+  syntax = "ld_absh {off}, {imm}";
+}
+
+encoding B_LD_INDW { width = 64;
+  base = 0x40;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_indw { class = load; encoding = B_LD_INDW;
+  operands = off: imm, imm: imm;
+  syntax = "ld_indw {off}, {imm}";
+}
+
+encoding B_LD_INDDW { width = 64;
+  base = 0x48;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_inddw { class = load; encoding = B_LD_INDDW;
+  operands = off: imm, imm: imm;
+  syntax = "ld_inddw {off}, {imm}";
+}
+
+encoding B_LD_INDB { width = 64;
+  base = 0x50;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_indb { class = load; encoding = B_LD_INDB;
+  operands = off: imm, imm: imm;
+  syntax = "ld_indb {off}, {imm}";
+}
+
+encoding B_LD_INDH { width = 64;
+  base = 0x58;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op ld_indh { class = load; encoding = B_LD_INDH;
+  operands = off: imm, imm: imm;
+  syntax = "ld_indh {off}, {imm}";
+}
+
+encoding B_ATOMIC_FETCH32 { width = 64;
+  base = 0xe3;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_fetch32 { class = atomic; encoding = B_ATOMIC_FETCH32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_fetch {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_FETCH64 { width = 64;
+  base = 0xfb;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_fetch64 { class = atomic; encoding = B_ATOMIC_FETCH64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_fetch {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_XCHG32 { width = 64;
+  base = 0xe3;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_xchg32 { class = atomic; encoding = B_ATOMIC_XCHG32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_xchg {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_XCHG64 { width = 64;
+  base = 0xfb;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_xchg64 { class = atomic; encoding = B_ATOMIC_XCHG64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_xchg {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_CMP32 { width = 64;
+  base = 0xe3;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_cmp32 { class = atomic; encoding = B_ATOMIC_CMP32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_cmp {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_CMP64 { width = 64;
+  base = 0xfb;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_cmp64 { class = atomic; encoding = B_ATOMIC_CMP64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_cmp {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_ADD32 { width = 64;
+  base = 0xe3;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_add32 { class = atomic; encoding = B_ATOMIC_ADD32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_add {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_ADD64 { width = 64;
+  base = 0xfb;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_add64 { class = atomic; encoding = B_ATOMIC_ADD64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_add {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_OR32 { width = 64;
+  base = 0xe7;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_or32 { class = atomic; encoding = B_ATOMIC_OR32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_or {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_OR64 { width = 64;
+  base = 0xff;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_or64 { class = atomic; encoding = B_ATOMIC_OR64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_or {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_AND32 { width = 64;
+  base = 0xe7;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_and32 { class = atomic; encoding = B_ATOMIC_AND32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_and {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_AND64 { width = 64;
+  base = 0xff;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_and64 { class = atomic; encoding = B_ATOMIC_AND64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_and {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_XOR32 { width = 64;
+  base = 0xe7;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_xor32 { class = atomic; encoding = B_ATOMIC_XOR32;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_xor {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_ATOMIC_XOR64 { width = 64;
+  base = 0xff;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op atomic_xor64 { class = atomic; encoding = B_ATOMIC_XOR64;
+  operands = rd: GPR, rs1: GPR, off: imm, imm: imm;
+  syntax = "atomic_xor {imm}, [{rs1}+{off}], {rd}";
+}
+
+encoding B_JEQ { width = 64;
+  base = 0x1d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jeq { class = branch; encoding = B_JEQ;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jeq {rd}, {rs1}, {off}";
+}
+
+encoding B_JEQI { width = 64;
+  base = 0x15;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jeqi { class = branch; encoding = B_JEQI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jeq {rs1}, {imm}, {off}";
+}
+
+encoding B_JGT { width = 64;
+  base = 0x2d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jgt { class = branch; encoding = B_JGT;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jgt {rd}, {rs1}, {off}";
+}
+
+encoding B_JGTI { width = 64;
+  base = 0x25;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jgti { class = branch; encoding = B_JGTI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jgt {rs1}, {imm}, {off}";
+}
+
+encoding B_JGE { width = 64;
+  base = 0x3d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jge { class = branch; encoding = B_JGE;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jge {rd}, {rs1}, {off}";
+}
+
+encoding B_JGEI { width = 64;
+  base = 0x35;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jgei { class = branch; encoding = B_JGEI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jge {rs1}, {imm}, {off}";
+}
+
+encoding B_JSET { width = 64;
+  base = 0x4d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jset { class = branch; encoding = B_JSET;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jset {rd}, {rs1}, {off}";
+}
+
+encoding B_JSETI { width = 64;
+  base = 0x45;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jseti { class = branch; encoding = B_JSETI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jset {rs1}, {imm}, {off}";
+}
+
+encoding B_JNE { width = 64;
+  base = 0x5d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jne { class = branch; encoding = B_JNE;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jne {rd}, {rs1}, {off}";
+}
+
+encoding B_JNEI { width = 64;
+  base = 0x55;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jnei { class = branch; encoding = B_JNEI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jne {rs1}, {imm}, {off}";
+}
+
+encoding B_JSGT { width = 64;
+  base = 0x6d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsgt { class = branch; encoding = B_JSGT;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsgt {rd}, {rs1}, {off}";
+}
+
+encoding B_JSGTI { width = 64;
+  base = 0x65;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jsgti { class = branch; encoding = B_JSGTI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsgt {rs1}, {imm}, {off}";
+}
+
+encoding B_JSGE { width = 64;
+  base = 0x7d;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsge { class = branch; encoding = B_JSGE;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsge {rd}, {rs1}, {off}";
+}
+
+encoding B_JSGEI { width = 64;
+  base = 0x75;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jsgei { class = branch; encoding = B_JSGEI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsge {rs1}, {imm}, {off}";
+}
+
+encoding B_JLT { width = 64;
+  base = 0xad;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jlt { class = branch; encoding = B_JLT;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jlt {rd}, {rs1}, {off}";
+}
+
+encoding B_JLTI { width = 64;
+  base = 0xa5;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jlti { class = branch; encoding = B_JLTI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jlt {rs1}, {imm}, {off}";
+}
+
+encoding B_JLE { width = 64;
+  base = 0xbd;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jle { class = branch; encoding = B_JLE;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jle {rd}, {rs1}, {off}";
+}
+
+encoding B_JLEI { width = 64;
+  base = 0xb5;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jlei { class = branch; encoding = B_JLEI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jle {rs1}, {imm}, {off}";
+}
+
+encoding B_JSLT { width = 64;
+  base = 0xcd;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jslt { class = branch; encoding = B_JSLT;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jslt {rd}, {rs1}, {off}";
+}
+
+encoding B_JSLTI { width = 64;
+  base = 0xc5;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jslti { class = branch; encoding = B_JSLTI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jslt {rs1}, {imm}, {off}";
+}
+
+encoding B_JSLE { width = 64;
+  base = 0xdd;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsle { class = branch; encoding = B_JSLE;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsle {rd}, {rs1}, {off}";
+}
+
+encoding B_JSLEI { width = 64;
+  base = 0xd5;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jslei { class = branch; encoding = B_JSLEI;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsle {rs1}, {imm}, {off}";
+}
+
+encoding B_JEQ32 { width = 64;
+  base = 0x1e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jeq32 { class = branch; encoding = B_JEQ32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jeq32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JEQ32I { width = 64;
+  base = 0x16;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jeq32i { class = branch; encoding = B_JEQ32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jeq32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JGT32 { width = 64;
+  base = 0x2e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jgt32 { class = branch; encoding = B_JGT32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jgt32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JGT32I { width = 64;
+  base = 0x26;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jgt32i { class = branch; encoding = B_JGT32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jgt32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JGE32 { width = 64;
+  base = 0x3e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jge32 { class = branch; encoding = B_JGE32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jge32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JGE32I { width = 64;
+  base = 0x36;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jge32i { class = branch; encoding = B_JGE32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jge32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JSET32 { width = 64;
+  base = 0x4e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jset32 { class = branch; encoding = B_JSET32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jset32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JSET32I { width = 64;
+  base = 0x46;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jset32i { class = branch; encoding = B_JSET32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jset32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JNE32 { width = 64;
+  base = 0x5e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jne32 { class = branch; encoding = B_JNE32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jne32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JNE32I { width = 64;
+  base = 0x56;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jne32i { class = branch; encoding = B_JNE32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jne32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JSGT32 { width = 64;
+  base = 0x6e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsgt32 { class = branch; encoding = B_JSGT32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsgt32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JSGT32I { width = 64;
+  base = 0x66;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jsgt32i { class = branch; encoding = B_JSGT32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsgt32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JSGE32 { width = 64;
+  base = 0x7e;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsge32 { class = branch; encoding = B_JSGE32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsge32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JSGE32I { width = 64;
+  base = 0x76;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jsge32i { class = branch; encoding = B_JSGE32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsge32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JLT32 { width = 64;
+  base = 0xae;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jlt32 { class = branch; encoding = B_JLT32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jlt32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JLT32I { width = 64;
+  base = 0xa6;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jlt32i { class = branch; encoding = B_JLT32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jlt32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JLE32 { width = 64;
+  base = 0xbe;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jle32 { class = branch; encoding = B_JLE32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jle32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JLE32I { width = 64;
+  base = 0xb6;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jle32i { class = branch; encoding = B_JLE32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jle32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JSLT32 { width = 64;
+  base = 0xce;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jslt32 { class = branch; encoding = B_JSLT32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jslt32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JSLT32I { width = 64;
+  base = 0xc6;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jslt32i { class = branch; encoding = B_JSLT32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jslt32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JSLE32 { width = 64;
+  base = 0xde;
+  rd = 8:4;
+  rs1 = 12:4;
+  off = 16:16;
+  signed = 1;
+}
+
+op jsle32 { class = branch; encoding = B_JSLE32;
+  operands = rd: GPR, rs1: GPR, off: imm;
+  syntax = "jsle32 {rd}, {rs1}, {off}";
+}
+
+encoding B_JSLE32I { width = 64;
+  base = 0xd6;
+  rs1 = 12:4;
+  off = 16:16;
+  imm = 32:32;
+  signed = 1;
+}
+
+op jsle32i { class = branch; encoding = B_JSLE32I;
+  operands = rs1: GPR, off: imm, imm: imm;
+  syntax = "jsle32 {rs1}, {imm}, {off}";
+}
+
+encoding B_JA { width = 64;
+  base = 0x5;
+  off = 16:16;
+  signed = 1;
+}
+
+op ja { class = branch; encoding = B_JA;
+  operands = off: imm;
+  syntax = "ja {off}";
+}
+
+encoding B_CALL { width = 64;
+  base = 0x85;
+  imm = 32:32;
+  signed = 1;
+}
+
+op call { class = branch; encoding = B_CALL;
+  operands = imm: imm;
+  syntax = "call {imm}";
+}
+
+encoding B_EXIT { width = 64;
+  base = 0x95;
+  signed = 1;
+}
+
+op exit { class = branch; encoding = B_EXIT;
+  operands = ;
+  syntax = "exit";
+}

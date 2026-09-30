@@ -19,7 +19,7 @@ target_link_libraries(qobjcommon INTERFACE qbfd::qbfd)
 target_include_directories(qobjcommon INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/common
-  ${CMAKE_CURRENT_SOURCE_DIR}/fd
+  ${CMAKE_CURRENT_SOURCE_DIR}/qbfd
 )
 
 function(qobjfile_tool tool dir)
@@ -34,8 +34,8 @@ function(qobjfile_tool tool dir)
   target_include_directories(${tool} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 endfunction()
 
-# The header-only reader library lives in fd/ (target qbfd::qbfd).
-add_subdirectory(fd)
+# The header-only reader library lives in qbfd/ (target qbfd::qbfd).
+add_subdirectory(qbfd)
 
 # Directory names differ from tool names (dump -> qobjdump, ...), so the
 # mapping is explicit rather than assumed.
@@ -78,5 +78,9 @@ install(TARGETS qobjdump qobjsize qobjcp qobjstr qobjstrip qobjnm qobjar qobjld
 install(TARGETS qld
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib)
+install(DIRECTORY qbfd/ DESTINATION include/qbfd
+        FILES_MATCHING PATTERN "*.hpp")
+install(FILES common/qdsl.hpp
+        DESTINATION include/qobjfile)
 install(FILES ld/ld.h ld/ld.hpp
         DESTINATION include/qobjld)

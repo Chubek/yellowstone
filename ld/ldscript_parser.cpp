@@ -312,7 +312,10 @@ Token Lexer::peek() {
   return *pushed_;
 }
 
-bool Lexer::eof() const { return false; }
+bool Lexer::eof() const {
+  if (pushed_) return pushed_->kind == TokKind::Eof;
+  return pos_ >= text_.size();
+}
 
 // --- Expr dumps --------------------------------------------------------
 

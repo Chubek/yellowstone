@@ -73,6 +73,22 @@ qld::detail::LinkOptions toInternal(const qld_options_t* o) {
   return in;
 }
 
+bool validOptions(const qld_options_t* o, std::string& error) {
+  if (!o) { error = "null options"; return false; }
+  if (o->n_inputs && !o->inputs) { error = "inputs is null"; return false; }
+  if (o->n_libpaths && !o->libpaths) { error = "libpaths is null"; return false; }
+  if (o->n_libs && !o->libs) { error = "libs is null"; return false; }
+  if (o->use_script_text && !o->script_text) {
+    error = "script_text is null while use_script_text is set";
+    return false;
+  }
+  if (o->mode < QLD_MODE_EXEC || o->mode > QLD_MODE_RELOCATABLE) {
+    error = "invalid link mode";
+    return false;
+  }
+  return true;
+}
+
 bool writeOutput(const std::string& path, const std::vector<uint8_t>& bytes,
                  std::string& error) {
   if (path.empty()) return true;
@@ -97,8 +113,9 @@ bool writeOutput(const std::string& path, const std::vector<uint8_t>& bytes,
 
 int runInternal(const qld_options_t* opts, std::vector<uint8_t>& outBytes,
                 char** errmsg) {
-  if (!opts) {
-    setErr(errmsg, "null options");
+  std::string validation;
+  if (!validOptions(opts, validation)) {
+    setErr(errmsg, validation);
     return 1;
   }
   qld::detail::LinkState state;
@@ -131,6 +148,25 @@ int runInternal(const qld_options_t* opts, std::vector<uint8_t>& outBytes,
 }  // namespace
 
 const char* qld_version(void) { return "1.0"; }
+
+void qld_options_init(qld_options_t* o) {
+  if (!o) return;
+  std::memset(o, 0, sizeof(*o));
+  o->mode = QLD_MODE_EXEC;
+}
+
+const char* qld_status_string(int status) {
+  switch (status) {
+    case QLD_OK: return "ok";
+    case QLD_INVALID_ARGUMENT: return "invalid argument";
+    case QLD_OUT_OF_MEMORY: return "out of memory";
+    case QLD_IO_ERROR: return "I/O error";
+    case QLD_PARSE_ERROR: return "parse error";
+    case QLD_UNDEFINED_SYMBOL: return "undefined symbol";
+    case QLD_UNSUPPORTED: return "unsupported";
+    default: return "link error";
+  }
+}
 
 void qld_free_string(char* s) { std::free(s); }
 

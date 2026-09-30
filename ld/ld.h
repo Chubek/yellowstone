@@ -10,6 +10,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#if defined(_WIN32) && defined(QLD_BUILD_SHARED)
+#  ifdef qld_EXPORTS
+#    define QLD_API __declspec(dllexport)
+#  else
+#    define QLD_API __declspec(dllimport)
+#  endif
+#else
+#  define QLD_API
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,6 +30,18 @@ typedef enum qld_mode {
   QLD_MODE_SHARED = 1,    /* ET_DYN shared object (-shared) */
   QLD_MODE_RELOCATABLE = 2 /* ET_REL partial link (-r) */
 } qld_mode_t;
+
+/* Stable result codes returned by every operation. */
+typedef enum qld_status {
+  QLD_OK = 0,
+  QLD_ERROR = 1,
+  QLD_INVALID_ARGUMENT = 2,
+  QLD_OUT_OF_MEMORY = 3,
+  QLD_IO_ERROR = 4,
+  QLD_PARSE_ERROR = 5,
+  QLD_UNDEFINED_SYMBOL = 6,
+  QLD_UNSUPPORTED = 7
+} qld_status_t;
 
 /* One-shot link options. All pointers are borrowed for the call duration;
  * none are retained. Strings use NUL-terminated UTF-8 path/byte semantics
@@ -48,28 +70,33 @@ typedef struct qld_options {
   const char* emulator;          /* -m name, informational only */
 } qld_options_t;
 
+/* Initialize an options record to documented defaults. This is ABI-safe for
+ * callers that do not use C designated initializers. */
+QLD_API void qld_options_init(qld_options_t* opts);
+
 /* Link once. Returns 0 on success, nonzero on failure.
  * On failure and when errmsg is non-NULL, *errmsg receives a malloc'd
  * NUL-terminated message the caller must release with qld_free_string(). */
-int qld_link(const qld_options_t* opts, char** errmsg);
+QLD_API int qld_link(const qld_options_t* opts, char** errmsg);
 
 /* Link to memory. Like qld_link but always captures the output image into
  * malloc'd bytes (*out_bytes, *out_size) regardless of opts->output.
  * The caller releases the buffer with qld_free_bytes(). When opts->output
  * is set the file is also written. */
-int qld_link_bytes(const qld_options_t* opts, uint8_t** out_bytes,
+QLD_API int qld_link_bytes(const qld_options_t* opts, uint8_t** out_bytes,
                    size_t* out_size, char** errmsg);
 
 /* Validate a linker script without linking. Returns 0 when the script
  * parses, nonzero otherwise (with *errmsg set as in qld_link). */
-int qld_check_script(const char* text, char** errmsg);
+QLD_API int qld_check_script(const char* text, char** errmsg);
 
 /* Library version string, e.g. "1.0". Never NULL. */
-const char* qld_version(void);
+QLD_API const char* qld_version(void);
+QLD_API const char* qld_status_string(int status);
 
 /* Release helpers for qld_link / qld_link_bytes diagnostics. */
-void qld_free_string(char* s);
-void qld_free_bytes(uint8_t* p, size_t n);
+QLD_API void qld_free_string(char* s);
+QLD_API void qld_free_bytes(uint8_t* p, size_t n);
 
 /* Incremental builder API for bindings that prefer many small calls. */
 typedef struct qld_linker qld_linker_t;

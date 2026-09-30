@@ -1,0 +1,916 @@
+# IBM z/Architecture, big endian, with the instruction left aligned in the printed word: the
+# opcode is the first byte, so a two-byte format puts its registers at bits 4 and 0, a
+# four-byte one at 20, 16 and 12, and a six-byte one at 36, 32 and 28.  The six-byte
+# formats are declared with width = 48.  The four-byte register-to-register
+# frame is the exception the measurement shows: it carries a fixed second
+# opcode byte and a fixed third one, and keeps both register numbers in the last
+# byte where the two-byte frame has them.
+# 
+# The twelve-bit displacement of the six-byte storage formats is three separate nibbles:
+# the high four in the byte after the two register bytes, and the low four and the middle
+# four in the two bytes after that.  Each is a slice of the one offset operand.  The
+# four-byte forms split it into two: the high four in the third byte and the low
+# eight in the fourth.
+# 
+# The index register is part of the encoding whether or not the instruction uses one,
+# so it is an operand of every storage form; r0 means no index.  An indexed address writes
+# the index register before the base register, which is the order the
+# assembler reads.  A relative branch stores a halfword offset from the address of the
+# instruction, so that operand is already halved.  The thirty-two bit shifts keep
+# fourteen of the sixteen amount bits, the top two belonging to the opcode byte.
+# 
+# RISBG names the first bit position and the width as a single sixteen-bit field, which
+# the hardware packs as a start, a width minus one and three zero bits, and takes a
+# four-bit mask in the last byte; the two written operands are those two fields,
+# not the start and width the assembler accepts.
+# 
+# Not listed, with the reason: the register-pair operations, which take an even and an
+# odd register as a pair rather than naming each one, and the load-multiple and store-
+# multiple forms, which iterate over a register range rather than naming two registers.
+arch s390x { word_size = 64; addr_size = 64; endian = big; align = 2; }
+
+regclass GPR {
+    r0(64)=0,
+    r1(64)=1,
+    r2(64)=2,
+    r3(64)=3,
+    r4(64)=4,
+    r5(64)=5,
+    r6(64)=6,
+    r7(64)=7,
+    r8(64)=8,
+    r9(64)=9,
+    r10(64)=10,
+    r11(64)=11,
+    r12(64)=12,
+    r13(64)=13,
+    r14(64)=14,
+    r15(64)=15,
+}
+
+
+
+encoding LPR { width = 16;
+  base = 0x1000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lpr { class = misc; encoding = LPR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lpr %{rd}, %{rs1}";
+}
+
+encoding LNR { width = 16;
+  base = 0x1100;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lnr { class = misc; encoding = LNR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lnr %{rd}, %{rs1}";
+}
+
+encoding LR { width = 16;
+  base = 0x1800;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lr { class = misc; encoding = LR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lr %{rd}, %{rs1}";
+}
+
+encoding LCR { width = 16;
+  base = 0x1300;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lcr { class = misc; encoding = LCR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lcr %{rd}, %{rs1}";
+}
+
+encoding NR { width = 16;
+  base = 0x1400;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op nr { class = arithmetic; encoding = NR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "nr %{rd}, %{rs1}";
+}
+
+encoding CLR { width = 16;
+  base = 0x1500;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op clr { class = compare; encoding = CLR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "clr %{rd}, %{rs1}";
+}
+
+encoding OR { width = 16;
+  base = 0x1600;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op or { class = arithmetic; encoding = OR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "or %{rd}, %{rs1}";
+}
+
+encoding XR { width = 16;
+  base = 0x1700;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op xr { class = arithmetic; encoding = XR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xr %{rd}, %{rs1}";
+}
+
+encoding CR { width = 16;
+  base = 0x1900;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op cr { class = compare; encoding = CR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cr %{rd}, %{rs1}";
+}
+
+encoding AR { width = 16;
+  base = 0x1a00;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op ar { class = arithmetic; encoding = AR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "ar %{rd}, %{rs1}";
+}
+
+encoding SR { width = 16;
+  base = 0x1b00;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op sr { class = arithmetic; encoding = SR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sr %{rd}, %{rs1}";
+}
+
+encoding ALR { width = 16;
+  base = 0x1e00;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op alr { class = arithmetic; encoding = ALR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "alr %{rd}, %{rs1}";
+}
+
+encoding SLR { width = 16;
+  base = 0x1f00;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op slr { class = arithmetic; encoding = SLR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "slr %{rd}, %{rs1}";
+}
+
+encoding LGR { width = 32;
+  base = 0xb9040000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lgr { class = misc; encoding = LGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lgr %{rd}, %{rs1}";
+}
+
+encoding LCGR { width = 32;
+  base = 0xb9030000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lcgr { class = misc; encoding = LCGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lcgr %{rd}, %{rs1}";
+}
+
+encoding LGHR { width = 32;
+  base = 0xb9070000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lghr { class = misc; encoding = LGHR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lghr %{rd}, %{rs1}";
+}
+
+encoding LGFR { width = 32;
+  base = 0xb9140000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lgfr { class = misc; encoding = LGFR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lgfr %{rd}, %{rs1}";
+}
+
+encoding LHR { width = 32;
+  base = 0xb9270000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lhr { class = misc; encoding = LHR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lhr %{rd}, %{rs1}";
+}
+
+encoding NGR { width = 32;
+  base = 0xb9800000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op ngr { class = arithmetic; encoding = NGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "ngr %{rd}, %{rs1}";
+}
+
+encoding OGR { width = 32;
+  base = 0xb9810000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op ogr { class = arithmetic; encoding = OGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "ogr %{rd}, %{rs1}";
+}
+
+encoding XGR { width = 32;
+  base = 0xb9820000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op xgr { class = arithmetic; encoding = XGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xgr %{rd}, %{rs1}";
+}
+
+encoding CGR { width = 32;
+  base = 0xb9200000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op cgr { class = compare; encoding = CGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cgr %{rd}, %{rs1}";
+}
+
+encoding CLGR { width = 32;
+  base = 0xb9210000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op clgr { class = compare; encoding = CLGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "clgr %{rd}, %{rs1}";
+}
+
+encoding AGR { width = 32;
+  base = 0xb9080000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op agr { class = arithmetic; encoding = AGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "agr %{rd}, %{rs1}";
+}
+
+encoding SGR { width = 32;
+  base = 0xb9090000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op sgr { class = arithmetic; encoding = SGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sgr %{rd}, %{rs1}";
+}
+
+encoding ALGR { width = 32;
+  base = 0xb90a0000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op algr { class = arithmetic; encoding = ALGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "algr %{rd}, %{rs1}";
+}
+
+encoding SLGR { width = 32;
+  base = 0xb90b0000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op slgr { class = arithmetic; encoding = SLGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "slgr %{rd}, %{rs1}";
+}
+
+encoding MSGR { width = 32;
+  base = 0xb90c0000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op msgr { class = arithmetic; encoding = MSGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "msgr %{rd}, %{rs1}";
+}
+
+encoding LNGR { width = 32;
+  base = 0xb9010000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lngr { class = misc; encoding = LNGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lngr %{rd}, %{rs1}";
+}
+
+encoding LPGR { width = 32;
+  base = 0xb9000000;
+  rd = 4:4;
+  rs1 = 0:4;
+}
+
+op lpgr { class = misc; encoding = LPGR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "lpgr %{rd}, %{rs1}";
+}
+
+encoding LG { width = 48;
+  base = 0xe30000000004;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op lg { class = load; encoding = LG;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "lg %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding LLGC { width = 48;
+  base = 0xe30000000090;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op llgc { class = load; encoding = LLGC;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "llgc %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding LLGH { width = 48;
+  base = 0xe30000000091;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op llgh { class = load; encoding = LLGH;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "llgh %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding LLGF { width = 48;
+  base = 0xe30000000016;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op llgf { class = load; encoding = LLGF;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "llgf %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding STG { width = 48;
+  base = 0xe30000000024;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op stg { class = store; encoding = STG;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "stg %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding AG { width = 48;
+  base = 0xe30000000008;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op ag { class = arithmetic; encoding = AG;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "ag %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding CG { width = 48;
+  base = 0xe30000000020;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op cg { class = compare; encoding = CG;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "cg %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding LAY { width = 48;
+  base = 0xe30000000071;
+  rt = 36:4;
+  rs2 = 32:4;
+  rb = 28:4;
+  offset[11:8] = 24:4;
+  offset[3:0] = 16:4;
+  offset[7:4] = 20:4;
+  signed = 1;
+}
+
+op lay { class = load; encoding = LAY;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "lay %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding L { width = 32;
+  base = 0x58000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op l { class = load; encoding = L;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "l %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding LH { width = 32;
+  base = 0x48000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op lh { class = load; encoding = LH;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "lh %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding STH { width = 32;
+  base = 0x40000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op sth { class = store; encoding = STH;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "sth %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding STC { width = 32;
+  base = 0x42000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op stc { class = store; encoding = STC;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "stc %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding ST { width = 32;
+  base = 0x50000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op st { class = store; encoding = ST;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "st %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding A { width = 32;
+  base = 0x5a000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op a { class = arithmetic; encoding = A;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "a %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding C { width = 32;
+  base = 0x59000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op c { class = compare; encoding = C;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "c %{rt}, {offset}(%{rs2}, %{rb})";
+}
+
+encoding STM { width = 32;
+  base = 0x90000000;
+  rt = 20:4;
+  rs2 = 16:4;
+  rb = 12:4;
+  offset[11:8] = 8:4;
+  offset[7:0] = 0:8;
+  signed = 1;
+}
+
+op stm { class = store; encoding = STM;
+  operands = rt: GPR, rs2: GPR, rb: GPR, offset: imm;
+  syntax = "stm %{rt}, %{rs2}, {offset}(%{rb})";
+}
+
+encoding RISBG { width = 48;
+  base = 0xec0000000005;
+  rd = 36:4;
+  rs1 = 32:4;
+  startlen = 16:16;
+  mask = 4:4;
+}
+
+op risbg { class = misc; encoding = RISBG;
+  operands = rd: GPR, rs1: GPR, startlen: imm, mask: imm;
+  syntax = "risbg %{rd}, %{rs1}, {startlen}, {mask}";
+}
+
+encoding SLL { width = 32;
+  base = 0x89000000;
+  rd = 20:4;
+  amount = 0:14;
+  signed = 1;
+}
+
+op sll { class = arithmetic; encoding = SLL;
+  operands = rd: GPR, amount: imm;
+  syntax = "sll %{rd}, {amount}";
+}
+
+encoding SRL { width = 32;
+  base = 0x88000000;
+  rd = 20:4;
+  amount = 0:14;
+  signed = 1;
+}
+
+op srl { class = arithmetic; encoding = SRL;
+  operands = rd: GPR, amount: imm;
+  syntax = "srl %{rd}, {amount}";
+}
+
+encoding SRA { width = 32;
+  base = 0x8a000000;
+  rd = 20:4;
+  amount = 0:14;
+  signed = 1;
+}
+
+op sra { class = arithmetic; encoding = SRA;
+  operands = rd: GPR, amount: imm;
+  syntax = "sra %{rd}, {amount}";
+}
+
+encoding SLLG { width = 48;
+  base = 0xeb000000000d;
+  rd = 36:4;
+  rs1 = 32:4;
+  amount = 16:8;
+  signed = 1;
+}
+
+op sllg { class = arithmetic; encoding = SLLG;
+  operands = rd: GPR, rs1: GPR, amount: imm;
+  syntax = "sllg %{rd}, %{rs1}, {amount}";
+}
+
+encoding SRLG { width = 48;
+  base = 0xeb000000000c;
+  rd = 36:4;
+  rs1 = 32:4;
+  amount = 16:8;
+  signed = 1;
+}
+
+op srlg { class = arithmetic; encoding = SRLG;
+  operands = rd: GPR, rs1: GPR, amount: imm;
+  syntax = "srlg %{rd}, %{rs1}, {amount}";
+}
+
+encoding SRAG { width = 48;
+  base = 0xeb000000000a;
+  rd = 36:4;
+  rs1 = 32:4;
+  amount = 16:8;
+  signed = 1;
+}
+
+op srag { class = arithmetic; encoding = SRAG;
+  operands = rd: GPR, rs1: GPR, amount: imm;
+  syntax = "srag %{rd}, %{rs1}, {amount}";
+}
+
+encoding LHI { width = 32;
+  base = 0xa7080000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op lhi { class = load; encoding = LHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "lhi %{rd}, {imm}";
+}
+
+encoding LGHI { width = 32;
+  base = 0xa7090000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op lghi { class = load; encoding = LGHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "lghi %{rd}, {imm}";
+}
+
+encoding AGHI { width = 32;
+  base = 0xa70b0000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op aghi { class = arithmetic; encoding = AGHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "aghi %{rd}, {imm}";
+}
+
+encoding CHI { width = 32;
+  base = 0xa70e0000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op chi { class = compare; encoding = CHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "chi %{rd}, {imm}";
+}
+
+encoding CGHI { width = 32;
+  base = 0xa70f0000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op cghi { class = compare; encoding = CGHI;
+  operands = rd: GPR, imm: imm;
+  syntax = "cghi %{rd}, {imm}";
+}
+
+encoding NILL { width = 32;
+  base = 0xa5070000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op nill { class = arithmetic; encoding = NILL;
+  operands = rd: GPR, imm: imm;
+  syntax = "nill %{rd}, {imm}";
+}
+
+encoding OILL { width = 32;
+  base = 0xa50b0000;
+  rd = 20:4;
+  imm = 0:16;
+  signed = 1;
+}
+
+op oill { class = arithmetic; encoding = OILL;
+  operands = rd: GPR, imm: imm;
+  syntax = "oill %{rd}, {imm}";
+}
+
+encoding CLFI { width = 48;
+  base = 0xc20f00000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op clfi { class = compare; encoding = CLFI;
+  operands = rd: GPR, imm: imm;
+  syntax = "clfi %{rd}, {imm}";
+}
+
+encoding CLGFI { width = 48;
+  base = 0xc20e00000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op clgfi { class = compare; encoding = CLGFI;
+  operands = rd: GPR, imm: imm;
+  syntax = "clgfi %{rd}, {imm}";
+}
+
+encoding AGFI { width = 48;
+  base = 0xc20800000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op agfi { class = arithmetic; encoding = AGFI;
+  operands = rd: GPR, imm: imm;
+  syntax = "agfi %{rd}, {imm}";
+}
+
+encoding XILF { width = 48;
+  base = 0xc00700000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op xilf { class = arithmetic; encoding = XILF;
+  operands = rd: GPR, imm: imm;
+  syntax = "xilf %{rd}, {imm}";
+}
+
+encoding OILF { width = 48;
+  base = 0xc00d00000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op oilf { class = arithmetic; encoding = OILF;
+  operands = rd: GPR, imm: imm;
+  syntax = "oilf %{rd}, {imm}";
+}
+
+encoding IILF { width = 48;
+  base = 0xc00900000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op iilf { class = arithmetic; encoding = IILF;
+  operands = rd: GPR, imm: imm;
+  syntax = "iilf %{rd}, {imm}";
+}
+
+encoding LLIHF { width = 48;
+  base = 0xc00e00000000;
+  rd = 36:4;
+  imm = 0:32;
+  signed = 1;
+}
+
+op llihf { class = load; encoding = LLIHF;
+  operands = rd: GPR, imm: imm;
+  syntax = "llihf %{rd}, {imm}";
+}
+
+encoding B { width = 32;
+  base = 0x47f00000;
+  offset = 0:16;
+  signed = 1;
+}
+
+op b { class = branch; encoding = B;
+  operands = offset: rel;
+  syntax = "b {offset}";
+}
+
+encoding BR { width = 16;
+  base = 0x7f0;
+  rs1 = 0:4;
+}
+
+op br { class = branch; encoding = BR;
+  operands = rs1: GPR;
+  syntax = "br %{rs1}";
+}
+
+encoding NOPR { width = 16;
+  base = 0x700;
+  rs1 = 0:4;
+}
+
+op nopr { class = misc; encoding = NOPR;
+  operands = rs1: GPR;
+  syntax = "nopr %{rs1}";
+}

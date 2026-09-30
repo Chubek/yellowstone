@@ -1,0 +1,1203 @@
+# Motorola 68000, big endian, sixteen-bit instructions with the register and the
+# address field at the bottom of the word.
+# Nothing here is measured against a reference assembler: this llvm-mc build has
+# no M68k target, so there is no assembler to measure with.  The encodings are
+# transcribed from the M68000 Programmer's Reference Manual and cross-read against
+# the M68k TableGen definitions in the LLVM source tree, which give the same
+# layouts.  The one encoding the bundled test suites check is the golden move_l
+# they already carried, which still holds.
+# A destination that may be either a data or an address register takes six bits
+# with the data bit in the top one, so a data register is 0 to 7 and an address
+# register is 8 to 15.  An effective address is a three-bit mode above a three-bit
+# register, and the mode is part of every encoding that has an address, so it is
+# an operand of every such form: 0 is a data register, 1 an address register, 2
+# address register indirect, 3 postincrement, 4 predecrement, 5 a sixteen-bit
+# displacement, 6 an eight-bit displacement with an index register, 7 a sixteen-bit
+# displacement with an index register, 8 an absolute word, 9 an absolute long, 10 a
+# program-counter displacement, 11 and 12 a program-counter displacement with an
+# index register, 13 a program-counter displacement with a sixteen-bit
+# displacement, and 14 an immediate.  The mode is written after the register in a
+# square bracket, which is where the manual puts the same three bits.
+# The move is direction-agnostic in the encoding: the six-bit register field and
+# the six-bit address field hold the two operands either way round, so the
+# six-bit form writes the address first and is listed as move_b_ea, move_w_ea
+# and move_l_ea.  The three-bit form takes two data registers and is the one
+# named move_b, move_w and move_l.  The size codes are 1 for a byte, 3 for a
+# word and 2 for a long, which is why the long move sits between the other two.
+# The one-operand group addresses its register through the effective address, so
+# it is the address field's register and not a separate data register.  The
+# multiply and divide forms share one encoding: the word form uses address mode
+# seven and the long form mode three.  The sixteen branch conditions and the
+# sixteen set-on-condition instructions are listed by the letter the assembler
+# uses, in the order the condition field numbers them.
+# Not listed, with the reason: the immediate-to-register forms, where the 68000
+# puts the sixteen-bit value of the word and long forms in a second word rather
+# than in a wider field, so one operation cannot describe it; the word and long
+# branch forms, which reach their sixteen and thirty-two bit displacements the same
+# way, by writing a marker in the eight-bit field and following it with a second
+# word; the shift and rotate group, whose size and direction codes this file would
+# have to take on trust with no way to check them; movem, whose register mask is
+# a reversed bit list in the load form and whose size bit sits inside the mask
+# field in the store form, so neither direction has one plain mask operand; stop,
+# trap and link, whose immediate or displacement is a second word rather than a
+# wider field; and the bitfield and multiply-accumulate instructions of the 68020
+# and above, which the base encoding has no room for.
+arch m68k { word_size = 32; addr_size = 32; endian = big; align = 2; }
+
+regclass GPR {
+    d0(32)=0,
+    d1(32)=1,
+    d2(32)=2,
+    d3(32)=3,
+    d4(32)=4,
+    d5(32)=5,
+    d6(32)=6,
+    d7(32)=7,
+    a0(32)=8,
+    a1(32)=9,
+    a2(32)=10,
+    a3(32)=11,
+    a4(32)=12,
+    a5(32)=13,
+    a6(32)=14,
+    a7(32)=15,
+}
+
+alias sp = a7;
+alias usp = a6;
+alias fp = a5;
+
+
+
+encoding MOVE_B { width = 16;
+  base = 0x1000;
+  rd = 9:3;
+  rs1 = 0:3;
+}
+
+op move_b { class = misc; encoding = MOVE_B;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "move.b ${rs1}, ${rd}";
+}
+
+encoding MOVEX_B { width = 16;
+  base = 0x1000;
+  rd = 6:6;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op move_b_ea { class = misc; encoding = MOVEX_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "move.b ${reg} [{mode}], ${rd}";
+}
+
+encoding MOVE_W { width = 16;
+  base = 0x3000;
+  rd = 9:3;
+  rs1 = 0:3;
+}
+
+op move_w { class = misc; encoding = MOVE_W;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "move.w ${rs1}, ${rd}";
+}
+
+encoding MOVEX_W { width = 16;
+  base = 0x3000;
+  rd = 6:6;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op move_w_ea { class = misc; encoding = MOVEX_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "move.w ${reg} [{mode}], ${rd}";
+}
+
+encoding MOVEA_W { width = 16;
+  base = 0x3000;
+  rd = 6:6;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op movea_w { class = misc; encoding = MOVEA_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "movea.w ${reg} [{mode}], ${rd}";
+}
+
+encoding MOVE_L { width = 16;
+  base = 0x2000;
+  rd = 9:3;
+  rs1 = 0:3;
+}
+
+op move_l { class = misc; encoding = MOVE_L;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "move.l ${rs1}, ${rd}";
+}
+
+encoding MOVEX_L { width = 16;
+  base = 0x2000;
+  rd = 6:6;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op move_l_ea { class = misc; encoding = MOVEX_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "move.l ${reg} [{mode}], ${rd}";
+}
+
+encoding MOVEA_L { width = 16;
+  base = 0x2000;
+  rd = 6:6;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op movea_l { class = misc; encoding = MOVEA_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "movea.l ${reg} [{mode}], ${rd}";
+}
+
+encoding MOVEQ { width = 16;
+  base = 0x7000;
+  rd = 9:3;
+  imm = 0:8;
+}
+
+op moveq { class = arithmetic; encoding = MOVEQ;
+  operands = rd: GPR, imm: imm;
+  syntax = "moveq #{imm}, ${rd}";
+}
+
+encoding ADD_B { width = 16;
+  base = 0xd000;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op add_b { class = arithmetic; encoding = ADD_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "add.b ${reg} [{mode}], ${rd}";
+}
+
+encoding ADD_W { width = 16;
+  base = 0xd040;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op add_w { class = arithmetic; encoding = ADD_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "add.w ${reg} [{mode}], ${rd}";
+}
+
+encoding ADD_L { width = 16;
+  base = 0xd080;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op add_l { class = arithmetic; encoding = ADD_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "add.l ${reg} [{mode}], ${rd}";
+}
+
+encoding SUB_B { width = 16;
+  base = 0x9000;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op sub_b { class = arithmetic; encoding = SUB_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "sub.b ${reg} [{mode}], ${rd}";
+}
+
+encoding SUB_W { width = 16;
+  base = 0x9040;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op sub_w { class = arithmetic; encoding = SUB_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "sub.w ${reg} [{mode}], ${rd}";
+}
+
+encoding SUB_L { width = 16;
+  base = 0x9080;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op sub_l { class = arithmetic; encoding = SUB_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "sub.l ${reg} [{mode}], ${rd}";
+}
+
+encoding CMP_B { width = 16;
+  base = 0xb080;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op cmp_b { class = compare; encoding = CMP_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "cmp.b ${reg} [{mode}], ${rd}";
+}
+
+encoding CMP_W { width = 16;
+  base = 0xb0c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op cmp_w { class = compare; encoding = CMP_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "cmp.w ${reg} [{mode}], ${rd}";
+}
+
+encoding CMP_L { width = 16;
+  base = 0xb100;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op cmp_l { class = compare; encoding = CMP_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "cmp.l ${reg} [{mode}], ${rd}";
+}
+
+encoding AND_B { width = 16;
+  base = 0xc000;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op and_b { class = arithmetic; encoding = AND_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "and.b ${reg} [{mode}], ${rd}";
+}
+
+encoding AND_W { width = 16;
+  base = 0xc040;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op and_w { class = arithmetic; encoding = AND_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "and.w ${reg} [{mode}], ${rd}";
+}
+
+encoding AND_L { width = 16;
+  base = 0xc080;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op and_l { class = arithmetic; encoding = AND_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "and.l ${reg} [{mode}], ${rd}";
+}
+
+encoding OR_B { width = 16;
+  base = 0x8000;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op or_b { class = arithmetic; encoding = OR_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "or.b ${reg} [{mode}], ${rd}";
+}
+
+encoding OR_W { width = 16;
+  base = 0x8040;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op or_w { class = arithmetic; encoding = OR_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "or.w ${reg} [{mode}], ${rd}";
+}
+
+encoding OR_L { width = 16;
+  base = 0x8080;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op or_l { class = arithmetic; encoding = OR_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "or.l ${reg} [{mode}], ${rd}";
+}
+
+encoding EOR_B { width = 16;
+  base = 0xb100;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op eor_b { class = arithmetic; encoding = EOR_B;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "eor.b ${reg} [{mode}], ${rd}";
+}
+
+encoding EOR_W { width = 16;
+  base = 0xb140;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op eor_w { class = arithmetic; encoding = EOR_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "eor.w ${reg} [{mode}], ${rd}";
+}
+
+encoding EOR_L { width = 16;
+  base = 0xb180;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op eor_l { class = arithmetic; encoding = EOR_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "eor.l ${reg} [{mode}], ${rd}";
+}
+
+encoding ADDQ_B { width = 16;
+  base = 0x5000;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op addq_b { class = arithmetic; encoding = ADDQ_B;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "addq.b #{imm}, ${reg} [{mode}]";
+}
+
+encoding ADDQ_W { width = 16;
+  base = 0x5040;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op addq_w { class = arithmetic; encoding = ADDQ_W;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "addq.w #{imm}, ${reg} [{mode}]";
+}
+
+encoding ADDQ_L { width = 16;
+  base = 0x5080;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op addq_l { class = arithmetic; encoding = ADDQ_L;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "addq.l #{imm}, ${reg} [{mode}]";
+}
+
+encoding SUBQ_B { width = 16;
+  base = 0x5100;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op subq_b { class = arithmetic; encoding = SUBQ_B;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "subq.b #{imm}, ${reg} [{mode}]";
+}
+
+encoding SUBQ_W { width = 16;
+  base = 0x5140;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op subq_w { class = arithmetic; encoding = SUBQ_W;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "subq.w #{imm}, ${reg} [{mode}]";
+}
+
+encoding SUBQ_L { width = 16;
+  base = 0x5180;
+  imm = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op subq_l { class = arithmetic; encoding = SUBQ_L;
+  operands = imm: imm, mode: imm, reg: GPR;
+  syntax = "subq.l #{imm}, ${reg} [{mode}]";
+}
+
+encoding CLR_B { width = 16;
+  base = 0x4200;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op clr_b { class = misc; encoding = CLR_B;
+  operands = mode: imm, reg: GPR;
+  syntax = "clr.b ${reg} [{mode}]";
+}
+
+encoding CLR_W { width = 16;
+  base = 0x4240;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op clr_w { class = misc; encoding = CLR_W;
+  operands = mode: imm, reg: GPR;
+  syntax = "clr.w ${reg} [{mode}]";
+}
+
+encoding CLR_L { width = 16;
+  base = 0x4280;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op clr_l { class = misc; encoding = CLR_L;
+  operands = mode: imm, reg: GPR;
+  syntax = "clr.l ${reg} [{mode}]";
+}
+
+encoding NEG_B { width = 16;
+  base = 0x4400;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op neg_b { class = arithmetic; encoding = NEG_B;
+  operands = mode: imm, reg: GPR;
+  syntax = "neg.b ${reg} [{mode}]";
+}
+
+encoding NEG_W { width = 16;
+  base = 0x4440;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op neg_w { class = arithmetic; encoding = NEG_W;
+  operands = mode: imm, reg: GPR;
+  syntax = "neg.w ${reg} [{mode}]";
+}
+
+encoding NEG_L { width = 16;
+  base = 0x4480;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op neg_l { class = arithmetic; encoding = NEG_L;
+  operands = mode: imm, reg: GPR;
+  syntax = "neg.l ${reg} [{mode}]";
+}
+
+encoding NEGX_B { width = 16;
+  base = 0x4000;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op negx_b { class = arithmetic; encoding = NEGX_B;
+  operands = mode: imm, reg: GPR;
+  syntax = "negx.b ${reg} [{mode}]";
+}
+
+encoding NEGX_W { width = 16;
+  base = 0x4040;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op negx_w { class = arithmetic; encoding = NEGX_W;
+  operands = mode: imm, reg: GPR;
+  syntax = "negx.w ${reg} [{mode}]";
+}
+
+encoding NEGX_L { width = 16;
+  base = 0x4080;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op negx_l { class = arithmetic; encoding = NEGX_L;
+  operands = mode: imm, reg: GPR;
+  syntax = "negx.l ${reg} [{mode}]";
+}
+
+encoding NOT_B { width = 16;
+  base = 0x4600;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op not_b { class = arithmetic; encoding = NOT_B;
+  operands = mode: imm, reg: GPR;
+  syntax = "not.b ${reg} [{mode}]";
+}
+
+encoding NOT_W { width = 16;
+  base = 0x4640;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op not_w { class = arithmetic; encoding = NOT_W;
+  operands = mode: imm, reg: GPR;
+  syntax = "not.w ${reg} [{mode}]";
+}
+
+encoding NOT_L { width = 16;
+  base = 0x4680;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op not_l { class = arithmetic; encoding = NOT_L;
+  operands = mode: imm, reg: GPR;
+  syntax = "not.l ${reg} [{mode}]";
+}
+
+encoding TST_B { width = 16;
+  base = 0x4a00;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op tst_b { class = compare; encoding = TST_B;
+  operands = mode: imm, reg: GPR;
+  syntax = "tst.b ${reg} [{mode}]";
+}
+
+encoding TST_W { width = 16;
+  base = 0x4a40;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op tst_w { class = compare; encoding = TST_W;
+  operands = mode: imm, reg: GPR;
+  syntax = "tst.w ${reg} [{mode}]";
+}
+
+encoding TST_L { width = 16;
+  base = 0x4a80;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op tst_l { class = compare; encoding = TST_L;
+  operands = mode: imm, reg: GPR;
+  syntax = "tst.l ${reg} [{mode}]";
+}
+
+encoding ABCD { width = 16;
+  base = 0xc100;
+  rd = 9:3;
+  reg = 0:3;
+}
+
+op abcd { class = arithmetic; encoding = ABCD;
+  operands = rd: GPR, reg: GPR;
+  syntax = "abcd ${reg}, ${rd}";
+}
+
+encoding SBCD { width = 16;
+  base = 0x8100;
+  rd = 9:3;
+  reg = 0:3;
+}
+
+op sbcd { class = arithmetic; encoding = SBCD;
+  operands = rd: GPR, reg: GPR;
+  syntax = "sbcd ${reg}, ${rd}";
+}
+
+encoding NBCD { width = 16;
+  base = 0x4800;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op nbcd { class = arithmetic; encoding = NBCD;
+  operands = mode: imm, reg: GPR;
+  syntax = "nbcd ${reg} [{mode}]";
+}
+
+encoding MULU_W { width = 16;
+  base = 0xc0c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op mulu_w { class = arithmetic; encoding = MULU_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "mulu.w ${reg} [{mode}], ${rd}";
+}
+
+encoding MULU_L { width = 16;
+  base = 0xc0c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op mulu_l { class = arithmetic; encoding = MULU_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "mulu.l ${reg} [{mode}], ${rd}";
+}
+
+encoding MULS_W { width = 16;
+  base = 0xc1c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op muls_w { class = arithmetic; encoding = MULS_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "muls.w ${reg} [{mode}], ${rd}";
+}
+
+encoding MULS_L { width = 16;
+  base = 0xc1c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op muls_l { class = arithmetic; encoding = MULS_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "muls.l ${reg} [{mode}], ${rd}";
+}
+
+encoding DIVU_W { width = 16;
+  base = 0x80c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op divu_w { class = arithmetic; encoding = DIVU_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "divu.w ${reg} [{mode}], ${rd}";
+}
+
+encoding DIVU_L { width = 16;
+  base = 0x80c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op divu_l { class = arithmetic; encoding = DIVU_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "divu.l ${reg} [{mode}], ${rd}";
+}
+
+encoding DIVS_W { width = 16;
+  base = 0x81c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op divs_w { class = arithmetic; encoding = DIVS_W;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "divs.w ${reg} [{mode}], ${rd}";
+}
+
+encoding DIVS_L { width = 16;
+  base = 0x81c0;
+  rd = 9:3;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op divs_l { class = arithmetic; encoding = DIVS_L;
+  operands = rd: GPR, mode: imm, reg: GPR;
+  syntax = "divs.l ${reg} [{mode}], ${rd}";
+}
+
+encoding BT { width = 16;
+  base = 0x6000;
+  offset = 0:8;
+}
+
+op bt { class = branch; encoding = BT;
+  operands = offset: rel;
+  syntax = "bt {offset}";
+}
+
+encoding ST { width = 16;
+  base = 0x50c0;
+  rd = 0:3;
+}
+
+op st { class = misc; encoding = ST;
+  operands = rd: GPR;
+  syntax = "st ${rd}";
+}
+
+encoding BF { width = 16;
+  base = 0x6100;
+  offset = 0:8;
+}
+
+op bf { class = branch; encoding = BF;
+  operands = offset: rel;
+  syntax = "bf {offset}";
+}
+
+encoding SF { width = 16;
+  base = 0x51c0;
+  rd = 0:3;
+}
+
+op sf { class = misc; encoding = SF;
+  operands = rd: GPR;
+  syntax = "sf ${rd}";
+}
+
+encoding BHI { width = 16;
+  base = 0x6200;
+  offset = 0:8;
+}
+
+op bhi { class = branch; encoding = BHI;
+  operands = offset: rel;
+  syntax = "bhi {offset}";
+}
+
+encoding SHI { width = 16;
+  base = 0x52c0;
+  rd = 0:3;
+}
+
+op shi { class = misc; encoding = SHI;
+  operands = rd: GPR;
+  syntax = "shi ${rd}";
+}
+
+encoding BLS { width = 16;
+  base = 0x6300;
+  offset = 0:8;
+}
+
+op bls { class = branch; encoding = BLS;
+  operands = offset: rel;
+  syntax = "bls {offset}";
+}
+
+encoding SLS { width = 16;
+  base = 0x53c0;
+  rd = 0:3;
+}
+
+op sls { class = misc; encoding = SLS;
+  operands = rd: GPR;
+  syntax = "sls ${rd}";
+}
+
+encoding BCC { width = 16;
+  base = 0x6400;
+  offset = 0:8;
+}
+
+op bcc { class = branch; encoding = BCC;
+  operands = offset: rel;
+  syntax = "bcc {offset}";
+}
+
+encoding SCC { width = 16;
+  base = 0x54c0;
+  rd = 0:3;
+}
+
+op scc { class = misc; encoding = SCC;
+  operands = rd: GPR;
+  syntax = "scc ${rd}";
+}
+
+encoding BCS { width = 16;
+  base = 0x6500;
+  offset = 0:8;
+}
+
+op bcs { class = branch; encoding = BCS;
+  operands = offset: rel;
+  syntax = "bcs {offset}";
+}
+
+encoding SCS { width = 16;
+  base = 0x55c0;
+  rd = 0:3;
+}
+
+op scs { class = misc; encoding = SCS;
+  operands = rd: GPR;
+  syntax = "scs ${rd}";
+}
+
+encoding BNE { width = 16;
+  base = 0x6600;
+  offset = 0:8;
+}
+
+op bne { class = branch; encoding = BNE;
+  operands = offset: rel;
+  syntax = "bne {offset}";
+}
+
+encoding SNE { width = 16;
+  base = 0x56c0;
+  rd = 0:3;
+}
+
+op sne { class = misc; encoding = SNE;
+  operands = rd: GPR;
+  syntax = "sne ${rd}";
+}
+
+encoding BEQ { width = 16;
+  base = 0x6700;
+  offset = 0:8;
+}
+
+op beq { class = branch; encoding = BEQ;
+  operands = offset: rel;
+  syntax = "beq {offset}";
+}
+
+encoding SEQ { width = 16;
+  base = 0x57c0;
+  rd = 0:3;
+}
+
+op seq { class = misc; encoding = SEQ;
+  operands = rd: GPR;
+  syntax = "seq ${rd}";
+}
+
+encoding BVC { width = 16;
+  base = 0x6800;
+  offset = 0:8;
+}
+
+op bvc { class = branch; encoding = BVC;
+  operands = offset: rel;
+  syntax = "bvc {offset}";
+}
+
+encoding SVC { width = 16;
+  base = 0x58c0;
+  rd = 0:3;
+}
+
+op svc { class = misc; encoding = SVC;
+  operands = rd: GPR;
+  syntax = "svc ${rd}";
+}
+
+encoding BVS { width = 16;
+  base = 0x6900;
+  offset = 0:8;
+}
+
+op bvs { class = branch; encoding = BVS;
+  operands = offset: rel;
+  syntax = "bvs {offset}";
+}
+
+encoding SVS { width = 16;
+  base = 0x59c0;
+  rd = 0:3;
+}
+
+op svs { class = misc; encoding = SVS;
+  operands = rd: GPR;
+  syntax = "svs ${rd}";
+}
+
+encoding BPL { width = 16;
+  base = 0x6a00;
+  offset = 0:8;
+}
+
+op bpl { class = branch; encoding = BPL;
+  operands = offset: rel;
+  syntax = "bpl {offset}";
+}
+
+encoding SPL { width = 16;
+  base = 0x5ac0;
+  rd = 0:3;
+}
+
+op spl { class = misc; encoding = SPL;
+  operands = rd: GPR;
+  syntax = "spl ${rd}";
+}
+
+encoding BMI { width = 16;
+  base = 0x6b00;
+  offset = 0:8;
+}
+
+op bmi { class = branch; encoding = BMI;
+  operands = offset: rel;
+  syntax = "bmi {offset}";
+}
+
+encoding SMI { width = 16;
+  base = 0x5bc0;
+  rd = 0:3;
+}
+
+op smi { class = misc; encoding = SMI;
+  operands = rd: GPR;
+  syntax = "smi ${rd}";
+}
+
+encoding BGE { width = 16;
+  base = 0x6c00;
+  offset = 0:8;
+}
+
+op bge { class = branch; encoding = BGE;
+  operands = offset: rel;
+  syntax = "bge {offset}";
+}
+
+encoding SGE { width = 16;
+  base = 0x5cc0;
+  rd = 0:3;
+}
+
+op sge { class = misc; encoding = SGE;
+  operands = rd: GPR;
+  syntax = "sge ${rd}";
+}
+
+encoding BLT { width = 16;
+  base = 0x6d00;
+  offset = 0:8;
+}
+
+op blt { class = branch; encoding = BLT;
+  operands = offset: rel;
+  syntax = "blt {offset}";
+}
+
+encoding SLT { width = 16;
+  base = 0x5dc0;
+  rd = 0:3;
+}
+
+op slt { class = misc; encoding = SLT;
+  operands = rd: GPR;
+  syntax = "slt ${rd}";
+}
+
+encoding BGT { width = 16;
+  base = 0x6e00;
+  offset = 0:8;
+}
+
+op bgt { class = branch; encoding = BGT;
+  operands = offset: rel;
+  syntax = "bgt {offset}";
+}
+
+encoding SGT { width = 16;
+  base = 0x5ec0;
+  rd = 0:3;
+}
+
+op sgt { class = misc; encoding = SGT;
+  operands = rd: GPR;
+  syntax = "sgt ${rd}";
+}
+
+encoding BLE { width = 16;
+  base = 0x6f00;
+  offset = 0:8;
+}
+
+op ble { class = branch; encoding = BLE;
+  operands = offset: rel;
+  syntax = "ble {offset}";
+}
+
+encoding SLE { width = 16;
+  base = 0x5fc0;
+  rd = 0:3;
+}
+
+op sle { class = misc; encoding = SLE;
+  operands = rd: GPR;
+  syntax = "sle ${rd}";
+}
+
+encoding BRA { width = 16;
+  base = 0x6000;
+  offset = 0:8;
+}
+
+op bra { class = branch; encoding = BRA;
+  operands = offset: rel;
+  syntax = "bra {offset}";
+}
+
+encoding BSR { width = 16;
+  base = 0x6100;
+  offset = 0:8;
+}
+
+op bsr { class = branch; encoding = BSR;
+  operands = offset: rel;
+  syntax = "bsr {offset}";
+}
+
+encoding RTS { width = 16;
+  base = 0x4e75;
+}
+
+op rts { class = branch; encoding = RTS;
+  operands = ;
+  syntax = "rts";
+}
+
+encoding RTE { width = 16;
+  base = 0x4e73;
+}
+
+op rte { class = branch; encoding = RTE;
+  operands = ;
+  syntax = "rte";
+}
+
+encoding RTR { width = 16;
+  base = 0x4e77;
+}
+
+op rtr { class = branch; encoding = RTR;
+  operands = ;
+  syntax = "rtr";
+}
+
+encoding NOP { width = 16;
+  base = 0x4e71;
+}
+
+op nop { class = misc; encoding = NOP;
+  operands = ;
+  syntax = "nop";
+}
+
+encoding ILLEGAL { width = 16;
+  base = 0x4afc;
+}
+
+op illegal { class = misc; encoding = ILLEGAL;
+  operands = ;
+  syntax = "illegal";
+}
+
+encoding STOP { width = 16;
+  base = 0x4e72;
+}
+
+op stop { class = system; encoding = STOP;
+  operands = ;
+  syntax = "stop";
+}
+
+encoding TRAP { width = 16;
+  base = 0x4e40;
+  imm = 0:4;
+}
+
+op trap { class = system; encoding = TRAP;
+  operands = imm: imm;
+  syntax = "trap #{imm}";
+}
+
+encoding JMP { width = 16;
+  base = 0x4ec0;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op jmp { class = branch; encoding = JMP;
+  operands = mode: imm, reg: GPR;
+  syntax = "jmp ${reg} [{mode}]";
+}
+
+encoding JSR { width = 16;
+  base = 0x4e80;
+  mode = 3:3;
+  reg = 0:3;
+}
+
+op jsr { class = branch; encoding = JSR;
+  operands = mode: imm, reg: GPR;
+  syntax = "jsr ${reg} [{mode}]";
+}
+
+encoding LINK { width = 16;
+  base = 0x4e50;
+  reg = 0:3;
+}
+
+op link { class = misc; encoding = LINK;
+  operands = reg: GPR;
+  syntax = "link ${reg}";
+}
+
+encoding UNLK { width = 16;
+  base = 0x4e58;
+  reg = 0:3;
+}
+
+op unlk { class = misc; encoding = UNLK;
+  operands = reg: GPR;
+  syntax = "unlk ${reg}";
+}
+

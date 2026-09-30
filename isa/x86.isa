@@ -1,0 +1,1580 @@
+# AMD64 instruction forms, little endian. Variable encodings describe legacy
+# prefixes, REX.W, opcode bytes, register/ModR/M operands, memory operands,
+# fixed-size immediates and rel32 displacements (relative to instruction end).
+# In group encodings, an imm operand in the ModR/M reg position is a checked
+# three-bit opcode selector. Only the explicitly listed forms are supported.
+arch amd64 { word_size = 64; addr_size = 64; endian = little; align = 1; }
+
+regclass GPR {
+    rax(64)=0,
+    rcx(64)=1,
+    rdx(64)=2,
+    rbx(64)=3,
+    rsp(64)=4,
+    rbp(64)=5,
+    rsi(64)=6,
+    rdi(64)=7,
+    r8(64)=8,
+    r9(64)=9,
+    r10(64)=10,
+    r11(64)=11,
+    r12(64)=12,
+    r13(64)=13,
+    r14(64)=14,
+    r15(64)=15,
+}
+
+regclass FPR {
+    xmm0(128)=0,
+    xmm1(128)=1,
+    xmm2(128)=2,
+    xmm3(128)=3,
+    xmm4(128)=4,
+    xmm5(128)=5,
+    xmm6(128)=6,
+    xmm7(128)=7,
+    xmm8(128)=8,
+    xmm9(128)=9,
+    xmm10(128)=10,
+    xmm11(128)=11,
+    xmm12(128)=12,
+    xmm13(128)=13,
+    xmm14(128)=14,
+    xmm15(128)=15,
+}
+
+
+
+encoding ADD { width = variable;
+  opcode = 0x1;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op add { class = arithmetic; encoding = ADD;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "add {rd}, {rs1}";
+}
+
+encoding OR { width = variable;
+  opcode = 0x9;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op or { class = arithmetic; encoding = OR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "or {rd}, {rs1}";
+}
+
+encoding ADC { width = variable;
+  opcode = 0x11;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op adc { class = arithmetic; encoding = ADC;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "adc {rd}, {rs1}";
+}
+
+encoding SBB { width = variable;
+  opcode = 0x19;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op sbb { class = arithmetic; encoding = SBB;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sbb {rd}, {rs1}";
+}
+
+encoding AND { width = variable;
+  opcode = 0x21;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op and { class = arithmetic; encoding = AND;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "and {rd}, {rs1}";
+}
+
+encoding SUB { width = variable;
+  opcode = 0x29;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op sub { class = arithmetic; encoding = SUB;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "sub {rd}, {rs1}";
+}
+
+encoding XOR { width = variable;
+  opcode = 0x31;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op xor { class = arithmetic; encoding = XOR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xor {rd}, {rs1}";
+}
+
+encoding CMP { width = variable;
+  opcode = 0x39;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op cmp { class = compare; encoding = CMP;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmp {rd}, {rs1}";
+}
+
+encoding MOV { width = variable;
+  opcode = 0x89;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op mov { class = misc; encoding = MOV;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "mov {rd}, {rs1}";
+}
+
+encoding LEA { width = variable;
+  opcode = 0x8d;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op lea { class = misc; encoding = LEA;
+  operands = rd: GPR, mem: mem;
+  syntax = "lea {rd}, {mem}";
+}
+
+encoding MOVSXD { width = variable;
+  opcode = 0x63;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op movsxd { class = misc; encoding = MOVSXD;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "movsxd {rd}, {rs1}";
+}
+
+encoding PUSH { width = variable;
+  opcode = 0x50;
+  opreg = rd;
+}
+
+op push { class = misc; encoding = PUSH;
+  operands = rd: GPR;
+  syntax = "push {rd}";
+}
+
+encoding POP { width = variable;
+  opcode = 0x58;
+  opreg = rd;
+}
+
+op pop { class = misc; encoding = POP;
+  operands = rd: GPR;
+  syntax = "pop {rd}";
+}
+
+encoding XCHG { width = variable;
+  opcode = 0x87;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op xchg { class = misc; encoding = XCHG;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xchg {rd}, {rs1}";
+}
+
+encoding TEST { width = variable;
+  opcode = 0x85;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op test { class = compare; encoding = TEST;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "test {rd}, {rs1}";
+}
+
+encoding PUSH_IMM8 { width = variable;
+  opcode = 0x6a;
+  imm8 = imm;
+}
+
+op push_imm8 { class = misc; encoding = PUSH_IMM8;
+  operands = imm: imm;
+  syntax = "push {imm}";
+}
+
+encoding PUSH_IMM32 { width = variable;
+  opcode = 0x68;
+  imm32 = imm;
+}
+
+op push_imm32 { class = misc; encoding = PUSH_IMM32;
+  operands = imm: imm;
+  syntax = "push {imm}";
+}
+
+encoding RET_IMM16 { width = variable;
+  opcode = 0xc2;
+  imm16 = imm;
+}
+
+op ret_imm16 { class = branch; encoding = RET_IMM16;
+  operands = imm: imm;
+  syntax = "ret {imm}";
+}
+
+encoding MOVZX { width = variable;
+  opcode = 0x0fb6;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op movzx { class = misc; encoding = MOVZX;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "movzx {rd}, {rs1}";
+}
+
+encoding MOVZXL { width = variable;
+  opcode = 0x0fb7;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op movzx_l { class = misc; encoding = MOVZXL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "movzx {rd}, {rs1}";
+}
+
+encoding MOVSX { width = variable;
+  opcode = 0x0fbe;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op movsx { class = misc; encoding = MOVSX;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "movsx {rd}, {rs1}";
+}
+
+encoding MOVSXL { width = variable;
+  opcode = 0x0fbf;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op movsx_l { class = misc; encoding = MOVSXL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "movsx {rd}, {rs1}";
+}
+
+encoding IMUL { width = variable;
+  opcode = 0x0faf;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op imul { class = arithmetic; encoding = IMUL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "imul {rd}, {rs1}";
+}
+
+encoding SYSCALL { width = variable;
+  opcode = 0x0f05;
+}
+
+op syscall { class = system; encoding = SYSCALL;
+  operands = ;
+  syntax = "syscall";
+}
+
+encoding ENDBR64 { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f1efa;
+}
+
+op endbr64 { class = system; encoding = ENDBR64;
+  operands = ;
+  syntax = "endbr64";
+}
+
+encoding CALL { width = variable;
+  opcode = 0xe8;
+  rel32 = offset;
+}
+
+op call { class = branch; encoding = CALL;
+  operands = offset: rel;
+  syntax = "call {offset}";
+}
+
+encoding JMP { width = variable;
+  opcode = 0xe9;
+  rel32 = offset;
+}
+
+op jmp { class = branch; encoding = JMP;
+  operands = offset: rel;
+  syntax = "jmp {offset}";
+}
+
+encoding JMP8 { width = variable;
+  opcode = 0xeb;
+}
+
+op jmp8 { class = branch; encoding = JMP8;
+  operands = offset: rel;
+  syntax = "jmp {offset}";
+}
+
+encoding JO { width = variable;
+  prefix = 0xf;
+  opcode = 0x80;
+  rel32 = offset;
+}
+
+op jo { class = branch; encoding = JO;
+  operands = offset: rel;
+  syntax = "jo {offset}";
+}
+
+encoding JNO { width = variable;
+  prefix = 0xf;
+  opcode = 0x81;
+  rel32 = offset;
+}
+
+op jno { class = branch; encoding = JNO;
+  operands = offset: rel;
+  syntax = "jno {offset}";
+}
+
+encoding JB { width = variable;
+  prefix = 0xf;
+  opcode = 0x82;
+  rel32 = offset;
+}
+
+op jb { class = branch; encoding = JB;
+  operands = offset: rel;
+  syntax = "jb {offset}";
+}
+
+encoding JAE { width = variable;
+  prefix = 0xf;
+  opcode = 0x83;
+  rel32 = offset;
+}
+
+op jae { class = branch; encoding = JAE;
+  operands = offset: rel;
+  syntax = "jae {offset}";
+}
+
+encoding JE { width = variable;
+  prefix = 0xf;
+  opcode = 0x84;
+  rel32 = offset;
+}
+
+op je { class = branch; encoding = JE;
+  operands = offset: rel;
+  syntax = "je {offset}";
+}
+
+encoding JNE { width = variable;
+  prefix = 0xf;
+  opcode = 0x85;
+  rel32 = offset;
+}
+
+op jne { class = branch; encoding = JNE;
+  operands = offset: rel;
+  syntax = "jne {offset}";
+}
+
+encoding JBE { width = variable;
+  prefix = 0xf;
+  opcode = 0x86;
+  rel32 = offset;
+}
+
+op jbe { class = branch; encoding = JBE;
+  operands = offset: rel;
+  syntax = "jbe {offset}";
+}
+
+encoding JA { width = variable;
+  prefix = 0xf;
+  opcode = 0x87;
+  rel32 = offset;
+}
+
+op ja { class = branch; encoding = JA;
+  operands = offset: rel;
+  syntax = "ja {offset}";
+}
+
+encoding JS { width = variable;
+  prefix = 0xf;
+  opcode = 0x88;
+  rel32 = offset;
+}
+
+op js { class = branch; encoding = JS;
+  operands = offset: rel;
+  syntax = "js {offset}";
+}
+
+encoding JNS { width = variable;
+  prefix = 0xf;
+  opcode = 0x89;
+  rel32 = offset;
+}
+
+op jns { class = branch; encoding = JNS;
+  operands = offset: rel;
+  syntax = "jns {offset}";
+}
+
+encoding JP { width = variable;
+  prefix = 0xf;
+  opcode = 0x8a;
+  rel32 = offset;
+}
+
+op jp { class = branch; encoding = JP;
+  operands = offset: rel;
+  syntax = "jp {offset}";
+}
+
+encoding JNP { width = variable;
+  prefix = 0xf;
+  opcode = 0x8b;
+  rel32 = offset;
+}
+
+op jnp { class = branch; encoding = JNP;
+  operands = offset: rel;
+  syntax = "jnp {offset}";
+}
+
+encoding JL { width = variable;
+  prefix = 0xf;
+  opcode = 0x8c;
+  rel32 = offset;
+}
+
+op jl { class = branch; encoding = JL;
+  operands = offset: rel;
+  syntax = "jl {offset}";
+}
+
+encoding JGE { width = variable;
+  prefix = 0xf;
+  opcode = 0x8d;
+  rel32 = offset;
+}
+
+op jge { class = branch; encoding = JGE;
+  operands = offset: rel;
+  syntax = "jge {offset}";
+}
+
+encoding JLE { width = variable;
+  prefix = 0xf;
+  opcode = 0x8e;
+  rel32 = offset;
+}
+
+op jle { class = branch; encoding = JLE;
+  operands = offset: rel;
+  syntax = "jle {offset}";
+}
+
+encoding JG { width = variable;
+  prefix = 0xf;
+  opcode = 0x8f;
+  rel32 = offset;
+}
+
+op jg { class = branch; encoding = JG;
+  operands = offset: rel;
+  syntax = "jg {offset}";
+}
+
+encoding RET { width = variable;
+  opcode = 0xc3;
+}
+
+op ret { class = branch; encoding = RET;
+  operands = ;
+  syntax = "ret";
+}
+
+encoding LEAVE { width = variable;
+  opcode = 0xc9;
+}
+
+op leave { class = misc; encoding = LEAVE;
+  operands = ;
+  syntax = "leave";
+}
+
+encoding INT3 { width = variable;
+  opcode = 0xcc;
+}
+
+op int3 { class = system; encoding = INT3;
+  operands = ;
+  syntax = "int3";
+}
+
+encoding PUSHFQ { width = variable;
+  opcode = 0x9c;
+}
+
+op pushfq { class = misc; encoding = PUSHFQ;
+  operands = ;
+  syntax = "pushfq";
+}
+
+encoding POPFQ { width = variable;
+  opcode = 0x9d;
+}
+
+op popfq { class = misc; encoding = POPFQ;
+  operands = ;
+  syntax = "popfq";
+}
+
+encoding CDQE { width = variable;
+  opcode = 0x98;
+  rex_w = 1;
+}
+
+op cdqe { class = misc; encoding = CDQE;
+  operands = ;
+  syntax = "cdqe";
+}
+
+encoding CWTL { width = variable;
+  opcode = 0x98;
+}
+
+op cwtl { class = misc; encoding = CWTL;
+  operands = ;
+  syntax = "cwtl";
+}
+
+encoding CLTQ { width = variable;
+  opcode = 0x98;
+  rex_w = 1;
+}
+
+op cltq { class = misc; encoding = CLTQ;
+  operands = ;
+  syntax = "cltq";
+}
+
+encoding CQO { width = variable;
+  opcode = 0x99;
+  rex_w = 1;
+}
+
+op cqo { class = misc; encoding = CQO;
+  operands = ;
+  syntax = "cqo";
+}
+
+encoding CDQ { width = variable;
+  opcode = 0x99;
+}
+
+op cdq { class = misc; encoding = CDQ;
+  operands = ;
+  syntax = "cdq";
+}
+
+encoding PAUSE { width = variable;
+  prefix = 0xf3;
+  opcode = 0x90;
+}
+
+op pause { class = misc; encoding = PAUSE;
+  operands = ;
+  syntax = "pause";
+}
+
+encoding UD2 { width = variable;
+  opcode = 0x0f0b;
+}
+
+op ud2 { class = system; encoding = UD2;
+  operands = ;
+  syntax = "ud2";
+}
+
+encoding CMOVE { width = variable;
+  opcode = 0x0f44;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmove { class = misc; encoding = CMOVE;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmove {rd}, {rs1}";
+}
+
+encoding CMOVNE { width = variable;
+  opcode = 0x0f45;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmovne { class = misc; encoding = CMOVNE;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmovne {rd}, {rs1}";
+}
+
+encoding CMOVB { width = variable;
+  opcode = 0x0f42;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmovb { class = misc; encoding = CMOVB;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmovb {rd}, {rs1}";
+}
+
+encoding CMOVA { width = variable;
+  opcode = 0x0f47;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmova { class = misc; encoding = CMOVA;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmova {rd}, {rs1}";
+}
+
+encoding CMOVL { width = variable;
+  opcode = 0x0f4c;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmovl { class = misc; encoding = CMOVL;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmovl {rd}, {rs1}";
+}
+
+encoding CMOVG { width = variable;
+  opcode = 0x0f4f;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op cmovg { class = misc; encoding = CMOVG;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmovg {rd}, {rs1}";
+}
+
+encoding BSF { width = variable;
+  opcode = 0x0fbc;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op bsf { class = misc; encoding = BSF;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "bsf {rd}, {rs1}";
+}
+
+encoding BSR { width = variable;
+  opcode = 0x0fbd;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op bsr { class = misc; encoding = BSR;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "bsr {rd}, {rs1}";
+}
+
+encoding POPCNT { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0fb8;
+  rex_w = 1;
+  modrm = rd, rs1;
+}
+
+op popcnt { class = misc; encoding = POPCNT;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "popcnt {rd}, {rs1}";
+}
+
+encoding CMPXCHG { width = variable;
+  opcode = 0x0fb1;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op cmpxchg { class = atomic; encoding = CMPXCHG;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "cmpxchg {rd}, {rs1}";
+}
+
+encoding XADD { width = variable;
+  opcode = 0x0fc1;
+  rex_w = 1;
+  modrm = rs1, rd;
+}
+
+op xadd { class = atomic; encoding = XADD;
+  operands = rd: GPR, rs1: GPR;
+  syntax = "xadd {rd}, {rs1}";
+}
+
+encoding RDTSC { width = variable;
+  opcode = 0x0f31;
+}
+
+op rdtsc { class = system; encoding = RDTSC;
+  operands = ;
+  syntax = "rdtsc";
+}
+
+encoding CPUID { width = variable;
+  opcode = 0x0fa2;
+}
+
+op cpuid { class = system; encoding = CPUID;
+  operands = ;
+  syntax = "cpuid";
+}
+
+encoding ADDSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f58;
+  modrm = rd, rs1;
+}
+
+op addss { class = arithmetic; encoding = ADDSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "addss {rd}, {rs1}";
+}
+
+encoding ADDSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f58;
+  modrm = rd, rs1;
+}
+
+op addsd { class = arithmetic; encoding = ADDSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "addsd {rd}, {rs1}";
+}
+
+encoding SUBSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f5c;
+  modrm = rd, rs1;
+}
+
+op subss { class = arithmetic; encoding = SUBSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "subss {rd}, {rs1}";
+}
+
+encoding SUBSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f5c;
+  modrm = rd, rs1;
+}
+
+op subsd { class = arithmetic; encoding = SUBSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "subsd {rd}, {rs1}";
+}
+
+encoding MULSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f59;
+  modrm = rd, rs1;
+}
+
+op mulss { class = arithmetic; encoding = MULSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "mulss {rd}, {rs1}";
+}
+
+encoding MULSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f59;
+  modrm = rd, rs1;
+}
+
+op mulsd { class = arithmetic; encoding = MULSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "mulsd {rd}, {rs1}";
+}
+
+encoding DIVSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f5e;
+  modrm = rd, rs1;
+}
+
+op divss { class = arithmetic; encoding = DIVSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "divss {rd}, {rs1}";
+}
+
+encoding DIVSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f5e;
+  modrm = rd, rs1;
+}
+
+op divsd { class = arithmetic; encoding = DIVSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "divsd {rd}, {rs1}";
+}
+
+encoding SQRTSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f51;
+  modrm = rd, rs1;
+}
+
+op sqrtss { class = arithmetic; encoding = SQRTSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "sqrtss {rd}, {rs1}";
+}
+
+encoding SQRTSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f51;
+  modrm = rd, rs1;
+}
+
+op sqrtsd { class = arithmetic; encoding = SQRTSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "sqrtsd {rd}, {rs1}";
+}
+
+encoding MINSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f5d;
+  modrm = rd, rs1;
+}
+
+op minss { class = arithmetic; encoding = MINSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "minss {rd}, {rs1}";
+}
+
+encoding MINSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f5d;
+  modrm = rd, rs1;
+}
+
+op minsd { class = arithmetic; encoding = MINSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "minsd {rd}, {rs1}";
+}
+
+encoding MAXSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f5f;
+  modrm = rd, rs1;
+}
+
+op maxss { class = arithmetic; encoding = MAXSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "maxss {rd}, {rs1}";
+}
+
+encoding MAXSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f5f;
+  modrm = rd, rs1;
+}
+
+op maxsd { class = arithmetic; encoding = MAXSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "maxsd {rd}, {rs1}";
+}
+
+encoding MOVSS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f10;
+  modrm = rd, rs1;
+}
+
+op movss { class = misc; encoding = MOVSS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movss {rd}, {rs1}";
+}
+
+encoding MOVSD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f10;
+  modrm = rd, rs1;
+}
+
+op movsd { class = misc; encoding = MOVSD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movsd {rd}, {rs1}";
+}
+
+encoding COMISS { width = variable;
+  opcode = 0x0f2f;
+  modrm = rd, rs1;
+}
+
+op comiss { class = compare; encoding = COMISS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "comiss {rd}, {rs1}";
+}
+
+encoding COMISD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f2f;
+  modrm = rd, rs1;
+}
+
+op comisd { class = compare; encoding = COMISD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "comisd {rd}, {rs1}";
+}
+
+encoding UCOMISS { width = variable;
+  opcode = 0x0f2e;
+  modrm = rd, rs1;
+}
+
+op ucomiss { class = compare; encoding = UCOMISS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "ucomiss {rd}, {rs1}";
+}
+
+encoding UCOMISD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f2e;
+  modrm = rd, rs1;
+}
+
+op ucomisd { class = compare; encoding = UCOMISD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "ucomisd {rd}, {rs1}";
+}
+
+encoding CVTSI2SS { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f2a;
+  modrm = rd, rs1;
+}
+
+op cvtsi2ss { class = arithmetic; encoding = CVTSI2SS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvtsi2ss {rd}, {rs1}";
+}
+
+encoding CVTSI2SD { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f2a;
+  modrm = rd, rs1;
+}
+
+op cvtsi2sd { class = arithmetic; encoding = CVTSI2SD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvtsi2sd {rd}, {rs1}";
+}
+
+encoding CVTTSS2SI { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f2c;
+  modrm = rd, rs1;
+}
+
+op cvttss2si { class = arithmetic; encoding = CVTTSS2SI;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvttss2si {rd}, {rs1}";
+}
+
+encoding CVTTSD2SI { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f2c;
+  modrm = rd, rs1;
+}
+
+op cvttsd2si { class = arithmetic; encoding = CVTTSD2SI;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvttsd2si {rd}, {rs1}";
+}
+
+encoding CVTSS2SD { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f5a;
+  modrm = rd, rs1;
+}
+
+op cvtss2sd { class = arithmetic; encoding = CVTSS2SD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvtss2sd {rd}, {rs1}";
+}
+
+encoding CVTSD2SS { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f5a;
+  modrm = rd, rs1;
+}
+
+op cvtsd2ss { class = arithmetic; encoding = CVTSD2SS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "cvtsd2ss {rd}, {rs1}";
+}
+
+encoding MOVAPS { width = variable;
+  opcode = 0x0f28;
+  modrm = rd, rs1;
+}
+
+op movaps { class = arithmetic; encoding = MOVAPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movaps {rd}, {rs1}";
+}
+
+encoding MOVAPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f28;
+  modrm = rd, rs1;
+}
+
+op movapd { class = arithmetic; encoding = MOVAPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movapd {rd}, {rs1}";
+}
+
+encoding MOVUPS { width = variable;
+  opcode = 0x0f10;
+  modrm = rd, rs1;
+}
+
+op movups { class = arithmetic; encoding = MOVUPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movups {rd}, {rs1}";
+}
+
+encoding MOVUPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f10;
+  modrm = rd, rs1;
+}
+
+op movupd { class = arithmetic; encoding = MOVUPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "movupd {rd}, {rs1}";
+}
+
+encoding ANDPS { width = variable;
+  opcode = 0x0f54;
+  modrm = rd, rs1;
+}
+
+op andps { class = arithmetic; encoding = ANDPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "andps {rd}, {rs1}";
+}
+
+encoding ANDPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f54;
+  modrm = rd, rs1;
+}
+
+op andpd { class = arithmetic; encoding = ANDPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "andpd {rd}, {rs1}";
+}
+
+encoding ORPS { width = variable;
+  opcode = 0x0f56;
+  modrm = rd, rs1;
+}
+
+op orps { class = arithmetic; encoding = ORPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "orps {rd}, {rs1}";
+}
+
+encoding ORPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f56;
+  modrm = rd, rs1;
+}
+
+op orpd { class = arithmetic; encoding = ORPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "orpd {rd}, {rs1}";
+}
+
+encoding XORPS { width = variable;
+  opcode = 0x0f57;
+  modrm = rd, rs1;
+}
+
+op xorps { class = arithmetic; encoding = XORPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "xorps {rd}, {rs1}";
+}
+
+encoding XORPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f57;
+  modrm = rd, rs1;
+}
+
+op xorpd { class = arithmetic; encoding = XORPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "xorpd {rd}, {rs1}";
+}
+
+encoding ADDPS { width = variable;
+  opcode = 0x0f58;
+  modrm = rd, rs1;
+}
+
+op addps { class = arithmetic; encoding = ADDPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "addps {rd}, {rs1}";
+}
+
+encoding ADDPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f58;
+  modrm = rd, rs1;
+}
+
+op addpd { class = arithmetic; encoding = ADDPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "addpd {rd}, {rs1}";
+}
+
+encoding MULPS { width = variable;
+  opcode = 0x0f59;
+  modrm = rd, rs1;
+}
+
+op mulps { class = arithmetic; encoding = MULPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "mulps {rd}, {rs1}";
+}
+
+encoding MULPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f59;
+  modrm = rd, rs1;
+}
+
+op mulpd { class = arithmetic; encoding = MULPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "mulpd {rd}, {rs1}";
+}
+
+encoding SUBPS { width = variable;
+  opcode = 0x0f5c;
+  modrm = rd, rs1;
+}
+
+op subps { class = arithmetic; encoding = SUBPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "subps {rd}, {rs1}";
+}
+
+encoding SUBPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f5c;
+  modrm = rd, rs1;
+}
+
+op subpd { class = arithmetic; encoding = SUBPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "subpd {rd}, {rs1}";
+}
+
+encoding DIVPS { width = variable;
+  opcode = 0x0f5e;
+  modrm = rd, rs1;
+}
+
+op divps { class = arithmetic; encoding = DIVPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "divps {rd}, {rs1}";
+}
+
+encoding DIVPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f5e;
+  modrm = rd, rs1;
+}
+
+op divpd { class = arithmetic; encoding = DIVPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "divpd {rd}, {rs1}";
+}
+
+encoding SQRTPS { width = variable;
+  opcode = 0x0f51;
+  modrm = rd, rs1;
+}
+
+op sqrtps { class = arithmetic; encoding = SQRTPS;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "sqrtps {rd}, {rs1}";
+}
+
+encoding SQRTPD { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f51;
+  modrm = rd, rs1;
+}
+
+op sqrtpd { class = arithmetic; encoding = SQRTPD;
+  operands = rd: FPR, rs1: FPR;
+  syntax = "sqrtpd {rd}, {rs1}";
+}
+
+encoding MOV_LOAD { width = variable;
+  opcode = 0x8b;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op mov_load { class = load; encoding = MOV_LOAD;
+  operands = rd: GPR, mem: mem;
+  syntax = "mov {rd}, {mem}";
+}
+
+encoding ADD_MEM { width = variable;
+  opcode = 0x3;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op add_mem { class = arithmetic; encoding = ADD_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "add {rd}, {mem}";
+}
+
+encoding OR_MEM { width = variable;
+  opcode = 0xb;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op or_mem { class = arithmetic; encoding = OR_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "or {rd}, {mem}";
+}
+
+encoding ADC_MEM { width = variable;
+  opcode = 0x13;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op adc_mem { class = arithmetic; encoding = ADC_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "adc {rd}, {mem}";
+}
+
+encoding SBB_MEM { width = variable;
+  opcode = 0x1b;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op sbb_mem { class = arithmetic; encoding = SBB_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "sbb {rd}, {mem}";
+}
+
+encoding AND_MEM { width = variable;
+  opcode = 0x23;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op and_mem { class = arithmetic; encoding = AND_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "and {rd}, {mem}";
+}
+
+encoding SUB_MEM { width = variable;
+  opcode = 0x2b;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op sub_mem { class = arithmetic; encoding = SUB_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "sub {rd}, {mem}";
+}
+
+encoding XOR_MEM { width = variable;
+  opcode = 0x33;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op xor_mem { class = arithmetic; encoding = XOR_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "xor {rd}, {mem}";
+}
+
+encoding CMP_MEM { width = variable;
+  opcode = 0x3b;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op cmp_mem { class = compare; encoding = CMP_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "cmp {rd}, {mem}";
+}
+
+encoding MOV_STORE { width = variable;
+  opcode = 0x89;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op mov_store { class = store; encoding = MOV_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "mov {mem}, {rs1}";
+}
+
+encoding ADD_STORE { width = variable;
+  opcode = 0x1;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op add_store { class = arithmetic; encoding = ADD_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "add {mem}, {rs1}";
+}
+
+encoding OR_STORE { width = variable;
+  opcode = 0x9;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op or_store { class = arithmetic; encoding = OR_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "or {mem}, {rs1}";
+}
+
+encoding ADC_STORE { width = variable;
+  opcode = 0x11;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op adc_store { class = arithmetic; encoding = ADC_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "adc {mem}, {rs1}";
+}
+
+encoding SBB_STORE { width = variable;
+  opcode = 0x19;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op sbb_store { class = arithmetic; encoding = SBB_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "sbb {mem}, {rs1}";
+}
+
+encoding AND_STORE { width = variable;
+  opcode = 0x21;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op and_store { class = arithmetic; encoding = AND_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "and {mem}, {rs1}";
+}
+
+encoding SUB_STORE { width = variable;
+  opcode = 0x29;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op sub_store { class = arithmetic; encoding = SUB_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "sub {mem}, {rs1}";
+}
+
+encoding XOR_STORE { width = variable;
+  opcode = 0x31;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op xor_store { class = arithmetic; encoding = XOR_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "xor {mem}, {rs1}";
+}
+
+encoding CMP_STORE { width = variable;
+  opcode = 0x39;
+  rex_w = 1;
+  modrm = rs1, mem;
+}
+
+op cmp_store { class = compare; encoding = CMP_STORE;
+  operands = rs1: GPR, mem: mem;
+  syntax = "cmp {mem}, {rs1}";
+}
+
+encoding LEA_MEM { width = variable;
+  opcode = 0x8d;
+  rex_w = 1;
+  modrm = rd, mem;
+}
+
+op lea_mem { class = misc; encoding = LEA_MEM;
+  operands = rd: GPR, mem: mem;
+  syntax = "lea {rd}, {mem}";
+}
+
+encoding MOVSS_MEM { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f10;
+  modrm = rd, mem;
+}
+
+op movss_mem { class = load; encoding = MOVSS_MEM;
+  operands = rd: FPR, mem: mem;
+  syntax = "movss {rd}, {mem}";
+}
+
+encoding MOVSD_MEM { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f10;
+  modrm = rd, mem;
+}
+
+op movsd_mem { class = load; encoding = MOVSD_MEM;
+  operands = rd: FPR, mem: mem;
+  syntax = "movsd {rd}, {mem}";
+}
+
+encoding MOVAPS_MEM { width = variable;
+  opcode = 0x0f28;
+  modrm = rd, mem;
+}
+
+op movaps_mem { class = load; encoding = MOVAPS_MEM;
+  operands = rd: FPR, mem: mem;
+  syntax = "movaps {rd}, {mem}";
+}
+
+encoding MOVUPD_MEM { width = variable;
+  prefix = 0x66;
+  opcode = 0x0f10;
+  modrm = rd, mem;
+}
+
+op movupd_mem { class = load; encoding = MOVUPD_MEM;
+  operands = rd: FPR, mem: mem;
+  syntax = "movupd {rd}, {mem}";
+}
+
+encoding MOVSS_MEM_STORE { width = variable;
+  prefix = 0xf3;
+  opcode = 0x0f11;
+  modrm = rs1, mem;
+}
+
+op movss_mem_store { class = store; encoding = MOVSS_MEM_STORE;
+  operands = rs1: FPR, mem: mem;
+  syntax = "movss {mem}, {rs1}";
+}
+
+encoding MOVSD_MEM_STORE { width = variable;
+  prefix = 0xf2;
+  opcode = 0x0f11;
+  modrm = rs1, mem;
+}
+
+op movsd_mem_store { class = store; encoding = MOVSD_MEM_STORE;
+  operands = rs1: FPR, mem: mem;
+  syntax = "movsd {mem}, {rs1}";
+}
+
+encoding MOVAPS_MEM_STORE { width = variable;
+  opcode = 0x0f29;
+  modrm = rs1, mem;
+}
+
+op movaps_mem_store { class = store; encoding = MOVAPS_MEM_STORE;
+  operands = rs1: FPR, mem: mem;
+  syntax = "movaps {mem}, {rs1}";
+}
+
+# Integer JIT forms. Group encodings expose the 3-bit opcode extension as
+# an immediate selector, not a physical register. shift_cl selectors 4/5/7
+# mean SHL/SHR/SAR; unary64 selector 7 means signed IDIV.
+encoding MOV_IMM64 { width = variable;
+  opcode = 0xb8;
+  rex_w = 1;
+  opreg = rd;
+  imm64 = imm;
+}
+op mov_imm { class = misc; encoding = MOV_IMM64;
+  operands = rd: GPR, imm: imm;
+  syntax = "mov {rd}, {imm}";
+}
+encoding SHIFT_CL64 { width = variable;
+  opcode = 0xd3;
+  rex_w = 1;
+  modrm = selector, rd;
+}
+op shift_cl { class = arithmetic; encoding = SHIFT_CL64;
+  operands = rd: GPR, selector: imm;
+  syntax = "shift/{selector} {rd}, cl";
+}
+encoding UNARY64 { width = variable;
+  opcode = 0xf7;
+  rex_w = 1;
+  modrm = selector, rd;
+}
+op unary64 { class = arithmetic; encoding = UNARY64;
+  operands = rd: GPR, selector: imm;
+  syntax = "unary/{selector} {rd}";
+}
